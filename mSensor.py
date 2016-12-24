@@ -107,6 +107,7 @@ def main(isActive):
                         sys.exit()
 
 def sendSensor(sendTime, sendCodifier, sendValue):
+    log.debug(Ctrl-D : sendCodifier, sendTime, sendValue)
     if type(sendValue) == type(int()):
         payload_type = 'i'
         packed = struct.pack(payload_type, sendValue)
@@ -119,7 +120,6 @@ def sendSensor(sendTime, sendCodifier, sendValue):
     else:
         logger.critical('notyetcoded: %s', payload)
         sys.exit()
-    # print "Sensor", sendCodifier, type(sendValue), sendValue,
     jphconfig.sendDataChannel(sendTime, sendCodifier, payload_type, packed)
        
 def TempLinux(Timestamp):
