@@ -141,10 +141,10 @@ def phobya2temp(voltageOut):
 
 def ADCpiReader(Timestamp):
     try:
-        v = adc.read_voltage(mySensor["Sensor"]["Pin"])
+        v = adc.read_voltage(int(mySensor["Sensor"]["Pin"]))
         sendSensor(Timestamp, Codifier, phobya2temp(v))
         for proxy in mySensor["Sensor"]["Proxy"]:
-            v = adc.read_voltage(proxy["Pin"])
+            v = adc.read_voltage(int(proxy["Pin"]))
             sendSensor(Timestamp, str(proxy["Codifier"]), v)
     except KeyError as e:
         logger.critical("Exception (Field not found?): %s", e)
