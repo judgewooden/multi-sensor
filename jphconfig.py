@@ -103,7 +103,7 @@ def closeControlChannel():
 	global ctrlAddress, ctrlPort, ctrlSocket
 	ctrlSocket.close()
 	ctrlAddress=""
-	ctrlPort=""
+	ctrlPort="" 
 	ctrlSocket=""
 
 def sendPing(Timestamp, Codifier, isActive):
