@@ -160,6 +160,7 @@ def ADCpiReader(Timestamp):
 
 def ADAfruitReader(Timestamp):
     try:
+        import Adafruit_DHT
         h, v = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, int(mySensor["Sensor"]["Pin"]))
         if h is None and v is None:
             raise("sensors return None")
