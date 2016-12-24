@@ -1,0 +1,312 @@
+
+{
+    "Multicast": {
+        "Control-Channel": {
+            "Address":"225.0.0.251",
+            "Port":8001
+        },
+        "Data-Channel": {
+            "Address":"225.0.0.251",
+            "Port":8002
+        }
+    },
+    "Logging":{
+        "version":1,
+        "disable_existing_loggers":true,
+        "formatters":{
+            "brief":{
+                "class":"logging.Formatter",
+                "datefmt":"%I:%M:%S",
+                "format":"%(name)s[%(process)d]: %(levelname)s (%(lineno)d) %(message)s"
+            },
+            "verbose":{
+                "class":"logging.Formatter",
+                "datefmt":"%I:%M:%S",
+                "format":"%(levelname)s (%(lineno)d) %(message)s"
+            }
+        },
+        "handlers":{
+            "console":{
+                "level":"WARN",
+                "class":"logging.StreamHandler",
+                "formatter":"verbose",
+                "stream":"ext://sys.stdout"
+            },
+            "syslog":{
+                "level":"INFO",
+                "class":"logging.handlers.SysLogHandler",
+                "facility":"daemon",
+                "formatter":"brief",
+                "address":"/dev/log"
+            }
+        },
+        "loggers":{
+            "default": {
+                "handlers":["syslog", "console"],
+                "level":"INFO"
+            },
+            "mRedis": {
+                "handlers":["syslog", "console"],
+                "level":"INFO"
+            },
+            "mSQL": {
+                "handlers":["syslog", "console"],
+                "level":"INFO"
+            }
+        },
+        "root": {
+            "handlers":["console"],
+            "level":"WARN"
+        }
+    },
+    "Sensors":[{
+            "Codifier":"CC",
+            "ShortName":"Control",
+            "Name":"Control, show number of message on Multicast Bus or latest Console message",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "Active":false,
+            "DataType":"integer",
+            "Sensor":{
+                "Type":"ControlProgram"
+            }
+        }, {
+            "Codifier":"Q1",
+            "ShortName":"SQL-jphpi",
+            "Name":"Postgress SQL adaptor on jphpi",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "Active":true,
+            "DataType":"integer",
+            "Sensor":{
+                "Type":"SQLLoader",
+                "SQL":{
+                    "Database":"mysensor6",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
+        }, {
+            "Codifier":"R1",
+            "ShortName":"Redis-mad",
+            "Name":"Redis-Cache on mad",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "Active":true,
+            "DataType":"integer",
+            "Sensor":{
+                "Type":"RedisLoader"
+            }
+        }, {
+            "Codifier":"C1",
+            "ShortName":"kastpi Temp",
+            "Name":"kastpi CPU Temparature",
+            "Active":true,
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "DataType":"float",
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"C2",
+            "ShortName":"pihost Temp",
+            "Name":"pihost CPU Temparature",
+            "Active":true,
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "DataType":"float",
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"X1",
+            "ShortName":"Aqua Flow",
+            "Name":"Water sensors Rotations",
+            "Symbol":"rpm",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "DataType":"float",
+            "Sensor":{
+                "Type":"failsafeReader",
+                "URL":"http://192.168.0.8/X",
+                "Field":"FlowPerSecond",
+                "Proxy":[{
+                    "Codifier":"X2",
+                    "Field":"LitersPerSecond"
+                    },{
+                    "Codifier":"X3",
+                    "Field":"Power"
+                }]
+            }
+        }, {
+            "Codifier":"X2",
+            "ShortName":"Aqua Liters",
+            "Name":"Liters Per Minute",
+            "Symbol":"lpm",
+            "Sensor":{
+                "Type":"Proxy",
+                "Codifier":"X1"
+            }
+        }, {
+            "Codifier":"X3",
+            "ShortName":"Power",
+            "Name":"Indicator if the Power is ON/OFF",
+            "Symbol":" ",
+            "Type":"bool",
+            "Sensor":{
+                "Type":"Proxy",
+                "Codifier":"X1"
+            }
+        }, {
+            "Codifier":"Y1",
+            "ShortName":"MAD Flow",
+            "Name":"Water sensors Rotations",
+            "Symbol":"rpm",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "DataType":"float",
+            "Sensor":{
+                "Type":"failsafeReader",
+                "URL":"http://192.168.0.8/Y",
+                "Field":"FlowPerSecond",
+                "Proxy":[{
+                    "Codifier":"Y2",
+                    "Field":"LitersPerSecond"
+                    },{
+                    "Codifier":"Y3",
+                    "Field":"Power"
+                }]
+            }
+        }, {
+            "Codifier":"Y2",
+            "ShortName":"Aqua Liters",
+            "Name":"Liters Per Minute",
+            "Symbol":"lpm",
+            "Sensor":{
+                "Type":"Proxy",
+                "Codifier":"Y1"
+            }
+        }, {
+            "Codifier":"Y3",
+            "ShortName":"Power",
+            "Name":"Indicator if the Power is ON/OFF",
+            "Symbol":" ",
+            "Type":"bool",
+            "Sensor":{
+                "Type":"Proxy",
+                "Codifier":"Y1"
+            }
+        }, {
+            "Codifier":"41",
+            "ShortName":"CPU Temp",
+            "Name":"kastpi CPU Temparature",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"51",
+            "ShortName":"CPU Temp",
+            "Name":"kastpi CPU Temparature",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"61",
+            "ShortName":"CPU Temp",
+            "Name":"kastpi CPU Temparature",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"71",
+            "ShortName":"CPU Temp",
+            "Name":"kastpi CPU Temparature",
+            "Symbol":"C",
+            "StaleWarning":10,
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":false,
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"81",
+            "ShortName":"CPU Temp",
+            "Name":"kastpi CPU Temparature",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"91",
+            "ShortName":"CPU Temp",
+            "Name":"kastpi CPU Temparature",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"P1",
+            "ShortName":"CPU Temp",
+            "Name":"kastpi CPU Temparature",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"A1",
+            "ShortName":"CPU Temp",
+            "Name":"kastpi CPU Temparature",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }
+    ]
+}
+   

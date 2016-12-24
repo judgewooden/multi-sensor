@@ -1,0 +1,154 @@
+
+
+/* the graph */
+svg.line-graph .title {
+	font-size: 14px;
+	text-decoration: underline;
+}
+
+svg.line-graph text {
+	cursor: default;
+}
+
+svg.line-graph .hover-line {
+	stroke: #6E7B8B;
+}
+
+svg.line-graph .hide {
+	opacity: 0;
+}
+
+svg.line-graph .axis {
+	shape-rendering: crispEdges;
+}
+
+svg.line-graph .x.axis line {
+	fill: none;
+	stroke: #000;
+}
+
+svg.line-graph .x.axis .minor {
+	stroke-opacity: .5;
+}
+
+svg.line-graph .x.axis path {
+  	display: none;
+}
+
+svg.line-graph .x.axis text {
+	font-size: 10px;
+}
+
+svg.line-graph .y.axis line, .y.axis path {
+	fill: none;
+	stroke: #000;
+}
+
+svg.line-graph .y.axis text {
+	font-size: 10px;
+}
+
+svg.line-graph .menu-button:not(.selected):hover {
+	text-decoration: underline;
+	cursor: pointer !important;
+}
+
+svg.line-graph .date-label {
+	fill: #6E7B8B;
+}
+
+/* tool tips */
+.d3-tip {
+  line-height: 1;
+  font-weight: normal;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 8px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+/* menu bar */
+.navbar-nav > li > a, .navbar-brand {
+    padding-top:2px !important;
+    padding-bottom:2px !important;
+    height: 28px;
+}
+
+.navbar {
+    min-height:22px !important;
+}
+
+.navbar .navbar-toggle {
+    margin-top: 3px;
+    margin-bottom: 0px;
+    padding: 8px 9px;
+}
+
+/* The document */
+body {
+    font-family: "Helvetica Neue", Helvetica;
+}
+p {
+    clear:both;
+    top: 20px;
+}
+div.aGraph {
+        margin-bottom: 30px;
+}
+
+/* Dashboard containers */
+
+.dash-box {
+  border: 1px solid navy;
+  min-height: 70px;
+  min-width: 120px;
+  background-color: #dddddd;
+}
+
+.panel > .panel-heading {
+   background-color: #337ab7;
+}
+
+.panel > .panel-warning {
+   background-color: #b74f33;
+}
+
+.dash-title {
+  font-size:10px;
+  font-weight: bold;
+  text-align: center;
+  padding: 0;
+}
+
+.dash-value {
+  font-size:24px;
+  text-align: center;
+  background-color: #dddddd;
+  padding: 0;
+}
+
+.dash-time {
+  font-size:8px;
+  text-align: center;
+  background-color: #dddddd;
+  padding: 0;
+}
+
