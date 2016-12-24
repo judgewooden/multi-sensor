@@ -234,6 +234,31 @@
                 "Codifier":"A1"
             }
         }, {
+            "Codifier":"F1",
+            "ShortName":"Air Temp",
+            "Name":"Temperature of the Air outside",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "Sensor":{
+                "Type":"ADAfruitReader",
+                "Pin":"21",
+                "Proxy":[{
+                    "Codifier":"F2"
+                }]
+            }
+        }, {
+            "Codifier":"F2",
+            "ShortName":"Air Humidity",
+            "Name":"Humidity of the Air outside",
+            "Symbol":"%",
+            "Type":"float",
+            "Sensor":{
+                "Type":"Proxy",
+                "Codifier":"F1"
+            }
+        }, {
             "Codifier":"51",
             "ShortName":"CPU Temp",
             "Name":"kastpi CPU Temparature",

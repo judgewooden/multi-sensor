@@ -32,6 +32,8 @@ def initJPH(type):
         except ImportError:
             print ("in sensors, importing ABE_ADCPi failed")
             sys.exit()
+    if type == "ADAfruitReader":
+        import Adafruit_DHT
 
 # -------------
 # Read Startup Parameters
@@ -155,6 +157,21 @@ def ADCpiReader(Timestamp):
         logger.critical("Exception (Field not found?): %s", e)
     except Exception as e:
         logger.critical("Exception : %s", e)
+
+def ADAfruitReader(Timestamp):
+    try:
+        h, v = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, int(mySensor["Sensor"]["Pin"]))
+        if h is None and v is None:
+            raise("sensors return None")
+        sendSensor(Timestamp, Codifier, v)
+        for proxy in mySensor["Sensor"]["Proxy"]:
+            sendSensor(Timestamp, str(proxy["Codifier"]), h)
+
+    except KeyError as e:
+        logger.critical("Exception (Field not found?): %s", e)
+    except Exception as e:
+        logger.critical("Exception : %s", e)
+
 
 def TempLinux(Timestamp):
     try:
