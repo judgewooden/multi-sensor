@@ -14,6 +14,7 @@ import struct
 import socket
 import jphconfig
 import select
+import math
 
 adc=""
 
@@ -25,7 +26,6 @@ def initJPH(type):
             sys.path.append('/home/jphmonitor/ABElectronics_Python_Libraries/ADCPi')
             from ABE_ADCPi import ADCPi
             from ABE_helpers import ABEHelpers
-            import math
             i2c_helper = ABEHelpers()
             bus = i2c_helper.get_smbus()
             adc = ADCPi(bus, 0x68, 0x69, 12)
