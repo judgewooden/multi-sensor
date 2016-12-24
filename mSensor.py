@@ -134,14 +134,22 @@ def sendSensor(sendTime, sendCodifier, sendValue):
         sys.exit()
     jphconfig.sendDataChannel(sendTime, sendCodifier, payload_type, packed)
        
-def phobya2temp ( voltageOut ):
+def phobya2temp(voltageOut):
     ohm=(5-voltageOut)/voltageOut*16800/1000
     temp=(0.0755*math.pow(ohm,2))-4.2327*ohm+60.589
     return temp
 
-def ADCpiReader (Timestamp):
-    tInFlowBefore = adc.read_voltage(2)
-    sendSensor(Timestamp, Codifier, phobya2temp(tInFlowBefore))
+def ADCpiReader(Timestamp):
+    try:
+        v = adc.read_voltage(mySensor["Sensor"]["Pin"])
+        sendSensor(Timestamp, Codifier, phobya2temp(v))
+        for proxy in mySensor["Sensor"]["Proxy"]:
+            v = adc.read_voltage(proxy["Pin"])
+            sendSensor(Timestamp, str(proxy["Codifier"]), v)
+    except KeyError as e:
+        logger.critical("Exception (Field not found?): %s", e)
+    except Exception as e:
+        logger.critical("Exception : %s", e)
 
 def TempLinux(Timestamp):
     try:

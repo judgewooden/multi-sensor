@@ -217,12 +217,16 @@
             "Active":true,
             "Sensor":{
                 "Type":"ADCpiReader",
-                "Pin":"2"
+                "Pin":"2",
+                "Proxy":[{
+                    "Codifier":"A2",
+                    "Pin":"1"
+                }]
             }
         }, {
             "Codifier":"A2",
             "ShortName":"Rad-out Temp",
-            "Name":"Radoatot Temperature OUT",
+            "Name":"Radiator Temperature OUT",
             "Symbol":"C",
             "Type":"float",
             "Sensor":{
