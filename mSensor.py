@@ -15,18 +15,20 @@ import socket
 import jphconfig
 import select
 
-try:
-    sys.path.append("/home/jphmonitor")
-    sys.path.append('/home/jphmonitor/ABElectronics_Python_Libraries/ADCPi')
-    from ABE_ADCPi import ADCPi
-    from ABE_helpers import ABEHelpers
-    import math
-    i2c_helper = ABEHelpers()
-    bus = i2c_helper.get_smbus()
-    adc = ADCPi(bus, 0x68, 0x69, 12)
-except ImportError:
-    print ("in sensors, importing ABE_ADCPi failed")
-    sys.exit()
+def initJPH(type):
+    if type == "ADCpiReader":
+        try:
+            sys.path.append("/home/jphmonitor")
+            sys.path.append('/home/jphmonitor/ABElectronics_Python_Libraries/ADCPi')
+            from ABE_ADCPi import ADCPi
+            from ABE_helpers import ABEHelpers
+            import math
+            i2c_helper = ABEHelpers()
+            bus = i2c_helper.get_smbus()
+            adc = ADCPi(bus, 0x68, 0x69, 12)
+        except ImportError:
+            print ("in sensors, importing ABE_ADCPi failed")
+            sys.exit()
 
 # -------------
 # Read Startup Parameters
@@ -191,6 +193,7 @@ if __name__ == '__main__':
 
     while True:
         (logger, configJSON, mySensor, isActive)=jphconfig.loadconfig(configURL, Codifier, isActive)
+        initJPH(mySensor["Sensor"]["Type"])
 
         if mySensor["Sensor"]["Type"] == "":
             logger.critical("Exepecting a Sensor:Type for %s", Codifier)
