@@ -15,7 +15,10 @@ import socket
 import jphconfig
 import select
 
+adc=""
+
 def initJPH(type):
+    global adc
     if type == "ADCpiReader":
         try:
             sys.path.append("/home/jphmonitor")
