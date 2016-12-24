@@ -107,7 +107,7 @@ def main(isActive):
                         sys.exit()
 
 def sendSensor(sendTime, sendCodifier, sendValue):
-    log.debug(Ctrl-D : sendCodifier, sendTime, sendValue)
+    log.debug("Ctrl-D : %s %d %s", sendCodifier, sendTime, sendValue)
     if type(sendValue) == type(int()):
         payload_type = 'i'
         packed = struct.pack(payload_type, sendValue)
