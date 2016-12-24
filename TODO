@@ -1,0 +1,15 @@
+TODO
+----
+- Program all sensors
+- numpy ??? // panda for calculations
+- Think how to do a proxy (one program updating two or more sensors)
+- Consider that some sensors will not be stored....
+
+- Consider loading last data-Interval from database when user opens dashboard
+- Add a feature to jphconfig that validates all JSON
+
+- Build a program to configure the JSON
+ 	- double Check the proxies
+
+DONE
+- All logger per host / per unit
