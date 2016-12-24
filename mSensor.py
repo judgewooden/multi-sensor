@@ -14,7 +14,18 @@ import struct
 import socket
 import jphconfig
 import select
-import requests
+
+try:
+    sys.path.append("/home/jphmonitor")
+    sys.path.append('/home/jphmonitor/ABElectronics_Python_Libraries/ADCPi')
+    from ABE_ADCPi import ADCPi
+    from ABE_helpers import ABEHelpers
+    i2c_helper = ABEHelpers()
+    bus = i2c_helper.get_smbus()
+    adc = ADCPi(bus, 0x68, 0x69, 12)
+except ImportError:
+    print ("in sensors, importing ABE_ADCPi failed")
+    sys.exit()
 
 # -------------
 # Read Startup Parameters
@@ -67,7 +78,7 @@ def main(isActive):
         # send a keepalive packet
         if t >= ctrlNextKeepAlive:
             seq=jphconfig.sendPing(t, Codifier, isActive)
-            logging.debug("Ctrl-I : send %s %s %s", t, seq, isActive)
+            logging.debug("Ctrl-I : send %s %s %s %s", Codifier, t, seq, isActive)
             if not isActive:
                 logger.info("Keep Alive send. Processing currently HALTED.")
             ctrlNextKeepAlive = t + mySensor["KeepAliveInterval"]
@@ -88,26 +99,26 @@ def main(isActive):
             # Process Ctrl Messages
             if source in (Codifier, "@@"):
                 if flag == 'C':
-                    logger.info("Ctrl-C - Received request to reload config")
+                    logger.info("Ctrl-C - recv %s %s Received request to reload config", source, timestamp)
                     forever=False
                     break
                 if flag == 'H':
-                    logging.info("Ctrl-H - Received request to halt sensor")
+                    logging.info("Ctrl-H - recv %s %s Received request to halt sensor", source, timestamp)
                     isActive=False
                     ctrlNextKeepAlive=0     # force to send out a status change ping
                 if flag == 'S':
-                    logging.info("Ctrl-I - Received request to start sensor")
+                    logging.info("Ctrl-I - recv %s %s Received request to start sensor", source, timestamp)
                     isActive=True
                     ctrlNextKeepAlive=0     # force to send out a status change ping
                 if flag == 'I':
                     seq2, isActive2 = struct.unpack('I?', value)
-                    logging.debug("Ctrl-I : recv %s %s %s", timestamp, seq2, isActive2)
+                    logging.debug("Ctrl-I : recv %s %s %s %s", source, timestamp, seq2, isActive2)
                     if seq2 != seq:
                         logging.critical("There is another instance of %s running (seq=%s)", Codifier, str(seq2))
                         sys.exit()
 
 def sendSensor(sendTime, sendCodifier, sendValue):
-    logger.debug("Ctrl-D : %s %d %s", sendCodifier, sendTime, sendValue)
+    logger.debug("Ctrl-D : send %s %d %s", sendCodifier, sendTime, sendValue)
     if type(sendValue) == type(int()):
         payload_type = 'i'
         packed = struct.pack(payload_type, sendValue)
@@ -122,9 +133,23 @@ def sendSensor(sendTime, sendCodifier, sendValue):
         sys.exit()
     jphconfig.sendDataChannel(sendTime, sendCodifier, payload_type, packed)
        
+def phobya2temp ( voltageOut ):
+    ohm=(5-voltageOut)/voltageOut*16800/1000
+    temp=(0.0755*math.pow(ohm,2))-4.2327*ohm+60.589
+    return temp
+
+def ADCpiReader (Timestamp):
+    tInFlowBefore = adc.read_voltage(2)
+    sendSensor(Timestamp, Codifier, phobya2temp(tInFlowBefore))
+
 def TempLinux(Timestamp):
-    f = os.popen("/bin/cat " + mySensor["Sensor"]["Pipe"])
-    sendSensor(Timestamp, Codifier, float(f.read())/1000)
+    try:
+        f = os.popen("/bin/cat " + mySensor["Sensor"]["Pipe"])
+        sendSensor(Timestamp, Codifier, float(f.read())/1000)
+    except KeyError as e:
+        logger.critical("Exception (Field not found?): %s", e)
+    except Exception as e:
+        logger.critical("Exception : %s", e)
        
 def failsafeReader(Timestamp):
     try:
@@ -138,9 +163,8 @@ def failsafeReader(Timestamp):
             for proxy in mySensor["Sensor"]["Proxy"]:
                 v=json_data[proxy["Field"]]
                 sendSensor(Timestamp, str(proxy["Codifier"]), v)
-
-    # except KeyError:
-    #     print "KEY ERROR"
+    except KeyError as e:
+        logger.critical("Exception (Field not found?): %s", e)
     except requests.exceptions.ConnectionError as e:
         logger.warning("Unexpected not found: %s", e)
     except requests.exceptions.ReadTimeout as e:
@@ -148,13 +172,14 @@ def failsafeReader(Timestamp):
     except ValueError as e:
         logger.critical("Failed to read HTTP: %s", e)
     except Exception as e:
-        logger.critical("Exception (Field not found?): %s", e)
+        logger.critical("Exception : %s", e)
 
 if __name__ == '__main__':
 
     # - return location of the config file and my Codifier (from params or ENVIRONMENT)
-    (configURL, Codifier)=readParams("file:static/jphmonitor.json", "A1")
+    (configURL, Codifier)=readParams("file:static/jphmonitor.json", "")
     isActive=""     # At startup base Active-flag on config after that from CTRL-CHNL
+
     while True:
         (logger, configJSON, mySensor, isActive)=jphconfig.loadconfig(configURL, Codifier, isActive)
 
