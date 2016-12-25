@@ -313,7 +313,7 @@
             }
         }, {
             "Codifier":"F7",
-            "ShortName":"Cuboard Humidity",
+            "ShortName":"Cupboard Humidity",
             "Name":"Humidity of the Air inside",
             "Symbol":"%",
             "Type":"float",

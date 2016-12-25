@@ -172,8 +172,8 @@ def ADAfruitReader(Timestamp):
 
     except KeyError as e:
         logger.critical("Exception (Field not found?): %s", e)
-    except Exception as e:
-        logger.critical("Exception : %s", e)
+    # except Exception as e:
+    #     logger.critical("Exception : %s", e)
 
 
 def TempLinux(Timestamp):
