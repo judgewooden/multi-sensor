@@ -16,10 +16,10 @@ import __main__ as main
 # Global for tbhis sub
 #
 dataAddress=""
-dataPort=""
+dataPort=0
 dataSocket=""
 ctrlAddress=""
-ctrlPort=""
+ctrlPort=0
 ctrlSocket=""
 
 def loadconfig(configURL="", myCodifier="", isActive=""):
@@ -108,7 +108,7 @@ def closeControlChannel():
 	global ctrlAddress, ctrlPort, ctrlSocket
 	ctrlSocket.close()
 	ctrlAddress=""
-	ctrlPort="" 
+	ctrlPort=0
 	ctrlSocket=""
 
 def sendPing(Timestamp, Codifier, isActive):
@@ -139,9 +139,9 @@ def closeDataChannel():
 	global dataAddress, dataPort, dataSocket
 	dataSocket.close()
 	dataAddress=""
-	dataPort=""
+	dataPort=0
 	dataSocket=""
 
 def sendDataChannel(Timestamp, Codifier, MessageFlag, MessageData):
-	packed_data = struct.pack("I2s1sI%ds" % (len(MessageData),), Timestamp, Codifier, MessageFlag, len(MessageData), MessageData)
-	ctrlSocket.sendto(packed_data, (dataAddress, dataPort))
+    packed_data = struct.pack("I2s1sI%ds" % (len(MessageData),), Timestamp, Codifier, MessageFlag, len(MessageData), MessageData)
+    ctrlSocket.sendto(packed_data, (dataAddress, dataPort))

@@ -70,12 +70,12 @@ def main(isActive):
     Counter=0
 
     ctrlSocket=jphconfig.openControlChannel(
-        configJSON["Multicast"]["Control-Channel"]["Address"],
-        configJSON["Multicast"]["Control-Channel"]["Port"])
+        str(configJSON["Multicast"]["Control-Channel"]["Address"]),
+        int(configJSON["Multicast"]["Control-Channel"]["Port"]))
     ctrlNextKeepAlive=0
     dataSocket=jphconfig.openDataChannel(
-        configJSON["Multicast"]["Data-Channel"]["Address"],
-        configJSON["Multicast"]["Data-Channel"]["Port"])
+        str(configJSON["Multicast"]["Data-Channel"]["Address"]),
+        int(configJSON["Multicast"]["Data-Channel"]["Port"]))
     makeNextSensorReading = int(time.time()) + mySensor["SensorInterval"]
  
     if comTarget != "":

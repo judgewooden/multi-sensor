@@ -83,7 +83,7 @@
             "ShortName":"Kast Control",
             "Name":"Control, Used for multicast debugging",
             "Symbol":"p/m",
-            "KeepAliveInterval":10,
+            "KeepAliveInterval":60,
             "SensorInterval":60,
             "Active":false,
             "DataType":"integer",

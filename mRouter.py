@@ -18,20 +18,30 @@ def openSocket(addr, port, interface):
 
 north=openSocket("224.0.1.251", 8011, "192.168.0.225")
 south=openSocket("224.0.0.251", 8001, "192.168.136.4")
+northData=openSocket("224.0.1.252", 8012, "192.168.0.225")
+southData=openSocket("224.0.0.252", 8002, "192.168.136.4")
 
-inputs = [north, south]
+inputs = [north, south, northData, southData]
 forever=True
 while forever:
     readable, writable, exceptional = select.select(inputs, [], [])
     for s in readable:
+        if s == northData:
+            so="Data-North"
+            data, sender = northData.recvfrom(1500)
+            southData.sendto(data, ("224.0.0.252", 8002))
+        if s == southData:
+            so="Data-South"
+            data, sender = southData.recvfrom(1500)
+            northData.sendto(data, ("224.0.1.252", 8012))
         if s == north:
-            so="N"
+            so="Ctrl-North"
             data, sender = north.recvfrom(1500)
             south.sendto(data, ("224.0.0.251", 8001))
         if s == south:
-            so="S"
+            so="Ctrl-South"
             data, sender = south.recvfrom(1500)
-            # north.sendto(data, ("224.0.0.251", 8011))
+            north.sendto(data, ("224.0.1.251", 8011))
             
         (timestamp, source, flag, length,), value = struct.unpack('I2s1sI', data[:12]), data[12:]
         print (so, sender, timestamp, source, flag)
