@@ -126,7 +126,6 @@ def main(isActive):
                         sys.exit()
 
 def sendSensor(sendTime, sendCodifier, sendValue):
-    logger.debug("Ctrl-D : send %s %d %s", sendCodifier, sendTime, sendValue)
     if type(sendValue) == type(int()):
         payload_type = 'i'
         packed = struct.pack(payload_type, sendValue)
@@ -139,6 +138,7 @@ def sendSensor(sendTime, sendCodifier, sendValue):
     else:
         logger.critical('notyetcoded: %s', payload)
         sys.exit()
+    logger.debug("Data-%s : send %s %d %s", payload_type, sendCodifier, sendTime, sendValue)
     jphconfig.sendDataChannel(sendTime, sendCodifier, payload_type, packed)
        
 def phobya2temp(voltageOut):

@@ -2,14 +2,21 @@
 {
     "Multicast": {
         "Control-Channel": {
-            "Address":"225.0.0.251",
+            "Address":"224.0.0.251",
             "Port":8001
         },
         "Data-Channel": {
-            "Address":"225.0.0.251",
-            "Port":8002
+            "Address":"224.0.0.251",
+            "Port":8001
         }
     },
+    "Machines":[{
+        "Hostname":"jphpi",
+        "Interface":""
+    }, {
+        "Hostname":"kastpi",
+        "Interface":""
+    }],
     "Logging":{
         "version":1,
         "disable_existing_loggers":true,

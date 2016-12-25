@@ -1,6 +1,7 @@
 TODO
 ----
 - Program all sensors
+- Consider removing DATA/CONTROL channels make 1
 - numpy ??? // panda for calculations
 - Think how to do a proxy (one program updating two or more sensors)
 - Consider that some sensors will not be stored....
