@@ -79,6 +79,18 @@
                 "Type":"ControlProgram"
             }
         }, {
+            "Codifier":"CK",
+            "ShortName":"Kast Control",
+            "Name":"Control, Used for multicast debugging",
+            "Symbol":"p/m",
+            "KeepAliveInterval":10,
+            "SensorInterval":60,
+            "Active":false,
+            "DataType":"integer",
+            "Sensor":{
+                "Type":"ControlProgram"
+            }
+        }, {
             "Codifier":"Q1",
             "ShortName":"SQL-jphpi",
             "Name":"Postgress SQL adaptor on jphpi",

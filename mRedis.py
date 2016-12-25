@@ -118,7 +118,7 @@ def main(isActive):
                 if flag == 'I':
                     seq2, isActive2 = struct.unpack('I?', value)
                     logging.debug("Ctrl-I : recv %s %s %s", timestamp, seq2, isActive2)
-                    if seq2 != seq:
+                    if seq2 != seq and source == myCodifier:
                         logging.critical("There is another instance of %s running (seq=%s)", Codifier, str(seq2))
                         sys.exit()
 

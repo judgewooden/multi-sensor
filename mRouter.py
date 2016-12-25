@@ -16,7 +16,7 @@ def openSocket(addr, port, interface):
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 0)
     return tsocket
 
-north=openSocket("224.0.0.252", 8002, "192.168.0.225")
+north=openSocket("224.0.1.251", 8011, "192.168.0.225")
 south=openSocket("224.0.0.251", 8001, "192.168.136.4")
 
 inputs = [north, south]
@@ -31,7 +31,7 @@ while forever:
         if s == south:
             so="S"
             data, sender = south.recvfrom(1500)
-            # north.sendto(data, ("224.0.0.251", 8001))
+            # north.sendto(data, ("224.0.0.251", 8011))
             
         (timestamp, source, flag, length,), value = struct.unpack('I2s1sI', data[:12]), data[12:]
         print (so, sender, timestamp, source, flag)

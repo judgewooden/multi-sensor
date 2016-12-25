@@ -115,10 +115,8 @@ def main(isActive):
         readable, writable, exceptional = select.select(inputs, [], [], timeout)
         for s in readable:
             if s == dataSocket:
-                print("hello")
                 data, sender = dataSocket.recvfrom(1500)
             if s == ctrlSocket:
-                print("whot")
                 data, sender = ctrlSocket.recvfrom(1500)
             (timestamp, source, flag, length,), value = struct.unpack('I2s1sI', data[:12]), data[12:]
             Counter+=1
@@ -152,7 +150,7 @@ def main(isActive):
                 if flag == 'I':
                     seq2, isActive2 = struct.unpack('I?', value)
                     logging.debug("Ctrl-I : recv %s %s %s", timestamp, seq2, isActive2)
-                    if seq2 != seq:
+                    if seq2 != seq and source == myCodifier:
                         logging.warn("There is another instance of %s running (seq=%s) - ignore", myCodifier, str(seq2))
                 if flag == 'C':
                     logger.info("Ctrl-C - Received request to reload config")
