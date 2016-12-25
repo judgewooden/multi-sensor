@@ -234,6 +234,32 @@
                 "Codifier":"A1"
             }
         }, {
+            "Codifier":"A6",
+            "ShortName":"Mani-in Temp",
+            "Name":"Manifold Temperature IN",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "Sensor":{
+                "Type":"ADCpiReader",
+                "Pin":"2",
+                "Proxy":[{
+                    "Codifier":"A6",
+                    "Pin":"1"
+                }]
+            }
+        }, {
+            "Codifier":"A7",
+            "ShortName":"Rad-out Temp",
+            "Name":"Manifold Temperature OUT",
+            "Symbol":"C",
+            "Type":"float",
+            "Sensor":{
+                "Type":"Proxy",
+                "Codifier":"A7"
+            }
+        }, {
             "Codifier":"F1",
             "ShortName":"Air Temp",
             "Name":"Temperature of the Air outside",
@@ -257,6 +283,31 @@
             "Sensor":{
                 "Type":"Proxy",
                 "Codifier":"F1"
+            }
+        }, {
+            "Codifier":"F6",
+            "ShortName":"Cupboard Temp",
+            "Name":"Temperature of the Air inside",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "Sensor":{
+                "Type":"ADAfruitReader",
+                "Pin":"21",
+                "Proxy":[{
+                    "Codifier":"F7"
+                }]
+            }
+        }, {
+            "Codifier":"F7",
+            "ShortName":"Cuboard Humidity",
+            "Name":"Humidity of the Air inside",
+            "Symbol":"%",
+            "Type":"float",
+            "Sensor":{
+                "Type":"Proxy",
+                "Codifier":"F6"
             }
         }, {
             "Codifier":"51",

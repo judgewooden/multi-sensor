@@ -15,6 +15,9 @@ import __main__ as main
 #
 # Global for tbhis sub
 #
+dataAddress=""
+dataPort=""
+dataSocket=""
 ctrlAddress=""
 ctrlPort=""
 ctrlSocket=""
@@ -83,14 +86,15 @@ def loadconfig(configURL="", myCodifier="", isActive=""):
     return (logger, configJSON, mySensor, isActive)
 
 def openSocket(addr, port):
-	tAddr = socket.getaddrinfo(addr, None)[0]
-	tsocket = socket.socket(tAddr[0], socket.SOCK_DGRAM)
-	tsocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-	tsocket.bind(('', port))
-	group_bin = socket.inet_pton(tAddr[0], tAddr[4][0])
-	mreq = group_bin + struct.pack('=I', socket.INADDR_ANY)
-	tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
-	return tsocket
+    tAddr = socket.getaddrinfo(addr, None)[0]
+    tsocket = socket.socket(tAddr[0], socket.SOCK_DGRAM)
+    tsocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    tsocket.bind(('', port))
+    group_bin = socket.inet_pton(tAddr[0], tAddr[4][0])
+    mreq = group_bin + struct.pack('=I', socket.INADDR_ANY)
+    tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+    tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
+    return tsocket
 
 def openControlChannel(address, port):
 	global ctrlAddress, ctrlPort, ctrlSocket
