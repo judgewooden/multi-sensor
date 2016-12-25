@@ -94,7 +94,7 @@ def openSocket(addr, port):
     mreq = group_bin + struct.pack('=I', socket.INADDR_ANY)
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
-    tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 0)
+    tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
     return tsocket
 
 def openControlChannel(address, port):

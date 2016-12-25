@@ -7,15 +7,16 @@ def openSocket(addr, port, interface):
     tsocket = socket.socket(tAddr[0], socket.SOCK_DGRAM)
     tsocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     tsocket.bind(('', port))
-    group_bin = socket.inet_pton(tAddr[0], tAddr[4][0])
-    mreq = group_bin + struct.pack('=I', socket.INADDR_ANY)
-    tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+    # group_bin = socket.inet_pton(tAddr[0], tAddr[4][0])
+    # mreq = group_bin + struct.pack('=I', socket.INADDR_ANY)
+    # tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+    tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, socket.inet_aton(addr) + socket.inet_aton(interface))
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 1)
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_IF, socket.inet_aton(interface))
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 0)
     return tsocket
 
-north=openSocket("224.0.0.251", 8002, "192.168.0.225")
+north=openSocket("224.0.0.252", 8002, "192.168.0.225")
 south=openSocket("224.0.0.251", 8001, "192.168.136.4")
 
 inputs = [north, south]

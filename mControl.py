@@ -115,8 +115,10 @@ def main(isActive):
         readable, writable, exceptional = select.select(inputs, [], [], timeout)
         for s in readable:
             if s == dataSocket:
+                print("hello")
                 data, sender = dataSocket.recvfrom(1500)
             if s == ctrlSocket:
+                print("whot")
                 data, sender = ctrlSocket.recvfrom(1500)
             (timestamp, source, flag, length,), value = struct.unpack('I2s1sI', data[:12]), data[12:]
             Counter+=1
