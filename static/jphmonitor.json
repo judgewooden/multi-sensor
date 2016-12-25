@@ -212,7 +212,7 @@
             }
         }, {
             "Codifier":"Y2",
-            "ShortName":"Aqua Liters",
+            "ShortName":"MAD Liters",
             "Name":"Liters Per Minute",
             "Symbol":"lpm",
             "Sensor":{

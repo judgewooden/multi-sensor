@@ -165,7 +165,8 @@ def ADAfruitReader(Timestamp):
         import Adafruit_DHT
         h, v = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, int(mySensor["Sensor"]["Pin"]))
         if h is None and v is None:
-            raise("sensors return None")
+            print("SENSORS RETURN NO VALUES BRO")
+            break
         sendSensor(Timestamp, Codifier, v)
         for proxy in mySensor["Sensor"]["Proxy"]:
             sendSensor(Timestamp, str(proxy["Codifier"]), h)

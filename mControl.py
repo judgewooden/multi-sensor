@@ -18,7 +18,7 @@ import jphconfig
 # -------------
 # Read Startup Parameters
 # -------------
-def readParams(configURL, myCodifier):
+def readParams(configURL, Codifier):
     def usage():
         print("Usage: -u <url> -c <code> -t <code> -f <flag> -l <code> -x", __file__)
         print("\t-u <url> : load the configuration from a url")
@@ -43,7 +43,7 @@ def readParams(configURL, myCodifier):
             elif opt in ("-u", "--url"):
                 configURL=arg
             elif opt in ("-c", "--code"):
-                myCodifier=arg
+                Codifier=arg
             elif opt in ("-t", "--filter"):
                 comTarget=arg
             elif opt in ("-f", "--flag"):
@@ -52,7 +52,7 @@ def readParams(configURL, myCodifier):
                 comFilter=arg
             elif opt in ("-x", "--exit"):
                 comflagExit=True
-        if myCodifier == "" :
+        if Codifier == "" :
             raise ValueError("Option <code> is mandatory")
         if configURL == "" :
             raise ValueError("Option <url> is mandatory")
@@ -62,7 +62,7 @@ def readParams(configURL, myCodifier):
         print("Error: %s" % e)
         usage()
         sys.exit()
-    return (configURL, myCodifier, comTarget, comFilter, comflag, comflagExit)
+    return (configURL, Codifier, comTarget, comFilter, comflag, comflagExit)
 
 def main(isActive):
 
@@ -97,7 +97,7 @@ def main(isActive):
         
         # send a keepalive packet
         if t >= ctrlNextKeepAlive:
-            jphconfig.sendPing(t, myCodifier, False)
+            jphconfig.sendPing(t, Codifier, False)
             logging.debug("Ctrl-I : send %s %s %s", t, jphconfig.getReloadTime(), False)
             ctrlNextKeepAlive = t + mySensor["KeepAliveInterval"]
 
@@ -105,7 +105,7 @@ def main(isActive):
             payload_type = 'i'
             packed = struct.pack(payload_type, Counter)
             if isActive:
-                jphconfig.sendDataChannel(t, myCodifier, payload_type, packed)
+                jphconfig.sendDataChannel(t, Codifier, payload_type, packed)
             Counter=0
             makeNextSensorReading = t + mySensor["SensorInterval"]
 
@@ -146,12 +146,12 @@ def main(isActive):
                 print("%d %s%s %s %s (len=%d)" % (timestamp, chnl, flag, source,
                        payload, length)), sender
 
-            if source in (myCodifier, "@@"):
+            if source in (Codifier, "@@"):
                 if flag == 'I':
                     seq2, isActive2 = struct.unpack('I?', value)
                     logging.debug("Ctrl-I : recv %s %s %s", timestamp, seq2, isActive2)
                     if seq2 >= jphconfig.getReloadTime() and source == Codifier:
-                        logging.warn("There is another instance of %s running (seq=%s) - ignore", myCodifier, str(seq2))
+                        logging.warn("There is another instance of %s running (seq=%s) - ignore", Codifier, str(seq2))
                 if flag == 'C':
                     logger.info("Ctrl-C - Received request to reload config")
                     forever=False
@@ -163,17 +163,17 @@ def main(isActive):
 if __name__ == '__main__':
 
     # - return location of the config file and my Codifier (from params or ENVIRONMENT)
-    (configURL, myCodifier, comTarget, comFilter, comflag, comflagExit)=readParams("file:static/jphmonitor.json", "CC")
+    (configURL, Codifier, comTarget, comFilter, comflag, comflagExit)=readParams("file:static/jphmonitor.json", "CC")
     isActive=""     # At startup base Active-flag on config after that from CTRL-CHNNL
     while True:
-        (logger, configJSON, mySensor, isActive)=jphconfig.loadconfig(configURL, myCodifier, isActive)
+        (logger, configJSON, mySensor, isActive)=jphconfig.loadconfig(configURL, Codifier, isActive)
 
         if isActive:
             logger.warn("Configuration is setup to Active=True (This should be changed)")
         else:
             isActive=True
         if mySensor["Sensor"]["Type"] != "ControlProgram":
-            logger.critical("Sensor type (ControlProgram) expected for %s", myCodifier)
+            logger.critical("Sensor type (ControlProgram) expected for %s", Codifier)
             sys.exit()
 
         main(isActive)
