@@ -97,8 +97,8 @@ def main(isActive):
         
         # send a keepalive packet
         if t >= ctrlNextKeepAlive:
-            seq=jphconfig.sendPing(t, myCodifier, False)
-            logging.debug("Ctrl-I : send %s %s %s", t, seq, False)
+            jphconfig.sendPing(t, myCodifier, False)
+            logging.debug("Ctrl-I : send %s %s %s", t, jphconfig.getReloadTime(), False)
             ctrlNextKeepAlive = t + mySensor["KeepAliveInterval"]
 
         if t >= makeNextSensorReading:
@@ -150,7 +150,7 @@ def main(isActive):
                 if flag == 'I':
                     seq2, isActive2 = struct.unpack('I?', value)
                     logging.debug("Ctrl-I : recv %s %s %s", timestamp, seq2, isActive2)
-                    if seq2 != seq and source == myCodifier:
+                    if seq2 >= jphconfig.getReloadTime() and source == Codifier:
                         logging.warn("There is another instance of %s running (seq=%s) - ignore", myCodifier, str(seq2))
                 if flag == 'C':
                     logger.info("Ctrl-C - Received request to reload config")

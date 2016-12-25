@@ -87,8 +87,8 @@ def main(isActive):
 
         # send a keepalive packet
         if t >= ctrlNextKeepAlive:
-            seq=jphconfig.sendPing(t, Codifier, isActive)
-            logging.debug("Ctrl-I : send %s %s %s %s", Codifier, t, seq, isActive)
+            jphconfig.sendPing(t, Codifier, isActive)
+            logging.debug("Ctrl-I : send %s %s %s %s", Codifier, t, jphconfig.getReloadTime(), isActive)
             if not isActive:
                 logger.info("Keep Alive send. Processing currently HALTED.")
             ctrlNextKeepAlive = t + mySensor["KeepAliveInterval"]
@@ -123,7 +123,7 @@ def main(isActive):
                 if flag == 'I':
                     seq2, isActive2 = struct.unpack('I?', value)
                     logging.debug("Ctrl-I : recv %s %s %s %s", source, timestamp, seq2, isActive2)
-                    if seq2 != seq and source == myCodifier:
+                    if seq2 >= jphconfig.getReloadTime() and source == Codifier:
                         logging.critical("There is another instance of %s running (seq=%s)", Codifier, str(seq2))
                         sys.exit()
 

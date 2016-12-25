@@ -4,6 +4,7 @@
 import os
 import logging
 import logging.config
+import time
 import sys
 import json
 import urllib2
@@ -21,8 +22,13 @@ dataSocket=""
 ctrlAddress=""
 ctrlPort=0
 ctrlSocket=""
+reloadedOn=0
+
+def getReloadTime():
+    return reloadedOn
 
 def loadconfig(configURL="", myCodifier="", isActive=""):
+    global reloadedOn
 
     if (os.getenv("JPH_DEBUG", "0")=="1"):
         logging.basicConfig(level=logging.DEBUG)
@@ -83,6 +89,8 @@ def loadconfig(configURL="", myCodifier="", isActive=""):
     else:
         logger.info("(Re)Starting logging in DEBUG")
 
+    reloadedOn=time.time()
+
     return (logger, configJSON, mySensor, isActive)
 
 def openSocket(addr, port):
@@ -112,11 +120,9 @@ def closeControlChannel():
 	ctrlSocket=""
 
 def sendPing(Timestamp, Codifier, isActive):
-    seq = random.randint(1,2147483647)
-    packed = struct.pack('I?', seq, isActive)
+    packed = struct.pack('I?', reloadedOn, isActive)
     packed_data = struct.pack("I2s1sI%ds" % (len(packed),), Timestamp, Codifier, 'I', len(packed), packed)
     ctrlSocket.sendto(packed_data, (ctrlAddress, ctrlPort))
-    return seq
 
 def sendControlChannel(Timestamp, Codifier, MessageFlag, MessageData):
 	print(Timestamp, Codifier, MessageFlag, MessageData)

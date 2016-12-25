@@ -5,6 +5,9 @@
     <title id='Description'>Dashboard</title>
 
     <!-- Bootstrap core CSS -->
+<!--
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <!-- jQWidgets CSS -->
     <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
@@ -12,6 +15,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.2/jquery.tipsy.js"></script>
     -->
     <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<!--
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js"></script>
+-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='sensorGraphStyle.css') }}">
@@ -76,7 +82,7 @@ var updateTimes = function() {
 
         // Rethink this for PROXY
         if (s.Active) {
-            n=parseInt((Date.now()-RefreshRate)/1000);
+            n=parseInt((Date.now()-RefreshRate)/1000) - 2;
             if ((n - s.SensorInterval) > s.LastDTimestamp) {
                 newStatus=STATUS.DWARNING;
             } else {
@@ -99,7 +105,7 @@ var updateTimes = function() {
                     newStatus=STATUS.IWARNING;
                 } else {
                     if (p.LastStatus!=STATUS.INFO) {
-                        n=parseInt((Date.now()-RefreshRate)/1000);
+                        n=parseInt((Date.now()-RefreshRate)/1000) - 2;
                         if ((n - p.SensorInterval) > s.LastDTimestamp) {
                             newStatus=STATUS.DWARNING;
                         } else {

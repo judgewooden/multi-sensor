@@ -269,7 +269,7 @@
             "Type":"float",
             "Sensor":{
                 "Type":"Proxy",
-                "Codifier":"A7"
+                "Codifier":"A6"
             }
         }, {
             "Codifier":"F1",
@@ -320,91 +320,6 @@
             "Sensor":{
                 "Type":"Proxy",
                 "Codifier":"F6"
-            }
-        }, {
-            "Codifier":"51",
-            "ShortName":"CPU Temp",
-            "Name":"kastpi CPU Temparature",
-            "Symbol":"C",
-            "KeepAliveInterval":60,
-            "SensorInterval":10,
-            "Active":true,
-            "Sensor":{
-                "Type":"TempLinux",
-                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
-            }
-        }, {
-            "Codifier":"61",
-            "ShortName":"CPU Temp",
-            "Name":"kastpi CPU Temparature",
-            "Symbol":"C",
-            "KeepAliveInterval":60,
-            "SensorInterval":10,
-            "Active":true,
-            "Sensor":{
-                "Type":"TempLinux",
-                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
-            }
-        }, {
-            "Codifier":"71",
-            "ShortName":"CPU Temp",
-            "Name":"kastpi CPU Temparature",
-            "Symbol":"C",
-            "StaleWarning":10,
-            "KeepAliveInterval":60,
-            "SensorInterval":10,
-            "Active":false,
-            "Sensor":{
-                "Type":"TempLinux",
-                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
-            }
-        }, {
-            "Codifier":"81",
-            "ShortName":"CPU Temp",
-            "Name":"kastpi CPU Temparature",
-            "Symbol":"C",
-            "KeepAliveInterval":60,
-            "SensorInterval":10,
-            "Active":true,
-            "Sensor":{
-                "Type":"TempLinux",
-                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
-            }
-        }, {
-            "Codifier":"91",
-            "ShortName":"CPU Temp",
-            "Name":"kastpi CPU Temparature",
-            "Symbol":"C",
-            "KeepAliveInterval":60,
-            "SensorInterval":10,
-            "Active":true,
-            "Sensor":{
-                "Type":"TempLinux",
-                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
-            }
-        }, {
-            "Codifier":"P1",
-            "ShortName":"CPU Temp",
-            "Name":"kastpi CPU Temparature",
-            "Symbol":"C",
-            "KeepAliveInterval":60,
-            "SensorInterval":10,
-            "Active":true,
-            "Sensor":{
-                "Type":"TempLinux",
-                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
-            }
-        }, {
-            "Codifier":"88",
-            "ShortName":"CPU Temp",
-            "Name":"kastpi CPU Temparature",
-            "Symbol":"C",
-            "KeepAliveInterval":60,
-            "SensorInterval":10,
-            "Active":true,
-            "Sensor":{
-                "Type":"TempLinux",
-                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
             }
         }
     ]
