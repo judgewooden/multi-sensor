@@ -71,7 +71,7 @@ var updateTimes = function() {
     //
     for ( i=mySensors.length;i--; ) {
         s=mySensors[i];
-        if (s.Codifier=="CC")       // This sensor shows messages to users
+        if (s.Sensor.Type=="ControlProgram")       // This sensor shows messages to users
             continue;
 
         // Rethink this for PROXY

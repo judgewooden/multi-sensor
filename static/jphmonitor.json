@@ -10,13 +10,6 @@
             "Port":8002
         }
     },
-    "Machines":[{
-        "Hostname":"jphpi",
-        "Interface":""
-    }, {
-        "Hostname":"kastpi",
-        "Interface":""
-    }],
     "Logging":{
         "version":1,
         "disable_existing_loggers":true,
@@ -147,12 +140,25 @@
                 "Pipe":"/sys/class/thermal/thermal_zone0/temp"
             }
         }, {
+            "Codifier":"C3",
+            "ShortName":"mad Temp",
+            "Name":"pihost CPU Temparature",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "Active":true,
+            "DataType":"float",
+            "Sensor":{
+                "Type":"TempLinux",
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
             "Codifier":"X1",
             "ShortName":"Aqua Flow",
             "Name":"Water sensors Rotations",
             "Symbol":"rpm",
             "KeepAliveInterval":60,
-            "SensorInterval":10,
+            "SensorInterval":60,
             "Active":true,
             "DataType":"float",
             "Sensor":{
@@ -178,7 +184,7 @@
             }
         }, {
             "Codifier":"X3",
-            "ShortName":"Power",
+            "ShortName":"Flow Sensor Power",
             "Name":"Indicator if the Power is ON/OFF",
             "Symbol":" ",
             "Type":"bool",
@@ -192,7 +198,7 @@
             "Name":"Water sensors Rotations",
             "Symbol":"rpm",
             "KeepAliveInterval":60,
-            "SensorInterval":10,
+            "SensorInterval":60,
             "Active":true,
             "DataType":"float",
             "Sensor":{
@@ -202,9 +208,6 @@
                 "Proxy":[{
                     "Codifier":"Y2",
                     "Field":"LitersPerSecond"
-                    },{
-                    "Codifier":"Y3",
-                    "Field":"Power"
                 }]
             }
         }, {
@@ -212,16 +215,6 @@
             "ShortName":"Aqua Liters",
             "Name":"Liters Per Minute",
             "Symbol":"lpm",
-            "Sensor":{
-                "Type":"Proxy",
-                "Codifier":"Y1"
-            }
-        }, {
-            "Codifier":"Y3",
-            "ShortName":"Power",
-            "Name":"Indicator if the Power is ON/OFF",
-            "Symbol":" ",
-            "Type":"bool",
             "Sensor":{
                 "Type":"Proxy",
                 "Codifier":"Y1"
@@ -254,7 +247,7 @@
             }
         }, {
             "Codifier":"A6",
-            "ShortName":"Mani-in Temp",
+            "ShortName":"Manifold-in Temp",
             "Name":"Manifold Temperature IN",
             "Symbol":"C",
             "KeepAliveInterval":60,
@@ -270,7 +263,7 @@
             }
         }, {
             "Codifier":"A7",
-            "ShortName":"Rad-out Temp",
+            "ShortName":"Manifold-out Temp",
             "Name":"Manifold Temperature OUT",
             "Symbol":"C",
             "Type":"float",

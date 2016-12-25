@@ -34,6 +34,8 @@ def initJPH(type):
             sys.exit()
     if type == "ADAfruitReader":
         import Adafruit_DHT
+    # if type == "failsafeReader":
+    #     import requests
 
 # -------------
 # Read Startup Parameters
@@ -121,7 +123,7 @@ def main(isActive):
                 if flag == 'I':
                     seq2, isActive2 = struct.unpack('I?', value)
                     logging.debug("Ctrl-I : recv %s %s %s %s", source, timestamp, seq2, isActive2)
-                    if seq2 != seq:
+                    if seq2 != seq and source == myCodifier:
                         logging.critical("There is another instance of %s running (seq=%s)", Codifier, str(seq2))
                         sys.exit()
 
@@ -185,6 +187,7 @@ def TempLinux(Timestamp):
        
 def failsafeReader(Timestamp):
     try:
+        import requests
         response=requests.get(mySensor["Sensor"]["URL"], timeout=(2.0, 10.0))
         if response.headers["content-type"] != "application/json":
             raise WrongContent(response=response)

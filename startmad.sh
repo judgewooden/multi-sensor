@@ -1,15 +1,9 @@
 #!/bin/sh
 
-# pkill -f mSensor
+export JPH_DEBUG=0
 
+python mSensor.py -c C3 &
+python mSensor.py -c X1 &
+python mSensor.py -c Y1 &
 
-python mSensor.py -c 11 &
-python mSensor.py -c 21 &
-python mSensor.py -c 31 &
-python mSensor.py -c 41 &
-python mSensor.py -c 51 &
-python mSensor.py -c 61 &
-python mSensor.py -c 71 &
-python mSensor.py -c 81 &
-python mSensor.py -c 91 &
-
+echo pkill -f mSensor
