@@ -81,8 +81,7 @@ def main(isActive):
     if comTarget != "":
         leftc=comflag[:1]
         t=int(time.time()) 
-        seq = random.randint(1,2147483647)
-        seq_packed = struct.pack('I', seq)
+        seq_packed = struct.pack('I', t)
         print("Sending flag=%s to Codifier=%s" % (leftc, comTarget))
         jphconfig.sendControlChannel(t, comTarget, leftc, seq_packed)
 
@@ -122,9 +121,11 @@ def main(isActive):
             Counter+=1
             
             # Process Messages
-            if flag in ('H', 'S', 'C', 'I'):
+            if flag in ('H', 'S', 'C', 'I', 'T', 'P'):
                 chnl="Ctrl-"
-                if flag == 'I':
+                if flag in ('T', 'P'):
+                    payload, = struct.unpack('I', value)
+                elif flag == 'I':
                     seq2, isActive2 = struct.unpack('I?', value)
                     payload=("%s / %s" % (seq2, isActive2))
                 else:
@@ -155,6 +156,7 @@ def main(isActive):
                 if flag == 'C':
                     logger.info("Ctrl-C - Received request to reload config")
                     forever=False
+                    break
 
     # exit
     jphconfig.closeControlChannel()

@@ -103,6 +103,7 @@ def openSocket(addr, port):
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
+
     return tsocket
 
 def openControlChannel(address, port):
@@ -118,6 +119,16 @@ def closeControlChannel():
 	ctrlAddress=""
 	ctrlPort=0
 	ctrlSocket=""
+
+def sendTime(Timestamp, Codifier, RequestTime):
+    packed = struct.pack('I', RequestTime)
+    packed_data = struct.pack("I2s1sI%ds" % (len(packed),), Timestamp, Codifier, 'T', len(packed), packed)
+    ctrlSocket.sendto(packed_data, (ctrlAddress, ctrlPort))
+
+def sendPing(Timestamp, Codifier, isActive):
+    packed = struct.pack('I?', reloadedOn, isActive)
+    packed_data = struct.pack("I2s1sI%ds" % (len(packed),), Timestamp, Codifier, 'I', len(packed), packed)
+    ctrlSocket.sendto(packed_data, (ctrlAddress, ctrlPort))
 
 def sendPing(Timestamp, Codifier, isActive):
     packed = struct.pack('I?', reloadedOn, isActive)

@@ -112,6 +112,13 @@ def main(isActive):
                     logger.info("Ctrl-C - recv %s %s Received request to reload config", source, timestamp)
                     forever=False
                     break
+                if flag == 'T':
+                    RequestTime, = struct.unpack('I', value)
+                    logger.debug("Ctrl-T - Received time info %s (ignore)", RequestTime)
+                if flag == 'P':
+                    RequestTime, = struct.unpack('I', value)
+                    logging.debug("Ctrl-P - Received request for time %s", RequestTime)
+                    jphconfig.sendTime(t, Codifier, RequestTime)
                 if flag == 'H':
                     logging.info("Ctrl-H - recv %s %s Received request to halt sensor", source, timestamp)
                     isActive=False
