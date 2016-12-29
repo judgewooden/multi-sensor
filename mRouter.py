@@ -16,10 +16,10 @@ def openSocket(addr, port, interface):
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 0)
     return tsocket
 
-northCtrl=openSocket("224.0.1.251", 8011, "192.168.0.225")
-southCtrl=openSocket("226.0.0.221", 7001, "192.168.136.4")
-northData=openSocket("224.0.1.252", 8012, "192.168.0.225")
-southData=openSocket("226.0.0.222", 7002, "192.168.136.4")
+northCtrl=openSocket("227.0.1.111", 5001, "192.168.0.225")
+southCtrl=openSocket("223.0.0.221", 7001, "192.168.136.4")
+northData=openSocket("227.0.1.112", 5002, "192.168.0.225")
+southData=openSocket("223.0.0.222", 7002, "192.168.136.4")
 
 inputs = [northCtrl, southCtrl, northData, southData]
 forever=True
@@ -29,7 +29,7 @@ while forever:
         if s == southCtrl:
             so="Ctrl-South"
             data, sender = southCtrl.recvfrom(1500)
-            northCtrl.sendto(data, ("224.0.1.251", 8011))
+            northCtrl.sendto(data, ("227.0.1.111", 5001))
         if s == northCtrl:
             so="Ctrl-North"
             data, sender = northCtrl.recvfrom(1500)
@@ -37,7 +37,7 @@ while forever:
         if s == southData:
             so="Data-South"
             data, sender = southData.recvfrom(1500)
-            northData.sendto(data, ("224.0.1.252", 8012))
+            northData.sendto(data, ("227.0.1.112", 5002))
         if s == northData:
             so="Data-North"
             data, sender = northData.recvfrom(1500)
