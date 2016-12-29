@@ -5,9 +5,9 @@ import getopt
 import struct
 import jph
 
-#----------------
-# Designed to view at control messages 
-#----------------
+#------------------------------------------------------------------
+# Designed to view multicast channels and send custom Ctrl messages
+#------------------------------------------------------------------
 
 # -------------
 # Globals
@@ -21,6 +21,7 @@ comExit=""
 comChnl=""
 configURL="file:static/jphmonitor.json2"
 Codifier=""
+comForce=""
 
 # -------------
 # Read Startup Parameters
@@ -31,17 +32,20 @@ def usage():
     print("\t-c <code>: The Codifier of this program") 
     print("")
     print("\t-t <code>: Send a message to this Codifier (requires -f)")
-    print("\t-f <flag>: Send this flag to Codifier (requires -t)")
-    print("\t-x       : Exit (skip view messages on console")
+    print("\t-f <flag>: Send this flag to Codifier in message (requires -t)")
+    print("\t-x       : Exit after message (skip view messages on console")
     print("")
     print("\t-l <code>: Filter and show all message TO&FROM this Codifier") 
+    print("\t           OR")
     print("\t-o <code>: Filter and show only message TO this Codifier") 
     print("\t-r <code>: Filter and show only messages FROM Codifier") 
     print("")
     print("\t-n <chnl>: Filter and show only this Channel (Data/Ctrl)")
+    print("")
+    print("\t-F       : Force ME as ON and Active to receive messages")
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hu:c:t:f:xl:o:r:n:", ["help", "url=", "code=", "msg-to=", "msg-flag=", "exit", "filter-from=", "filter-to=", "filter-all=", "filter-chnl="])
+    opts, args = getopt.getopt(sys.argv[1:], "hu:c:t:f:xl:o:r:n:F", ["force", "help", "url=", "code=", "msg-to=", "msg-flag=", "exit", "filter-from=", "filter-to=", "filter-all=", "filter-chnl="])
     for opt, arg in opts:
         if opt in ("-h", "help"):
             raise
@@ -63,6 +67,8 @@ try:
             comTo=arg[:2]
         elif opt in ("-n", "--filter-chnl"):
             comChnl=arg[:1].upper()
+        elif opt in ("-F", "--force"):
+            comForce=True
     if (comTarget!="" and comFlag=="") or (comTarget=="" and comFlag!=""):
         raise ValueError("Option -t & -f are combined")
 except Exception as e:
@@ -90,5 +96,7 @@ if __name__ == '__main__':
         channel.sendCtrl(to=comTarget, flag=comFlag)
     if comExit:
         sys.exit()
+    if comForce:
+        channel.sendCtrl(to=Codifier, flag='S')
 
     channel.run(ctrlCallback=theOutput, dataCallback=theOutput)

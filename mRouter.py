@@ -16,32 +16,30 @@ def openSocket(addr, port, interface):
     tsocket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 0)
     return tsocket
 
-north=openSocket("224.0.1.251", 8011, "192.168.0.225")
-south=openSocket("224.0.0.251", 8001, "192.168.136.4")
+northCtrl=openSocket("224.0.1.251", 8011, "192.168.0.225")
+southCtrl=openSocket("226.0.0.221", 7001, "192.168.136.4")
 northData=openSocket("224.0.1.252", 8012, "192.168.0.225")
-southData=openSocket("224.0.0.252", 8002, "192.168.136.4")
+southData=openSocket("226.0.0.222", 7002, "192.168.136.4")
 
-inputs = [north, south, northData, southData]
+inputs = [northCtrl, southCtrl, northData, southData]
 forever=True
 while forever:
     readable, writable, exceptional = select.select(inputs, [], [])
     for s in readable:
-        if s == northData:
-            so="Data-North"
-            data, sender = northData.recvfrom(1500)
-            southData.sendto(data, ("224.0.0.252", 8002))
+        if s == southCtrl:
+            so="Ctrl-South"
+            data, sender = southCtrl.recvfrom(1500)
+            northCtrl.sendto(data, ("224.0.1.251", 8011))
+        if s == northCtrl:
+            so="Ctrl-North"
+            data, sender = northCtrl.recvfrom(1500)
+            southCtrl.sendto(data, ("224.0.0.221", 7001))
         if s == southData:
             so="Data-South"
             data, sender = southData.recvfrom(1500)
             northData.sendto(data, ("224.0.1.252", 8012))
-        if s == north:
-            so="Ctrl-North"
-            data, sender = north.recvfrom(1500)
-            south.sendto(data, ("224.0.0.251", 8001))
-        if s == south:
-            so="Ctrl-South"
-            data, sender = south.recvfrom(1500)
-            north.sendto(data, ("224.0.1.251", 8011))
+        if s == northData:
+            so="Data-North"
+            data, sender = northData.recvfrom(1500)
+            southData.sendto(data, ("224.0.0.222", 7002))
             
-        (timestamp, source, flag, length,), value = struct.unpack('I2s1sI', data[:12]), data[12:]
-        print (so, sender, timestamp, source, flag)

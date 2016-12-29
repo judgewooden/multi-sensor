@@ -5,17 +5,14 @@ import getopt
 import struct
 import jph
 import os
+import time
+import random
 
 # -------------
 # Globals
 # -------------
-comFilter=""
-comFlag=""
-comTarget=""
-comExit=""
 configURL="file:static/jphmonitor.json2"
 Codifier=""
-x=0
 
 # -------------
 # Read Startup Parameters
@@ -24,13 +21,9 @@ def usage():
     print("Usage: -u <url>", __file__)
     print("\t-u <url> : load the JSON configuration from a url")
     print("\t-c <code>: The Sensor that this program needs to manage") 
-    print("\t-t <code>: The Codifier of the program to send a message to") 
-    print("\t-f <flag>: Send a signal (H)alt, (S)tart, (C)onfig")
-    print("\t-l <code>: Filter ond show only this Codifier") 
-    print("\t-x       : Exit (skip view messages on console")
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hu:c:t:f:l:x", ["help", "url=", "code=", "comTarget=", "flag=", "filter=", "exit"])
+    opts, args = getopt.getopt(sys.argv[1:], "hu:c:", ["help", "url=", "code="])
     for opt, arg in opts:
         if opt in ("-h", "help"):
             raise
@@ -38,32 +31,10 @@ try:
             configURL=arg
         elif opt in ("-c", "--code"):
             Codifier=arg
-        elif opt in ("-t", "--filter"):
-            comTarget=arg
-        elif opt in ("-f", "--flag"):
-            comFlag=arg
-        elif opt in ("-l", "--filter"):
-            comFilter=arg
-        elif opt in ("-x", "--exit"):
-            comExit=True
-    if (comTarget!="" and comFlag=="") or (comTarget=="" and comFlag!=""):
-        raise ValueError("Option -t & -f are combined")
 except Exception as e:
     print("Error: %s" % e)
     usage()
     sys.exit()
-
-def theOutput(chnl, flag, source, to, timestamp, sequence, length, sender, data, isActive):
-    if comFilter in (source, to, ""):
-        print("%d %s%s %s-%s %d (len=%d) (active=%s) %s" % (timestamp, chnl, flag, source, to, sequence, length, isActive, data ), sender)
-    return
-
-def theSensor(timestamp):
-    global x
-    # print("SENSOR READING: ", x)
-    channel.sendData(x)
-    x+=1
-    return
 
 #
 # by making a Sensor a class you can store local variables
@@ -72,6 +43,19 @@ def theSensor(timestamp):
 # 
 # Also allow for enhanced inequiry capabilities using a peer-to-peer future prototcol
 #
+def theOutput(chnl, flag, source, to, timestamp, sequence, length, sender, data, isActive):
+
+    comA = True if comAll in (source, to, "") else False
+    if (comFrom!=""):
+        comA = True if comFrom == source else False
+    if (comTo!=""):
+        comA = True if comTo == to else False
+
+    comC = True if comChnl in (chnl[:1], "") else False
+
+    if comA and comC:
+        print("%d %s%s %s-%s %d (len=%d) (active=%s) %s" % (timestamp, chnl, flag, source, to, sequence, length, isActive, data ), sender)
+        
 class Sensors(object):
     def TempLinux(self, Timestamp):
         try:
@@ -79,26 +63,26 @@ class Sensors(object):
         except AttributeError:
             self.cmd= ("/bin/cat " + channel.getSensor("Sensor")["Pipe"])
             channel.sendData(float(os.popen(self.cmd).read())/1000)
+        # channel.sendData(random.randint(1,2147483647), Codifier="XX")
 
 if __name__ == '__main__':
 
+    # Consider putting this into JPH in the future
     s=Sensors()
 
     channel=jph.jph(configURL=configURL, Codifier=Codifier)
-    if comTarget!="":
-        channel.sendCtrl(to=comTarget, flag=comFlag)
-    if comExit:
-        sys.exit()
 
-    print(channel.getSensor())
-    print(channel.getSensor("Sensor"))
     # Code examples
-    # channel.sendData("Hello again")
+    # x=88
+    # while 1:
+    #     channel.sendData(x)
+    #     channel.sendData(x*2, codifier="BB")
+    #     x+=1
+    #     time.sleep(1)
+    # channel.sendData("Hello again")      # this does not create a control channel with KeepAlive's 
     # channel.run(ctrlCallback=theOutput, dataCallback=theOutput, timeCallback=theSensor)
+    # TODO program the logic to figure out which sensor to call in the run program
     channel.run(timeCallback=s.TempLinux)
-
-    print("Got through it")
-
 
 """
 import logging

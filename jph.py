@@ -82,6 +82,7 @@ class jph(object):
         self.SensorInterval=0
         self.ConfigTimestamp=0
         self.IsActive=""
+        self.SequenceTable={}
 
         self.loadConfig()
         
@@ -181,10 +182,10 @@ class jph(object):
             raise ValueError(err)
 
         # AUTHOR: Consider programming the logic of looping and binding NIC
+
         self.CtrlSocket=openSocket(self.CtrlAddress, self.CtrlPort, enable_local_loop=1, do_not_load_multicast=do_not_load_multicast)
         self.CtrlSequence=random.randint(1,2147483647)
         self.sendCtrl(flag='N')
-        self.DataSequence=self.CtrlSequence
 
     def endCtrl(self):
         if (self.CtrlSocket==0):
@@ -213,43 +214,57 @@ class jph(object):
         self.DataSocket.close()
         self.DataSocket=0
 
-    def sendData(self, data, timestamp=0):
+    def sendData(self, data, timestamp=0, Codifier="", sequence_packet=False):
         if (self.DataSocket==0):
-            if (self.CtrlSocket==0):
-                self.startCtrl(do_not_load_multicast=True)
+            # DOUWE if (self.CtrlSocket==0):
+            # DOUWE     self.startCtrl(do_not_load_multicast=True)   # remove option from
             self.startData(do_not_load_multicast=True)
 
         if timestamp==0:
             timestamp=timeNow()
         to=str("@@")
 
-        if isinstance(data, unicode):           
-            data=str(data)
-        if type(data) == type(int()):
-            flag = str('i')
-            packed = struct.pack('i', data)
-        elif isinstance(data, str):
-            flag = str('s')
-            packed = struct.pack('I%ds' % (len(data),), len(data), data)
-        elif isinstance(data, float):
-            flag = str('f')
-            packed = struct.pack('f', data)
+        if Codifier=="":
+            Codifier=self.Codifier
         else:
-            raise NotImplementedError("Unknown (unsupported) data type")
+            Codifier=str(Codifier)
 
-        logging.debug("Data-%s : send %s-%s %d %d data:%s", flag, self.Codifier, to, timestamp, self.DataSequence, data)
+        if (sequence_packet):
+            sequence=data
+            flag = str('n')
+            packed = struct.pack('I', sequence)
+        else:
+            if not Codifier in self.SequenceTable:
+                self.SequenceTable[Codifier]=random.randint(1,2147483647)
+                self.sendData(data=self.SequenceTable[Codifier], timestamp=timestamp, Codifier=Codifier, sequence_packet=True)
 
-        packed_data = struct.pack("IQ1s2s2sI%ds" % (len(packed),), self.DataSequence, timestamp, flag, self.Codifier, to, len(packed), packed)
+            self.SequenceTable[Codifier]+=1
+            sequence=self.SequenceTable[Codifier]
+
+            if isinstance(data, unicode):           
+                data=str(data)
+            if type(data) == type(int()):
+                flag = str('i')
+                packed = struct.pack('I', data)
+            elif isinstance(data, str):
+                flag = str('s')
+                packed = struct.pack('I%ds' % (len(data),), len(data), data)
+            elif isinstance(data, float):
+                flag = str('f')
+                packed = struct.pack('f', data)
+            else:
+                raise NotImplementedError("Unknown (unsupported) data type")
+
+        logging.debug("Data-%s : send %s-%s %d %d data:%s", flag, Codifier, to, timestamp, sequence, data)
+
+        packed_data = struct.pack("IQ1s2s2sI%ds" % (len(packed),), sequence, timestamp, flag, Codifier, to, len(packed), packed)
 
         self.DataSocket.sendto(packed_data, (self.DataAddress, self.DataPort))
-        if self.DataSequence >= 2147483647:
-            self.DataSequence=0
-        else:
-            self.DataSequence+=1
 
     def sendCtrl(self, flag, timestamp=0, to="", timeComponent=0):
         if (self.CtrlSocket==0):
-            self.startCtrl(do_not_load_multicast=True)
+            # DOUWE self.startCtrl(do_not_load_multicast=True)
+            self.startCtrl()
 
         if to=="":
             to=str("@@")
@@ -275,7 +290,8 @@ class jph(object):
 
     def run(self, dataCallback=False, timeCallback=False, ctrlCallback=False):
         while True:
-            self.startCtrl()
+            if (self.CtrlSocket==0):
+                self.startCtrl()
             inputs = [self.CtrlSocket]
             if dataCallback:
                 self.startData()
@@ -318,6 +334,8 @@ class jph(object):
                             value, = struct.unpack('f', value)
                         elif flag == 'i':
                             value, = struct.unpack('I', value)
+                        elif flag == 'n':
+                            value, = struct.unpack('I', value)
                         elif flag == 's':
                             (i,), x = struct.unpack("I", value[:4]), value[4:]
                             value = x
@@ -325,8 +343,8 @@ class jph(object):
                         else:
                             raise NotImplementedError("Unknown (unsupported) data type")
                         self.logger.debug("Data-%s : recv %s-%s %d %d (len=%d) data:%s", flag, source, to, timestamp, sequence, length, value)
-                        if dataCallback:
-                            dataCallback("Data=", flag, source, to, timestamp, sequence, length, sender, value, self.IsActive)
+                        if dataCallback and self.IsActive:
+                            dataCallback("Data=", flag, source, to, timestamp, sequence, length, sender, value, None)
 
                     if s == self.CtrlSocket:
                         data, sender = self.CtrlSocket.recvfrom(1500)
@@ -338,6 +356,7 @@ class jph(object):
                             if flag == 'C':
                                 self.logger.debug("Ctrl-C - recv %s %s Received request to reload config", source, timestamp)
                                 self.loadConfig()
+                                self.endCtrl()
                                 forever = False;
                                 break
                             if flag == 'T':
@@ -359,5 +378,5 @@ class jph(object):
                                     logging.critical("There is another instance of %s running (time=%s)", self.Codifier, str(dataTime))
                                     sys.exit()
 
-                        if ctrlCallback:
+                        if ctrlCallback and self.IsActive:
                             ctrlCallback("Ctrl=", flag, source, to, timestamp, sequence, length, sender, dataTime, isActive2)
