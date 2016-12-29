@@ -47,6 +47,7 @@ def openSocket(address, port, enable_local_loop=1, bind_to_interface="", do_not_
     tsocket = socket.socket(tAddr[0], socket.SOCK_DGRAM)
     tsocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     tsocket.bind(('', port))
+    print(tAddr, port)
     if not do_not_load_multicast:
         group_bin = socket.inet_pton(tAddr[0], tAddr[4][0])
         mreq = group_bin + struct.pack('=I', socket.INADDR_ANY)
