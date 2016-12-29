@@ -4,6 +4,7 @@ import sys
 import getopt
 import struct
 import jph
+import os
 
 # -------------
 # Globals
@@ -64,7 +65,24 @@ def theSensor(timestamp):
     x+=1
     return
 
+#
+# by making a Sensor a class you can store local variables
+# and make a function to check the sensor every x seconds but only update the 
+# data if the sensor changed within a specific tollerance
+# 
+# Also allow for enhanced inequiry capabilities using a peer-to-peer future prototcol
+#
+class Sensors(object):
+    def TempLinux(self, Timestamp):
+        try:
+            channel.sendData(float(os.popen(self.cmd).read())/1000)
+        except AttributeError:
+            self.cmd= ("/bin/cat " + channel.getSensor("Sensor")["Pipe"])
+            channel.sendData(float(os.popen(self.cmd).read())/1000)
+
 if __name__ == '__main__':
+
+    s=Sensors()
 
     channel=jph.jph(configURL=configURL, Codifier=Codifier)
     if comTarget!="":
@@ -72,10 +90,12 @@ if __name__ == '__main__':
     if comExit:
         sys.exit()
 
-    channel.sendData("Hello world")
-    channel.sendData("Hello again")
+    print(channel.getSensor())
+    print(channel.getSensor("Sensor"))
+    # Code examples
+    # channel.sendData("Hello again")
     # channel.run(ctrlCallback=theOutput, dataCallback=theOutput, timeCallback=theSensor)
-    channel.run(timeCallback=theSensor)
+    channel.run(timeCallback=s.TempLinux)
 
     print("Got through it")
 
@@ -266,15 +286,6 @@ def ADAfruitReader(Timestamp):
     #     logger.critical("Exception : %s", e)
 
 
-def TempLinux(Timestamp):
-    try:
-        f = os.popen("/bin/cat " + mySensor["Sensor"]["Pipe"])
-        sendSensor(Timestamp, Codifier, float(f.read())/1000)
-    except KeyError as e:
-        logger.critical("Exception (Field not found?): %s", e)
-    except Exception as e:
-        logger.critical("Exception : %s", e)
-       
 def failsafeReader(Timestamp):
     try:
         import requests

@@ -154,6 +154,13 @@ class jph(object):
             self.logger=logging.getLogger(f)
             self.logger.info("(Re)Starting %s on logger: %s", __name__ + '-' + self.Codifier, f)
 
+    def getSensor(self, elem=None):
+        if elem:
+            if elem not in self.Sensor:
+                return None
+            return self.Sensor[elem]
+        return self.Sensor
+
     def startCtrl(self, do_not_load_multicast=False):
         if (self.CtrlSocket!=0):
             self.endCtrl()

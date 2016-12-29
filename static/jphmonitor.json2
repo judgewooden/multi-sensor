@@ -65,7 +65,7 @@
             "Name":"Control, show number of message on Multicast Bus or latest Console message",
             "Symbol":"p/m",
             "KeepAliveInterval":10.0,
-            "SensorInterval":0.001,
+            "SensorInterval":1.001,
             "Active":true,
             "DataType":"integer",
             "Type":"ControlProgram"
@@ -113,7 +113,7 @@
             "Name":"kastpi CPU Temparature",
             "Symbol":"C",
             "KeepAliveInterval":60,
-            "SensorInterval":10,
+            "SensorInterval":1,
             "Active":true,
             "DataType":"float",
             "Type":"TempLinux",
