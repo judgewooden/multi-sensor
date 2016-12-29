@@ -144,8 +144,8 @@ def main(isActive):
                     logger.critical("Message type (%s) not yet supported", flag)
 
             if comFilter in (source, ""):
-                print("%d %s%s %s %s (len=%d)" % (timestamp, chnl, flag, source,
-                       payload, length)), sender
+                print("%d %s%s %s %s (len=%d) (t=%d)" % (timestamp, chnl, flag, source,
+                       payload, length, time.time())), sender
 
             if source in (Codifier, "@@"):
                 if flag == 'I':

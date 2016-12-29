@@ -1,6 +1,86 @@
 #!/usr/bin/env python
-#
-# Read from 
+from __future__ import print_function, absolute_import, division, nested_scopes, generators, unicode_literals
+import sys
+import getopt
+import struct
+import jph
+
+# -------------
+# Globals
+# -------------
+comFilter=""
+comFlag=""
+comTarget=""
+comExit=""
+configURL="file:static/jphmonitor.json2"
+Codifier=""
+x=0
+
+# -------------
+# Read Startup Parameters
+# -------------
+def usage():
+    print("Usage: -u <url>", __file__)
+    print("\t-u <url> : load the JSON configuration from a url")
+    print("\t-c <code>: The Sensor that this program needs to manage") 
+    print("\t-t <code>: The Codifier of the program to send a message to") 
+    print("\t-f <flag>: Send a signal (H)alt, (S)tart, (C)onfig")
+    print("\t-l <code>: Filter ond show only this Codifier") 
+    print("\t-x       : Exit (skip view messages on console")
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "hu:c:t:f:l:x", ["help", "url=", "code=", "comTarget=", "flag=", "filter=", "exit"])
+    for opt, arg in opts:
+        if opt in ("-h", "help"):
+            raise
+        elif opt in ("-u", "--url"):
+            configURL=arg
+        elif opt in ("-c", "--code"):
+            Codifier=arg
+        elif opt in ("-t", "--filter"):
+            comTarget=arg
+        elif opt in ("-f", "--flag"):
+            comFlag=arg
+        elif opt in ("-l", "--filter"):
+            comFilter=arg
+        elif opt in ("-x", "--exit"):
+            comExit=True
+    if (comTarget!="" and comFlag=="") or (comTarget=="" and comFlag!=""):
+        raise ValueError("Option -t & -f are combined")
+except Exception as e:
+    print("Error: %s" % e)
+    usage()
+    sys.exit()
+
+def theOutput(chnl, flag, source, to, timestamp, sequence, length, sender, data, isActive):
+    if comFilter in (source, to, ""):
+        print("%d %s%s %s-%s %d (len=%d) (active=%s) %s" % (timestamp, chnl, flag, source, to, sequence, length, isActive, data ), sender)
+    return
+
+def theSensor(timestamp):
+    global x
+    # print("SENSOR READING: ", x)
+    channel.sendData(x)
+    x+=1
+    return
+
+if __name__ == '__main__':
+
+    channel=jph.jph(configURL=configURL, Codifier=Codifier)
+    if comTarget!="":
+        channel.sendCtrl(to=comTarget, flag=comFlag)
+    if comExit:
+        sys.exit()
+
+    channel.sendData("Hello world")
+    channel.sendData("Hello again")
+    # channel.run(ctrlCallback=theOutput, dataCallback=theOutput, timeCallback=theSensor)
+    channel.run(timeCallback=theSensor)
+
+    print("Got through it")
+
+
+"""
 import logging
 import logging.config
 import os
@@ -70,6 +150,8 @@ def readParams(configURL, Codifier):
     return (configURL, Codifier)
 
 def main(isActive):
+
+    jph.setup(ConfigURL, Codifier)
 
     ctrlSocket=jphconfig.openControlChannel(
         configJSON["Multicast"]["Control-Channel"]["Address"],
@@ -232,3 +314,5 @@ if __name__ == '__main__':
             sys.exit()
 
         main(isActive)
+
+"""

@@ -105,6 +105,7 @@ def main(isActive):
 
         # last parameter in select is timeout in seconds
         timeout=(max(0.001, (min(makeNextSensorReading, ctrlNextKeepAlive) - t)))
+        print("TIMEOUT", timeout)
         readable, writable, exceptional = select.select(inputs, [], [], timeout)
         for s in readable:
             if s == dataSocket:
@@ -121,10 +122,10 @@ def main(isActive):
                     break
                 if flag == 'T':
                     RequestTime, = struct.unpack('I', value)
-                    logger.debug("Ctrl-T - Received time info %s (ignore)", RequestTime)
+                    logger.debug("Ctrl-O - Received time info %s (ignore)", RequestTime)
                 if flag == 'P':
                     RequestTime, = struct.unpack('I', value)
-                    logging.debug("Ctrl-P - Received request for time %s", RequestTime)
+                    logging.debug("Ctrl-T - Received request for time %s", RequestTime)
                     jphconfig.sendTime(t, Codifier, RequestTime)
                 if flag == 'H':
                     logging.info("Ctrl-H - Received request to halt sensor")
