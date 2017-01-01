@@ -47,7 +47,7 @@ def openSocket(address, port, enable_local_loop=1, bind_to_interface="", do_not_
     tsocket = socket.socket(tAddr[0], socket.SOCK_DGRAM)
     tsocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     tsocket.bind(('', port))
-    print(tAddr, port)
+    # print(tAddr, port)
     if not do_not_load_multicast:
         group_bin = socket.inet_pton(tAddr[0], tAddr[4][0])
         mreq = group_bin + struct.pack('=I', socket.INADDR_ANY)
@@ -156,12 +156,25 @@ class jph(object):
             self.logger=logging.getLogger(f)
             self.logger.info("(Re)Starting %s on logger: %s", __name__ + '-' + self.Codifier, f)
 
-    def getSensor(self, elem=None):
-        if elem:
-            if elem not in self.Sensor:
-                return None
-            return self.Sensor[elem]
+    def getCondig(self):
+        return self.configJSON
+
+    def getAllSensors(self):
+        return self.configJSON["Sensors"]
+
+    def getSensor(self, Codifier):
+        for s in self.configJSON["Sensors"]:
+            if s["Codifier"] == Codifier:
+                return s
+        return None
+
+    def getMySensor(self, Codifier):
         return self.Sensor
+
+    def getMySensorElement(self, elem):
+        if elem in self.Sensor["Sensor"]:
+            return self.Sensor["Sensor"][elem]
+        return None
 
     def startCtrl(self, do_not_load_multicast=False):
         if (self.CtrlSocket!=0):
@@ -232,7 +245,7 @@ class jph(object):
 
         if (sequence_packet):
             sequence=data
-            flag = str('n')
+            flag = str('n') # TOCHANGE
             packed = struct.pack('I', sequence)
         else:
             if not Codifier in self.SequenceTable:

@@ -55,13 +55,13 @@ def theOutput(chnl, flag, source, to, timestamp, sequence, length, sender, data,
 
     if comA and comC:
         print("%d %s%s %s-%s %d (len=%d) (active=%s) %s" % (timestamp, chnl, flag, source, to, sequence, length, isActive, data ), sender)
-        
+
 class Sensors(object):
     def TempLinux(self, Timestamp):
         try:
             channel.sendData(float(os.popen(self.cmd).read())/1000)
         except AttributeError:
-            self.cmd= ("/bin/cat " + channel.getSensor("Sensor")["Pipe"])
+            self.cmd= ("/bin/cat " + channel.getMySensorElement("Pipe"))
             channel.sendData(float(os.popen(self.cmd).read())/1000)
         # channel.sendData(random.randint(1,2147483647), Codifier="XX")
 

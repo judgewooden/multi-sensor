@@ -1,25 +1,58 @@
-    <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">JPH Dashboard</a>
+<nav class="navbar navbar-dark bg-inverse navbar-fixed-top jph-nav">
+  <a class="navbar-brand" href="/">JPH Monitor</a>
+  <button class="navbar-toggler hidden-md-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
+  <div class="collapse navbar-toggleable-sm" id="navbarResponsive">
+    <ul class="nav navbar-nav">
+      <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="http://jphmonitor.nl" id="jph-nav-other" data-toggle="dropdown" 
+            aria-haspopup="true" aria-expanded="false">Other Sensors</a>
+        <div class="dropdown-menu" aria-labelledby="jph-nav-other">
+          <a class="dropdown-item" href="#">Power Details</a>
+          <a class="dropdown-item" href="#">Ethereum Mining</a>
         </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-left">
-            <li id="sensorFlow"><a href="">Overview</a></li>
-            <li id="sensorFlowRaw"><a href="">Flow Details</a></li>
-            <li id="sensorFlowTemps"><a href="">Water Details</a></li>
-            <li id="sensorKastTemps"><a href="">Closet Details</a></li>
-            <li id="sensorGauges"><a href="">Dashboard</a></li>
-            <li id="sensorGraphConfig"><a href="">Custom Graph</a></li>
-          </ul>
+      </li>
+      <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="http://jphmonitor.nl" id="jph-nav-kast" data-toggle="dropdown" 
+            aria-haspopup="true" aria-expanded="false">Cool Room Details</a>
+        <div class="dropdown-menu" aria-labelledby="jph-nav-kast">
+          <a class="dropdown-item" href="#">Last Two hours</a>
+          <a class="dropdown-item" href="#">Last Two days</a>
+          <a class="dropdown-item" href="#">First Loop Only</a>
+          <a class="dropdown-item" href="#">Second Loop Only</a>
         </div>
-      </div>
-    </nav>
-    <div style="position:relative;width:100%;height:28px"></div>
+      </li>
+      <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="http://jphmonitor.nl" id="jph-nav-water" data-toggle="dropdown" 
+            aria-haspopup="true" aria-expanded="false">Water Details</a>
+        <div class="dropdown-menu" aria-labelledby="jph-nav-water">
+          <a class="dropdown-item" href="#">Last Two hours</a>
+          <a class="dropdown-item" href="#">Last Two days</a>
+          <a class="dropdown-item" href="#">First Loop Only</a>
+          <a class="dropdown-item" href="#">Second Loop Only</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="http://jphmonitor.nl" id="jph-nav-flow" data-toggle="dropdown" 
+            aria-haspopup="true" aria-expanded="false">Flow Details</a>
+        <div class="dropdown-menu" aria-labelledby="jph-nav-flow">
+          <a class="dropdown-item" href="#">Last Two hours</a>
+          <a class="dropdown-item" href="#">Last Two days</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="http://jphmonitor.nl" id="jph-nav-config" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">Config</a>
+        <div class="dropdown-menu" aria-labelledby="jph-nav-config">
+          <a class="dropdown-item" href="#">Custom Graph</a>
+          <a class="dropdown-item" href="#">Setup Sensors</a>
+        </div>
+      </li>
+    </ul>
+
+  </div>
+</nav>
+<!-- DOUWE !!!!! Is this still needed? The above menu now works with <a> tags/
+
     <script>
         // Set the current page in the menu
         $(document).ready(function() {
@@ -34,3 +67,4 @@
             return false;
         });
     </script>
+-->

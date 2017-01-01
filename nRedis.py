@@ -48,32 +48,62 @@ class RedisHandler(object):
     def __init__(self):
         self.Counter=0
         self.LastDataSequence={}
+        self.LastCtrlSequence={}
 
     def publish(self, Timestamp):
         channel.sendData(self.Counter)
         self.Counter=0
 
     def updateData(self, chnl, flag, source, to, timestamp, sequence, length, sender, data, isActive):
-        if chnl[:1] == "D":
-            if (flag == 'n'):
-                self.LastDataSequence[source]=sequence
-                r.hset(source, "DPacketsLost", 0)
-                r.hset(source, "DPacketResetTime", timestamp)
+        r.hset(source, "Codifier", source)
+        if (flag == 'n'):
+            self.LastDataSequence[source]=sequence
+            r.hset(source, "DPacketsLost", 0)
+            r.hset(source, "DResetTime", timestamp)
+            self.Counter+=3
+            channel.logger.debug("%d %s%s %s Reset=%d", timestamp, chnl, flag, source, sequence)
+        else:
+            if source in self.LastDataSequence:
+                diff=sequence - self.LastDataSequence[source]
+                if diff != 1:
+                    channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, diff)
+                    r.hincrby(source, "DPacketsLost", diff)
                 self.Counter+=1
-                channel.logger.debug("%d %s%s %s Reset=%d", timestamp, chnl, flag, source, sequence)
-            else:
-                if source in self.LastDataSequence:
-                    diff=sequence - self.LastDataSequence[source]
-                    if diff != 1:
-                        channel.logger.warning("%d packets lost on Data channel %s", diff, source)
-                        r.hincrby(source, "DPacketsLost", diff)
-                self.LastDataSequence[source]=sequence
+            self.LastDataSequence[source]=sequence
 
-                r.hset(source, "Codifier",source)
-                r.hset(source, "Value",data)
-                r.hset(source, "DTimestamp",timestamp)
-                self.Counter+=3
-                channel.logger.debug("%d %s%s %s Data=%d", timestamp, chnl, flag, source, data)
+            r.hset(source, "Value",data)
+            r.hset(source, "DTimestamp",timestamp)
+            self.Counter+=3
+            channel.logger.debug("%d %s%s %s Data=%d", timestamp, chnl, flag, source, data)
+
+    def updateCtrl(self, chnl, flag, source, to, timestamp, sequence, length, sender, data, isActive):
+        r.hset(source, "Codifier", source)
+        if (flag == 'N'):
+            self.LastCtrlSequence[source]=sequence
+            r.hset(source, "CPacketsLost", 0)
+            r.hset(source, "CResetTime", timestamp)
+            self.Counter+=3
+            channel.logger.debug("%d %s%s %s Reset=%d", timestamp, chnl, flag, source, sequence)
+        else:
+            if source in self.LastCtrlSequence:
+                diff=sequence - self.LastCtrlSequence[source]
+                if diff != 1:
+                    channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, diff)
+                    r.hincrby(source, "CPacketsLost", diff)
+                    self.Counter+=1
+            self.LastCtrlSequence[source]=sequence
+
+            if flag == 'H':
+                r.hset(source, "HTimestamp", timestamp)
+            if flag == 'S':
+                r.hset(source, "STimestamp", timestamp)
+            if flag == 'I':
+                r.hset(source, "ITimestamp", timestamp)
+                r.hset(source, "IsActive", isActive)
+            if flag == 'C':
+                r.hset(source, "CTimestamp", timestamp)
+
+            channel.logger.debug("%d %s%s %s Data=%d", timestamp, chnl, flag, source, data)
 
 if __name__ == '__main__':
  
@@ -87,4 +117,4 @@ if __name__ == '__main__':
         channel.logger.critical("Failed to connect to Redis: (%s)", e)
         sys.exit()
 
-    channel.run(dataCallback=handler.updateData, timeCallback=handler.publish)
+    channel.run(dataCallback=handler.updateData, timeCallback=handler.publish, ctrlCallback=handler.updateCtrl)

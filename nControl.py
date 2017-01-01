@@ -76,22 +76,33 @@ except Exception as e:
     usage()
     sys.exit()
 
-def theOutput(chnl, flag, source, to, timestamp, sequence, length, sender, data, isActive):
+class ControlHandler(object):
 
-    comA = True if comAll in (source, to, "") else False
-    if (comFrom!=""):
-        comA = True if comFrom == source else False
-    if (comTo!=""):
-        comA = True if comTo == to else False
+    def __init__(self):
+        self.Counter=0
 
-    comC = True if comChnl in (chnl[:1], "") else False
+    def publish(self, Timestamp):
+        channel.sendData(self.Counter)
+        self.Counter=0
 
-    if comA and comC:
-        print("%d %s%s %s-%s %d (len=%d) (active=%s) %s" % (timestamp, chnl, flag, source, to, sequence, length, isActive, data ), sender)
+    def theOutput(self, chnl, flag, source, to, timestamp, sequence, length, sender, data, isActive):
+        self.Counter+=1
+
+        comA = True if comAll in (source, to, "") else False
+        if (comFrom!=""):
+            comA = True if comFrom == source else False
+        if (comTo!=""):
+            comA = True if comTo == to else False
+
+        comC = True if comChnl in (chnl[:1], "") else False
+
+        if comA and comC:
+            print("%d %s%s %s-%s %d (len=%d) (active=%s) %s" % (timestamp, chnl, flag, source, to, sequence, length, isActive, data ), sender)
 
 if __name__ == '__main__':
 
     channel=jph.jph(configURL=configURL, Codifier=Codifier)
+    handler=ControlHandler()
     if comTarget!="":
         channel.sendCtrl(to=comTarget, flag=comFlag)
     if comExit:
@@ -99,4 +110,4 @@ if __name__ == '__main__':
     if comForce:
         channel.sendCtrl(to=Codifier, flag='S')
 
-    channel.run(ctrlCallback=theOutput, dataCallback=theOutput)
+    channel.run(ctrlCallback=handler.theOutput, timeCallback=handler.publish, dataCallback=handler.theOutput)

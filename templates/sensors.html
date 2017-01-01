@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id='Description'>Dashboard</title>
+    <title>JPH Monitor</title>
 
     <!-- Bootstrap core CSS -->
 <!--
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
@@ -14,14 +14,425 @@
     <!-- # PROBABLE NO NEEDED
     <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.2/jquery.tipsy.js"></script>
--->
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
+      integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='sensorGraphStyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css') }}">
+
 </head>
+<!--
+id's are:
+h = header
+c = console menu
+v = value of the Sensors
+t = footer (for time value)
+s = start icon
+p = pause icon
+I = heartbeat (ping)
+l = line-chart
+i = show an info bubble
+-->
+<body style="background:white;">
+{% include "menubar.html" %}
+<!--
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>Dialog</h3>
+    </div>
+    <div class="modal-body">
+       <iframe class="embed-responsive embed-responsive-4by3" src="/sensorinfo/" style="zoom:0.60" width="80%" height="100" frameborder="0"></iframe> 
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">OK</button>
+    </div>
+</div>
+-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <iframe src="/sensorinfo/"></iframe>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<br><br>
+<div style="position:relative;width:100%"></div>
+<div class="container-fluid">
+  <div class="row">
+{% for sensor in sensors %}
+    <div class="col-md-2">
+      <div class="card card-block jph-box">
+
+        <div class="card-header {% if sensor.Active %} jph-okay {% else %} jph-info {% endif %}
+          jph-box-header" data-click="controls" id="{{ sensor.Codifier }}h">{{ sensor.ShortName }}</div>
+        <div class="card-subheader jph-box-subheader" id="{{ sensor.Codifier }}c"> 
+          <button type="button" class="btn jph-btn jph-okay" data-btn="runbtn" data-toggle="tooltip" data-placement="bottom" 
+            title="Start the Sensor" id="{{ sensor.Codifier }}s"><i class="fa fa-play fa-inverse"></i>
+          </button>
+          <button type="button" class="btn jph-btn jph-okay" data-btn="runbtn" data-toggle="tooltip" data-placement="bottom" 
+            title="Pause the Sensor" id="{{ sensor.Codifier }}p"><i class="fa fa-pause fa-inverse"></i></button>
+          <button type="button" class="btn jph-btn jph-okay" data-trigger="focus" rel="popover" data-placement="bottom" data-html="true" data-content='<iframe frameborder="0" scrolling="yes" height="220" width="240" src="/sensorinfo/{{ sensor.Codifier }}"></iframe>' title="{{ sensor.Name }}" id="{{ sensor.Codifier }}i"><i class="fa fa-info fa-inverse"></i></button>
+          <button type="button" class="btn jph-btn jph-okay" data-btn="runbtn" data-toggle="tooltip" data-placement="bottom" 
+            title="Ping the Sensor" id="{{ sensor.Codifier }}I"><i class="fa fa-heartbeat fa-inverse"></i></button>
+          <button type="button" class="btn jph-btn jph-okay" data-btn="runbtn" data-toggle="tooltip" data-placement="bottom" 
+            title="Show a line graph" id="{{ sensor.Codifier }}l"><i class="fa fa-line-chart fa-inverse"></i></button>
+        </div>
+        <div class="card-text jph-box-value" data-click="controls" id="{{ sensor.Codifier }}v"></div>
+        <!--
+        <div class="card-footer jph-box-footer" data-click="controls" data-toggle="tooltip"
+                    data-placement="top" title="No start/stop information available" id="{{ sensor.Codifier }}t">footer</div>
+        -->
+        <div class="card-footer jph-box-footer" data-click="controls" 
+                     id="{{ sensor.Codifier }}t"></div>
+      </div>
+    </div>
+{% endfor %}
+  </div>
+</div>
+
+<!--
+        <div class="container-fluid" style="width:100%">
+
+        <div class="row">
+{% for sensor in sensors %}
+
+            <div class="col-md-2">
+            <div class="panel panel-primary dash-box">
+                <div class="
+                    {% if sensor.Active %}
+                        panel-heading
+                    {% else %}
+                        panel-info
+                    {% endif %}
+                    dash-title" data-click="controls" data-toggle="tooltip" data-placement="bottom" 
+                    title="({{ sensor.Codifier }}) {{ sensor.Name }}" id="{{ sensor.Codifier }}c">
+                    {{ sensor.ShortName }}</div>
+                <div class="panel-body dash-value" id="{{ sensor.Codifier }}"></div>
+                <div class="panel-footer dash-time" id="{{ sensor.Codifier }}t" data-toggle="tooltip"
+                    data-placement="top" title="No start/stop information available"></div>
+            </div>
+            </div>
+{% endfor %}
+
+        </div>
+        </div>
+    </div>
+</div>
+
+-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+
 <script>
+//
+// Some AJAX navigation functions
+//
+var currentOpenConsole=""
+var showControlMenu = function(code) {
+    if ((currentOpenConsole != "") && (currentOpenConsole!=code)) {
+        $('#'+currentOpenConsole+'c').slideUp()
+        $('#'+currentOpenConsole+'v').slideDown('slow')
+        currentOpenConsole=""
+    }
+    if ($('#'+code+'c').css('display') != 'none') {
+        $('#'+code+'c').slideUp();
+        $('#'+code+'v').slideDown('slow');
+        currentOpenConsole=""
+    } else {
+        $('#'+code+'v').slideUp();
+        $('#'+code+'c').slideDown('slow');
+        currentOpenConsole=code;
+    }
+}
+
+$(function() {
+    $('[data-click="controls"]').click(function (event) {
+      var code=$(this).attr("id").substring(0,2); 
+      showControlMenu(code);
+    })
+})
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+
+// $(function () {
+//     $('[data-btn="runbtn"]').click(function (event) {
+//         var code=$(this).attr("id").substring(0,2); 
+//         var type=$(this).attr("id").substring(2,3); 
+//         console.log("Menu", code, type);
+//         // $('#myModal').on('show', function () {
+//         //     $('iframe').attr("src", "/sensorinfo");
+//         // });
+//         //$('#myModal').modal({show:true})
+//         x='<iframe frameborder="0" scrolling="no" height="220" width="420" src="/sensorinfo/"></iframe>';
+//         $("#"+code+type).popover({title: 'Sensor info', content: x, html:true});
+//     })
+// })
+
+$('[rel="popover"]').popover();
+
+//
+// Global Variables
+//
+var RefreshRate=1000;           // Update Frequency for client browser (for poling version)
+
+var STATUS = {                  // enum the status per sensor
+  INFO : {value: 0},
+  IWARNING : {value: 1}, 
+  DWARNING : {value: 2},
+  HEADING : {value: 3}
+};
+
+// Load the Data arrays for working on the data
+var mySensors = {{ sensors|tojson }};
+for (var key in mySensors) {
+    mySensors[key].LastITimestamp=0;
+    mySensors[key].LastDTimestamp=0;
+    mySensors[key].LastStatus=STATUS.INFO;
+}
+console.log(mySensors);
+
+var updateTimes = function() {
+
+    //
+    // Check here if there is any stale date
+    //
+    for ( i=mySensors.length;i--; ) {
+        s=mySensors[i];
+        if (s.Type=="ControlProgram")       // This sensor shows messages to users
+            continue;
+
+        // Rethink this for PROXY
+        // You have to figure out the differ meanings of active and IsActive
+        fix="C1";
+        if (s.Active) {
+            if (s.Codifier == fix ) console.log(s.Codifier, "I am active");
+            // n=parseInt((Date.now()-RefreshRate)/1000) - 5;
+            xxx=parseInt(Date.now());
+            n=parseInt((Date.now()-RefreshRate));
+            if (s.Codifier == fix ) 
+            console.log(s.Codifier, xxx, "now=", n, "interval", s.TimeoutWarning, "Data", s.LastDTimestamp, s);
+            if ((n - (s.TimeoutWarning * 1000)) > s.LastDTimestamp) {
+                if (s.Codifier == fix ) console.log(s.Codifier, "DATA WARNING");
+                newStatus=STATUS.DWARNING;
+            } else {
+                // only do this for sensors that is not a proxy
+                if (s.Codifier == fix ) console.log(s.Codifier, "DATA OKAY");
+                if ((n-(s.TimeoutWarning * 1000)) > s.LastITimestamp) {
+                    newStatus=STATUS.IWARNING;
+                } else {
+                    newStatus=STATUS.HEADING;
+                }
+            }
+        } else {
+            newStatus=STATUS.INFO;
+            if (s.Sensor.Type == "Proxy") {
+                p=findSensor(s.Sensor.Codifier);
+                if (p==null) {
+                    console.log("Strange? Proxy sensors not found ", s.Sensor.Codifier );
+                    continue;
+                }
+                if (p.LastStatus==STATUS.IWARNING) {
+                    newStatus=STATUS.IWARNING;
+                } else {
+                    if (p.LastStatus!=STATUS.INFO) {
+                        // n=parseInt((Date.now()-RefreshRate)/1000) - 5;
+                        n=parseInt((Date.now()-RefreshRate)) - 5000;
+                        if ((n - (p.TimeoutWarning * 1000)) > s.LastDTimestamp) {
+                            newStatus=STATUS.DWARNING;
+                        } else {
+                            newStatus=STATUS.HEADING;
+                        }
+                    }
+                }
+            }
+        }
+
+        if ( newStatus != s.LastStatus) {
+            switch(newStatus) {
+                case STATUS.HEADING:
+                console.log("IRS OKAY");
+                    $("#"+s.Codifier+"h").addClass("jph-okay");
+                    $("#"+s.Codifier+"h").removeClass("jph-error");
+                    $("#"+s.Codifier+"h").removeClass("jph-info");
+                    break;
+                case STATUS.DWARNING:
+                case STATUS.IWARNING:
+                    $("#"+s.Codifier+"h").removeClass("jph-okay");
+                    $("#"+s.Codifier+"h").addClass("jph-error");
+                    $("#"+s.Codifier+"h").removeClass("jph-info");
+                    break;
+                case STATUS.INFO:
+                    $("#"+s.Codifier+"h").removeClass("jph-okay");
+                    $("#"+s.Codifier+"h").removeClass("jph-error");
+                    $("#"+s.Codifier+"h").addClass("jph-info");
+                    break;
+            }
+            s.LastStatus=newStatus;
+        }
+        if (s.LastDTimestamp != 0) {
+            // d = new Date(s.LastDTimestamp * 1000);
+            d = parseInt(s.LastDTimestamp);
+            $("#"+s.Codifier+"t").html( time_ago(d) );
+        }
+    }
+}
+
+var updateValues = function() {
+    // Create a promise to get new data
+    jQuery.getJSON("/sensor/").done(function(response) {
+        if ( response.length > 0) {
+            for (var key in response) {
+                s=findSensor(response[key].Codifier);
+                if (s==null) {
+                    console.log("a new sensor:", reponse[key].Codifier);
+                    alert("A new sensor was found please refresh the page");
+                    // DOUWE: (Test this???)   ---> window.location.reload(true);
+                    continue
+                }
+
+                // check if the Control system changed the state of a sensor
+                t=parseInt(response[key].ITimestamp);
+                // console.log(s.Codifier, "Time", t);
+                if (t>s.LastITimestamp) { 
+                    s.Active = toBoolean(response[key].IsActive);
+                    s.LastITimestamp=t;
+                    m= new Date(t).toISOString().slice(0,19).replace('T', ' ');
+                    // DOUWE CONSIDER RE-WRITING THIS
+                    // $("#"+s.Codifier+'t').attr('data-original-title', 'Last Ping Received: ' + m).tooltip();
+                        // .tooltip('fixTitle');
+                }
+                // check if the Sensor provided a new value
+                t=parseInt(response[key].DTimestamp);
+                if (t>s.LastDTimestamp) {
+                    $("#"+s.Codifier+'v').html( afronden(parseFloat(response[key].Value).toFixed(1)) + "" + s.Symbol);
+                    s.LastDTimestamp=t;
+                }
+                if ( s.Codifier == "C1")
+                console.log(response[key].Codifier, "update: ", t, response[key].DTimestamp);
+            }
+        }
+    });
+};
+
+// Loop and update the screen all the time
+var IamInProgress = false;
+var ttimer = setInterval(function () {
+    if (IamInProgress)
+        return;
+    IamInProgress=true;
+    updateValues();
+    updateTimes();
+    IamInProgress=false;
+}, RefreshRate);
+
+function time_ago(time) { // add a parameter to add red items that are old than X time
+    switch (typeof time) {
+        case 'number': break;
+        case 'string': time = +new Date(time); break;
+        case 'object': if (time.constructor === Date) time = time.getTime(); break;
+        default: time = +new Date();
+    }
+    var time_formats = [
+        [60, 'seconds', 1], // 60
+        [120, '1 minute ago', '1 minute from now'], // 60*2
+        [3600, 'minutes', 60], // 60*60, 60
+        [7200, '1 hour ago', '1 hour from now'], // 60*60*2
+        [86400, 'hours', 3600], // 60*60*24, 60*60
+        [172800, 'Yesterday', 'Tomorrow'], // 60*60*24*2
+        [604800, 'days', 86400], // 60*60*24*7, 60*60*24
+        [1209600, 'Last week', 'Next week'], // 60*60*24*7*4*2
+        [2419200, 'weeks', 604800], // 60*60*24*7*4, 60*60*24*7
+        [4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
+        [29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
+        [58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
+        [2903040000, 'years', 29030400], // 60*60*24*7*4*12*100, 60*60*24*7*4*12
+        [5806080000, 'Last century', 'Next century'], // 60*60*24*7*4*12*100*2
+        [58060800000, 'centuries', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
+    ];
+    var seconds = (+new Date() - time) / 1000,
+        token = 'ago', list_choice = 1;
+
+    if (seconds < 1 && seconds > 0) {
+        return 'Just now'
+    }
+    if (seconds < 0) {
+        seconds = Math.abs(seconds);
+        token = 'from now';
+        list_choice = 2;
+    }
+    var i = 0, format;
+    while (format = time_formats[i++])
+        if (seconds < format[0]) {
+            if (typeof format[2] == 'string')
+                return format[list_choice];
+            else
+                return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
+        }
+    return time;
+};
+
+var afronden = function( inputValue ) {
+   if (inputValue > 100)
+           return Math.round(inputValue * 1) / 1;
+   else {
+       if (inputValue > 10)
+           return Math.round(inputValue * 10) / 10;
+       else {
+           if (inputValue > 1)
+               return Math.round(inputValue * 100) / 100;
+           else
+               return Math.round(inputValue * 1000) / 1000;
+       }
+    }
+};
+
+var toBoolean = function(value) {
+    var strValue = String(value).toLowerCase();
+    strValue = ((!isNaN(strValue) && strValue !== '0') &&
+        strValue !== '' &&
+        strValue !== 'null' &&
+        strValue !== 'undefined') ? '1' : strValue;
+    return strValue === 'true' || strValue === '1' ? true : false
+};
+
+function findSensor (val) { 
+  for (var ai, i = mySensors.length; i--;)
+    if ((ai = mySensors[i]) && ai["Codifier"] == val)
+      return ai;
+  return null;
+}
+
+
+
+</script>
+</body>
+</html>
+
+<!--
+/*
+// REVIEW ALL CODE FROM HERE 
 // This activates the bootstrap tooltips section
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
@@ -268,36 +679,8 @@ function findSensor (val) {
 
 
 </script>
-<body style="background:white;">
-{% include "menubar.html" %}
-<div style="position:relative;width:100%;height:7px"></div>
-        <div class="container-fluid" style="width:100%">
 
-        <div class="row">
-{% for sensor in sensors %}
-
-            <div class="col-md-2">
-            <div class="panel panel-primary dash-box">
-                <div class="
-                    {% if sensor.Active %}
-                        panel-heading
-                    {% else %}
-                        panel-info
-                    {% endif %}
-                    dash-title" data-click="jph" data-toggle="tooltip" data-placement="bottom" 
-                    title="({{ sensor.Codifier }}) {{ sensor.Name }}" id="{{ sensor.Codifier }}c">
-                    {{ sensor.ShortName }}</div>
-                <div class="panel-body dash-value" id="{{ sensor.Codifier }}"></div>
-                <div class="panel-footer dash-time" id="{{ sensor.Codifier }}t" data-toggle="tooltip"
-                    data-placement="top" title="No start/stop information available"></div>
-            </div>
-            </div>
-{% endfor %}
-
-        </div>
-        </div>
-    </div>
-</div>
 </body>
 </html>
+-->
 

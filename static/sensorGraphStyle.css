@@ -1,4 +1,125 @@
+/*
+ ******
+ * THIS SECTION HAS BEEN REVIEWED WITH BOOTSTRAP V4 
+ ******
+ */
 
+.popover-title {
+  color: blue;
+  font-size: small;
+  font-variant: small-caps;
+}
+.jph-popover-row-header {
+  text-decoration: underline;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+.jph-popover-row {
+  font-size: x-small;
+  vertical-align: text-top;
+}
+
+.jph-nav {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.jph-btn {
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  padding: 0px 0;
+  font-size: 12px;
+  /* line-height: 1.428571429; */
+  border-radius: 24px;
+  box-shadow: none;
+  margin-left: 1px;
+  margin-right: 1px;
+  margin-bottom: 3px;
+}
+
+.jph-box{
+  font-size: 11px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-height: 70px; 
+  box-shadow: none;
+  background-color: #dddddd;
+  /* margin-bottom: 1em;  */
+  padding: 0;
+  overflow: hidden;
+}
+
+.jph-box-header{
+  height: 15px;
+  padding: 0;
+  font-size: 11px;
+/*  font-weight: bold; */
+  text-align: center;
+  border-bottom: 1px solid transparent;
+  margin-bottom: 0;
+}
+
+.jph-box-subheader{
+  height: 30px;
+  display: none; 
+  padding: 0;
+  line-height: 30px;
+  text-align: center;
+  border: 1px solid transparent; /* dashed #f69c55; */
+}
+
+.jph-box-value{
+  height: 30px;
+  padding: 0;
+  line-height: 30px;
+  font-size: 18px;
+  text-align: center;
+  text-align: center;
+  border: 1px solid transparent; /* dashed #f69c55; */
+}
+
+/* not used */
+.jph-box-value-bar {
+  line-height:30px;
+}
+
+/* not used */
+.jph-box-value-text{
+  text-align: center;
+  line-height: 30px;
+}
+
+.jph-box-footer{
+  height: 15px;
+  padding: 0;
+  font-size: 9px;
+  text-align: center;
+  border-top: 1px solid transparent;
+  color: #333;
+  background-color: #dddddd; 
+}
+
+.jph-info{
+  color: #333;
+  background-color: #dddddd;
+}
+
+.jph-error{
+  color: #333;
+  background-color: #b74f33;
+}
+
+.jph-okay{
+  color: #fff;
+  background-color: #337ab7;
+}
+
+/*
+ ******
+ * DOUWE !!! FROM HERE EVERYTHING NEEDS TO BE REVIEWED 
+ ******
+ */
 
 /* the graph */
 svg.line-graph .title {
@@ -85,23 +206,6 @@ svg.line-graph .date-label {
   left: 0;
 }
 
-/* menu bar */
-.navbar-nav > li > a, .navbar-brand {
-    padding-top:2px !important;
-    padding-bottom:2px !important;
-    height: 28px;
-}
-
-.navbar {
-    min-height:22px !important;
-}
-
-.navbar .navbar-toggle {
-    margin-top: 3px;
-    margin-bottom: 0px;
-    padding: 8px 9px;
-}
-
 /* The document */
 body {
     font-family: "Helvetica Neue", Helvetica;
@@ -113,42 +217,3 @@ p {
 div.aGraph {
         margin-bottom: 30px;
 }
-
-/* Dashboard containers */
-
-.dash-box {
-  border: 1px solid navy;
-  min-height: 70px;
-  min-width: 120px;
-  background-color: #dddddd;
-}
-
-.panel > .panel-heading {
-   background-color: #337ab7;
-}
-
-.panel > .panel-warning {
-   background-color: #b74f33;
-}
-
-.dash-title {
-  font-size:10px;
-  font-weight: bold;
-  text-align: center;
-  padding: 0;
-}
-
-.dash-value {
-  font-size:24px;
-  text-align: center;
-  background-color: #dddddd;
-  padding: 0;
-}
-
-.dash-time {
-  font-size:8px;
-  text-align: center;
-  background-color: #dddddd;
-  padding: 0;
-}
-

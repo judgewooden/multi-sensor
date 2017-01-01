@@ -21,8 +21,6 @@ northCtrl=openSocket("227.0.0.111", 8001, "192.168.0.225")
 southCtrl=openSocket("226.0.0.221", 7001, "192.168.136.4")
 northData=openSocket("227.0.0.112", 8002, "192.168.0.225")
 southData=openSocket("226.0.0.222", 7002, "192.168.136.4")
-# southData=0
-# southCtrl=0
 
 inputs = [northCtrl, southCtrl, northData, southData]
 # inputs = [northData, northCtrl]
