@@ -156,7 +156,7 @@ class jph(object):
             self.logger=logging.getLogger(f)
             self.logger.info("(Re)Starting %s on logger: %s", __name__ + '-' + self.Codifier, f)
 
-    def getCondig(self):
+    def getConfig(self):
         return self.configJSON
 
     def getAllSensors(self):
@@ -277,8 +277,8 @@ class jph(object):
 
     def sendCtrl(self, flag, timestamp=0, to="", timeComponent=0):
         if (self.CtrlSocket==0):
-            # DOUWE self.startCtrl(do_not_load_multicast=True)
-            self.startCtrl()
+            self.startCtrl(do_not_load_multicast=True)
+            # self.startCtrl()
 
         if to=="":
             to=str("@@")
@@ -303,6 +303,8 @@ class jph(object):
             self.CtrlSequence+=1
 
     def run(self, dataCallback=False, timeCallback=False, ctrlCallback=False):
+        if (self.CtrlSocket!=0):
+            self.endCtrl()
         while True:
             if (self.CtrlSocket==0):
                 self.startCtrl()

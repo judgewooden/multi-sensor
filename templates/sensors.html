@@ -53,7 +53,7 @@ i = show an info bubble
         <button class="btn" data-dismiss="modal">OK</button>
     </div>
 </div>
--->
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -73,6 +73,7 @@ i = show an info bubble
     </div>
   </div>
 </div>
+-->
 <br><br>
 <div style="position:relative;width:100%"></div>
 <div class="container-fluid">
@@ -227,18 +228,12 @@ var updateTimes = function() {
         // You have to figure out the differ meanings of active and IsActive
         fix="C1";
         if (s.Active) {
-            if (s.Codifier == fix ) console.log(s.Codifier, "I am active");
             // n=parseInt((Date.now()-RefreshRate)/1000) - 5;
-            xxx=parseInt(Date.now());
             n=parseInt((Date.now()-RefreshRate));
-            if (s.Codifier == fix ) 
-            console.log(s.Codifier, xxx, "now=", n, "interval", s.TimeoutWarning, "Data", s.LastDTimestamp, s);
             if ((n - (s.TimeoutWarning * 1000)) > s.LastDTimestamp) {
-                if (s.Codifier == fix ) console.log(s.Codifier, "DATA WARNING");
                 newStatus=STATUS.DWARNING;
             } else {
                 // only do this for sensors that is not a proxy
-                if (s.Codifier == fix ) console.log(s.Codifier, "DATA OKAY");
                 if ((n-(s.TimeoutWarning * 1000)) > s.LastITimestamp) {
                     newStatus=STATUS.IWARNING;
                 } else {
@@ -272,7 +267,6 @@ var updateTimes = function() {
         if ( newStatus != s.LastStatus) {
             switch(newStatus) {
                 case STATUS.HEADING:
-                console.log("IRS OKAY");
                     $("#"+s.Codifier+"h").addClass("jph-okay");
                     $("#"+s.Codifier+"h").removeClass("jph-error");
                     $("#"+s.Codifier+"h").removeClass("jph-info");
@@ -329,8 +323,6 @@ var updateValues = function() {
                     $("#"+s.Codifier+'v').html( afronden(parseFloat(response[key].Value).toFixed(1)) + "" + s.Symbol);
                     s.LastDTimestamp=t;
                 }
-                if ( s.Codifier == "C1")
-                console.log(response[key].Codifier, "update: ", t, response[key].DTimestamp);
             }
         }
     });

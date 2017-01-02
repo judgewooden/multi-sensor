@@ -18,7 +18,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 # ---- Load from config file
 #
 configURL="file:static/jphmonitor.json2"
-Codifier="CC"
+Codifier="CK"
 channel=jph.jph(configURL=configURL, Codifier=Codifier)
 
 @app.route('/')
@@ -61,8 +61,14 @@ def sensorinfo(Codifier):
             sensordetail=json.dumps(channel.getSensor(Codifier))
             )
 
+@app.route('/sensormsg/<Codifier>/<flag>')
+def sensormsg(Codifier, flag):
+    print(Codifier, flag)
+    channel.sendCtrl(to=Codifier, flag=flag)
+    return "Message send"
+
 @app.route('/toggle/<Codifier>')
-def xhr(Codifier):
+def toggle(Codifier):
 
     c=str(sensor)
     if c != "":
