@@ -168,7 +168,7 @@ class jph(object):
                 return s
         return None
 
-    def getMySensor(self, Codifier):
+    def getMySensor(self):
         return self.Sensor
 
     def getMySensorElement(self, elem):
@@ -337,7 +337,11 @@ class jph(object):
 
                 if t >= makeNextSensorReading:
                     if self.IsActive:
-                        timeCallback(t)
+                        try:
+                            timeCallback(t)
+                        except:
+                            self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
+                            sys,exit()
                     makeNextSensorReading = t + self.SensorInterval
 
                 timeout=float((max(0.001, (min(makeNextSensorReading, ctrlNextKeepAlive) - t)/1000)))
@@ -367,8 +371,8 @@ class jph(object):
                         (sequence, timestamp, flag, source, to, length,), value = struct.unpack('IQ1s2s2sI', data[:28]), data[28:]
                         self.logger.debug("Ctrl-%s : recv %s-%s %d %d (len=%d)", flag, source, to, timestamp, sequence, length)
 
+                        dataTime, isActive2 = struct.unpack('Q?', value)
                         if (to in (self.Codifier, "@@")):
-                            dataTime, isActive2 = struct.unpack('Q?', value)
                             if flag == 'C':
                                 self.logger.debug("Ctrl-C - recv %s %s Received request to reload config", source, timestamp)
                                 self.loadConfig()

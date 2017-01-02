@@ -82,6 +82,17 @@
             "DataType":"integer",
             "Type":"ControlProgram"
         }, {
+            "Codifier":"CF",
+            "ShortName":"Flask Control",
+            "Name":"Web Interface",
+            "Symbol":"",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"ControlProgram"
+        }, {
             "Codifier":"Q1",
             "ShortName":"SQL-jphpi",
             "Name":"Postgress SQL adaptor on jphpi",
@@ -158,9 +169,9 @@
             "ShortName":"Aqua Flow",
             "Name":"Water sensors Rotations",
             "Symbol":"rpm",
-            "KeepAliveInterval":60,
-            "SensorInterval":60,
-            "TimeoutWarning":10,
+            "KeepAliveInterval":10,
+            "SensorInterval":10,
+            "TimeoutWarning":20,
             "Active":true,
             "DataType":"float",
             "Type":"failsafeReader",
@@ -199,9 +210,9 @@
             "ShortName":"MAD Flow",
             "Name":"Water sensors Rotations",
             "Symbol":"rpm",
-            "KeepAliveInterval":60,
-            "SensorInterval":60,
-            "TimeoutWarning":10,
+            "KeepAliveInterval":10,
+            "SensorInterval":10,
+            "TimeoutWarning":20,
             "Active":true,
             "DataType":"float",
             "Type":"failsafeReader",
@@ -218,8 +229,8 @@
             "ShortName":"MAD Liters",
             "Name":"Liters Per Minute",
             "Symbol":"lpm",
+            "Type":"Proxy",
             "Sensor":{
-                "Type":"Proxy",
                 "Codifier":"Y1"
             }
         }, {

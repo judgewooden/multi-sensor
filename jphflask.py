@@ -18,18 +18,17 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 # ---- Load from config file
 #
 configURL="file:static/jphmonitor.json2"
-Codifier="CK"
+Codifier="CF"
 channel=jph.jph(configURL=configURL, Codifier=Codifier)
 
 @app.route('/')
-def hello_world():
-    return 'Fuck you, World! - Be Nice - no need to be a cunt'
+def sensors():
+    return render_template('sensors.html', sensors = channel.getAllSensors())
 
 @app.route('/sensor/')
 @app.route('/sensor/<Codifier>')
 def show_sensor(Codifier=None):
     a=[]
-    # sensor="C1"
     if (Codifier==None):
         for sensors in channel.getAllSensors():
             if (r.hexists(sensors["Codifier"], "Codifier")):
@@ -47,11 +46,9 @@ def show_sensor(Codifier=None):
             p={}
             p["Codifier"]=Codifier
             a.append(p)
-    return (Response(response=json.dumps(a), status=200, mimetype="application/json"))
+    return (Response(response=json.dumps(a),
+            status=200, mimetype="application/json"))
 
-@app.route('/sensors/')
-def sensors():
-    return render_template('sensors.html', sensors = channel.getAllSensors())
 
 @app.route('/sensorinfo/<Codifier>')
 def sensorinfo(Codifier):
@@ -63,41 +60,14 @@ def sensorinfo(Codifier):
 
 @app.route('/sensormsg/<Codifier>/<flag>')
 def sensormsg(Codifier, flag):
-    print(Codifier, flag)
-    channel.sendCtrl(to=Codifier, flag=flag)
-    return "Message send"
-
-@app.route('/toggle/<Codifier>')
-def toggle(Codifier):
-
-    c=str(sensor)
-    if c != "":
-        # Consider what to do with proxy sensors
-        for p in configJSON["Sensors"]:
-            if p["Codifier"] == c:
-                if p["Sensor"]["Type"] == "RedisLoader":
-                    return c + " denied"
-                if p["Sensor"]["Type"] == "Proxy":
-                    c=str(p["Sensor"]["Codifier"])
-                break
-        else:
-            return c + " not found"
-
-        # Check thoe current status and toggle it .....
-        s=r.hget(c,"IsActive")
-        if (s=="True"):
-            m="H"
-            a=c + " Halt"
-        else:
-            m="S"
-            a=c + " Start"
-        t=int(time.time()) 
-#         seq = random.randint(1,2147483647)
-#         seq_packed = struct.pack('I', seq)
-# ???        jphconfig.sendControlChannel(t, c, m, seq_packed)
-    else:
-        a="no data"
-    return a
+    p={}
+    t=jph.timeNow()
+    p["Codifier"]=Codifier
+    p["Flag"]=flag
+    p["Timestamp"]=t
+    channel.sendCtrl(to=Codifier, flag=flag, timeComponent=t)
+    return (Response(response=json.dumps(p),
+            status=200, mimetype="application/json"))
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False)

@@ -66,8 +66,8 @@ class RedisHandler(object):
             if source in self.LastDataSequence:
                 diff=sequence - self.LastDataSequence[source]
                 if diff != 1:
-                    channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, diff)
-                    r.hincrby(source, "DPacketsLost", diff)
+                    channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, (diff-1))
+                    r.hincrby(source, "DPacketsLost", (diff-1))
                 self.Counter+=1
             self.LastDataSequence[source]=sequence
 
@@ -88,11 +88,18 @@ class RedisHandler(object):
             if source in self.LastCtrlSequence:
                 diff=sequence - self.LastCtrlSequence[source]
                 if diff != 1:
-                    channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, diff)
-                    r.hincrby(source, "CPacketsLost", diff)
+                    channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, (diff-1))
+                    r.hincrby(source, "CPacketsLost", (diff-1))
                     self.Counter+=1
             self.LastCtrlSequence[source]=sequence
 
+            if flag == 'P':
+                r.hset(source, "PTimestamp", timestamp)
+                r.hset(source, "PRequest", data)
+            if flag == 'T':
+                r.hset(source, "TRequest", data)
+                r.hset(source, "TTimestamp", timestamp)
+                r.hset(source, "TDuration", timestamp-data)
             if flag == 'H':
                 r.hset(source, "HTimestamp", timestamp)
             if flag == 'S':
