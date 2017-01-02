@@ -7,6 +7,7 @@ import jph
 import os
 import time
 import random
+import math
 
 # -------------
 # Globals
@@ -93,7 +94,7 @@ class failsafeReader(object):
         #     logger.critical("Failed to read HTTP: %s", e)
         # except Exception as e:
         #     channel.logger.critical("Exception : %s", e)
-        
+
 class ADCpiReader(object):
     def phobya2temp(self, voltageOut):
         ohm=(5-voltageOut)/voltageOut*16800/1000

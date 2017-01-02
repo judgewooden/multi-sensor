@@ -341,7 +341,7 @@ class jph(object):
                             timeCallback(t)
                         except:
                             self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
-                            sys,exit()
+                            sys.exit()
                     makeNextSensorReading = t + self.SensorInterval
 
                 timeout=float((max(0.001, (min(makeNextSensorReading, ctrlNextKeepAlive) - t)/1000)))
