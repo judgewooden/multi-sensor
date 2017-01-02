@@ -337,11 +337,7 @@ class jph(object):
 
                 if t >= makeNextSensorReading:
                     if self.IsActive:
-                        try:
-                            timeCallback(t)
-                        except:
-                            self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
-                            sys.exit()
+                        timeCallback(t)
                     makeNextSensorReading = t + self.SensorInterval
 
                 timeout=float((max(0.001, (min(makeNextSensorReading, ctrlNextKeepAlive) - t)/1000)))
