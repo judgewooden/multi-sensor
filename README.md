@@ -13,12 +13,12 @@ The purpose of the project is to automate the control of Raspberry Pi sensors on
 Program | Purpose
 ------- | -------
 jph.py  | Library of routines to manage the Multicast messaging
+jphFlask.py   | Web Interface
+jphRedis.py   | Store last state of all messages in the network
 sensor.py  | Routines to read sensors
 router.py  | Route message between multiple networks
-redis.py   | Store last state of all messages in the network
 control.py | Command line interface for viewing/managing network
 sql.py     | Store network messages in SQL
-flask.py   | Web Interface
 generateSQL.py     | Generate SQL to create database from config
 static/config.json | Config file used by all components
 static/(www)       | Files for the web interface

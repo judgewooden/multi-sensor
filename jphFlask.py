@@ -9,21 +9,18 @@ import struct
 import random
 import jph
 
-# ----- DOUWE : Review this code using jphconfig housekeeping
 app = Flask(__name__)
-r=FlaskRedis(app) 
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-#
-# ---- Load from config file
-#
-configURL="file:static/jphmonitor.json2"
+r=FlaskRedis(app) 
+
+configURL="file:static/config.json"
 Codifier="CF"
 channel=jph.jph(configURL=configURL, Codifier=Codifier)
 
 @app.route('/')
 def sensors():
-    return render_template('sensors.html', sensors = channel.getAllSensors())
+    return render_template('dashboard.html', sensors = channel.getAllSensors())
 
 @app.route('/sensor/')
 @app.route('/sensor/<Codifier>')

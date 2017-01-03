@@ -11,7 +11,7 @@ import time
 # -------------
 # Globals
 # -------------
-configURL="file:static/jphmonitor.json2"
+configURL="file:static/config.json"
 Codifier="R1"
 
 # -------------

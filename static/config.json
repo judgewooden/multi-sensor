@@ -2,12 +2,12 @@
 {
     "Multicast": {
         "Control-Channel": {
-            "Address":"224.0.0.251",
-            "Port":8001
+            "Address":"226.0.0.221",
+            "Port":7001
         },
         "Data-Channel": {
-            "Address":"224.0.0.252",
-            "Port":8002
+            "Address":"226.0.0.222",
+            "Port":7002
         }
     },
     "Logging":{
@@ -66,11 +66,10 @@
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
-            "Active":false,
+            "TimeoutWarning":60,
+            "Active":true,
             "DataType":"integer",
-            "Sensor":{
-                "Type":"ControlProgram"
-            }
+            "Type":"ControlProgram"
         }, {
             "Codifier":"CK",
             "ShortName":"Kast Control",
@@ -78,11 +77,21 @@
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
-            "Active":false,
+            "TimeoutWarning":60,
+            "Active":true,
             "DataType":"integer",
-            "Sensor":{
-                "Type":"ControlProgram"
-            }
+            "Type":"ControlProgram"
+        }, {
+            "Codifier":"CF",
+            "ShortName":"Flask Control",
+            "Name":"Web Interface",
+            "Symbol":"",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"ControlProgram"
         }, {
             "Codifier":"Q1",
             "ShortName":"SQL-jphpi",
@@ -90,10 +99,11 @@
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
+            "TimeoutWarning":10,
             "Active":true,
             "DataType":"integer",
+            "Type":"SQLLoader",
             "Sensor":{
-                "Type":"SQLLoader",
                 "SQL":{
                     "Database":"mysensor6",
                     "User":"jphadmin",
@@ -108,22 +118,22 @@
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
+            "TimeoutWarning":120,
             "Active":true,
             "DataType":"integer",
-            "Sensor":{
-                "Type":"RedisLoader"
-            }
+            "Type":"RedisLoader"
         }, {
             "Codifier":"C1",
             "ShortName":"kastpi Temp",
             "Name":"kastpi CPU Temparature",
             "Symbol":"C",
-            "KeepAliveInterval":60,
-            "SensorInterval":10,
+            "KeepAliveInterval":20,
+            "SensorInterval":5,
+            "TimeoutWarning":60,
             "Active":true,
             "DataType":"float",
+            "Type":"TempLinux",
             "Sensor":{
-                "Type":"TempLinux",
                 "Pipe":"/sys/class/thermal/thermal_zone0/temp"
             }
         }, {
@@ -131,12 +141,13 @@
             "ShortName":"pihost Temp",
             "Name":"pihost CPU Temparature",
             "Symbol":"C",
-            "KeepAliveInterval":60,
-            "SensorInterval":10,
+            "KeepAliveInterval":30,
+            "TimeoutWarning":60,
+            "SensorInterval":5,
             "Active":true,
             "DataType":"float",
+            "Type":"TempLinux",
             "Sensor":{
-                "Type":"TempLinux",
                 "Pipe":"/sys/class/thermal/thermal_zone0/temp"
             }
         }, {
@@ -144,12 +155,13 @@
             "ShortName":"mad Temp",
             "Name":"pihost CPU Temparature",
             "Symbol":"C",
-            "KeepAliveInterval":60,
-            "SensorInterval":10,
+            "KeepAliveInterval":30,
+            "TimeoutWarning":60,
+            "SensorInterval":5,
             "Active":true,
             "DataType":"float",
-            "Sensor":{
-                "Type":"TempLinux",
+            "Type":"TempLinux",
+            "Sensor":{ 
                 "Pipe":"/sys/class/thermal/thermal_zone0/temp"
             }
         }, {
@@ -157,12 +169,13 @@
             "ShortName":"Aqua Flow",
             "Name":"Water sensors Rotations",
             "Symbol":"rpm",
-            "KeepAliveInterval":60,
-            "SensorInterval":60,
+            "KeepAliveInterval":10,
+            "SensorInterval":10,
+            "TimeoutWarning":20,
             "Active":true,
             "DataType":"float",
+            "Type":"failsafeReader",
             "Sensor":{
-                "Type":"failsafeReader",
                 "URL":"http://192.168.0.8/X",
                 "Field":"FlowPerSecond",
                 "Proxy":[{
@@ -178,8 +191,8 @@
             "ShortName":"Aqua Liters",
             "Name":"Liters Per Minute",
             "Symbol":"lpm",
+            "Type":"Proxy",
             "Sensor":{
-                "Type":"Proxy",
                 "Codifier":"X1"
             }
         }, {
@@ -187,9 +200,9 @@
             "ShortName":"Flow Sensor Power",
             "Name":"Indicator if the Power is ON/OFF",
             "Symbol":" ",
-            "Type":"bool",
+            "DataType":"bool",
+            "Type":"Proxy",
             "Sensor":{
-                "Type":"Proxy",
                 "Codifier":"X1"
             }
         }, {
@@ -197,12 +210,13 @@
             "ShortName":"MAD Flow",
             "Name":"Water sensors Rotations",
             "Symbol":"rpm",
-            "KeepAliveInterval":60,
-            "SensorInterval":60,
+            "KeepAliveInterval":10,
+            "SensorInterval":10,
+            "TimeoutWarning":20,
             "Active":true,
             "DataType":"float",
+            "Type":"failsafeReader",
             "Sensor":{
-                "Type":"failsafeReader",
                 "URL":"http://192.168.0.8/Y",
                 "Field":"FlowPerSecond",
                 "Proxy":[{
@@ -215,8 +229,8 @@
             "ShortName":"MAD Liters",
             "Name":"Liters Per Minute",
             "Symbol":"lpm",
+            "Type":"Proxy",
             "Sensor":{
-                "Type":"Proxy",
                 "Codifier":"Y1"
             }
         }, {
@@ -224,11 +238,12 @@
             "ShortName":"Rad-in Temp",
             "Name":"Radiator Temperature IN",
             "Symbol":"C",
-            "KeepAliveInterval":60,
+            "KeepAliveInterval":20,
             "SensorInterval":10,
+            "TimeoutWarning":60,
             "Active":true,
+            "Type":"ADCpiReader",
             "Sensor":{
-                "Type":"ADCpiReader",
                 "Pin":"2",
                 "Proxy":[{
                     "Codifier":"A2",
@@ -240,9 +255,9 @@
             "ShortName":"Rad-out Temp",
             "Name":"Radiator Temperature OUT",
             "Symbol":"C",
-            "Type":"float",
+            "DataType":"float",
+            "Type":"Proxy",
             "Sensor":{
-                "Type":"Proxy",
                 "Codifier":"A1"
             }
         }, {
@@ -250,11 +265,12 @@
             "ShortName":"Manifold-in Temp",
             "Name":"Manifold Temperature IN",
             "Symbol":"C",
-            "KeepAliveInterval":60,
+            "KeepAliveInterval":20,
             "SensorInterval":10,
+            "TimeoutWarning":60,
             "Active":true,
+            "Type":"ADCpiReader",
             "Sensor":{
-                "Type":"ADCpiReader",
                 "Pin":"2",
                 "Proxy":[{
                     "Codifier":"A6",
@@ -267,8 +283,8 @@
             "Name":"Manifold Temperature OUT",
             "Symbol":"C",
             "Type":"float",
+            "Type":"Proxy",
             "Sensor":{
-                "Type":"Proxy",
                 "Codifier":"A6"
             }
         }, {
@@ -276,11 +292,12 @@
             "ShortName":"Air Temp",
             "Name":"Temperature of the Air outside",
             "Symbol":"C",
-            "KeepAliveInterval":60,
+            "KeepAliveInterval":20,
             "SensorInterval":10,
+            "TimeoutWarning":60,
             "Active":true,
+            "Type":"ADAfruitReader",
             "Sensor":{
-                "Type":"ADAfruitReader",
                 "Pin":"21",
                 "Proxy":[{
                     "Codifier":"F2"
@@ -291,9 +308,9 @@
             "ShortName":"Air Humidity",
             "Name":"Humidity of the Air outside",
             "Symbol":"%",
-            "Type":"float",
+            "DataType":"float",
+            "Type":"Proxy",
             "Sensor":{
-                "Type":"Proxy",
                 "Codifier":"F1"
             }
         }, {
@@ -301,11 +318,12 @@
             "ShortName":"Cupboard Temp",
             "Name":"Temperature of the Air inside",
             "Symbol":"C",
-            "KeepAliveInterval":60,
+            "KeepAliveInterval":20,
             "SensorInterval":10,
+            "TimeoutWarning":60,
             "Active":true,
+            "Type":"ADAfruitReader",
             "Sensor":{
-                "Type":"ADAfruitReader",
                 "Pin":"21",
                 "Proxy":[{
                     "Codifier":"F7"
@@ -316,9 +334,9 @@
             "ShortName":"Cupboard Humidity",
             "Name":"Humidity of the Air inside",
             "Symbol":"%",
-            "Type":"float",
+            "DataType":"float",
+            "Type":"Proxy",
             "Sensor":{
-                "Type":"Proxy",
                 "Codifier":"F6"
             }
         }

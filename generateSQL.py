@@ -13,7 +13,8 @@ import time
 import struct
 import socket
 import jphconfig
-
+print("REWRITE ALL OF THIS - IT DOES NOT SUPPROT THE NEW CONFIG YET")
+sys.exit()
 # -------------
 # Read Startup Parameters
 # -------------

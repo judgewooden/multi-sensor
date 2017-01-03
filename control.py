@@ -19,7 +19,7 @@ comFlag=""
 comTarget=""
 comExit=""
 comChnl=""
-configURL="file:static/jphmonitor.json2"
+configURL="file:static/config.json"
 Codifier=""
 comForce=""
 

@@ -6,7 +6,6 @@ import logging.config
 import socket
 import struct
 import random
-# import time
 import datetime 
 import select
 import sys
@@ -230,8 +229,6 @@ class jph(object):
 
     def sendData(self, data, timestamp=0, Codifier="", sequence_packet=False):
         if (self.DataSocket==0):
-            # DOUWE if (self.CtrlSocket==0):
-            # DOUWE     self.startCtrl(do_not_load_multicast=True)   # remove option from
             self.startData(do_not_load_multicast=True)
 
         if timestamp==0:
@@ -340,7 +337,7 @@ class jph(object):
                             break
                         raise
 
-                    if not self.IsActive:    # DOUWE ! should only apply if there is a data channel active
+                    if not self.IsActive:    # ! should only apply if there is a data channel used
                          self.logger.debug("Data-  :      Processing currently HALTED.")
                     ctrlNextKeepAlive = t + (self.KeepAliveInterval)
 
