@@ -9,9 +9,9 @@ The purpose of the project is to automate the control of Raspberry Pi sensors on
 ![Multicast Network](https://github.com/judgewooden/multi-sensor/raw/master/static/network.png)
 
 ## 
-Program            | Purpose
------------------- | -------------
-jph.py             | Library of routines to manage the Multicast messaging
+Program | Purpose
+------- | -------------
+jph.py | Library of routines to manage the Multicast messaging
 sensor.py          | Routines to read sensors 
 router.py          | Route message between multiple networks
 redis.py           | Store last state multicast messages 
