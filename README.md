@@ -1,6 +1,6 @@
 # pi Sensor Monitor
 
-I used this project to learn more about python, flask and asynchronous messaging. I am new to python and would not mind any suggestions advice from experts that come to this repo.
+I used this project to learn more about python, flask and messaging. I am new to python and would not mind any suggestions/advice from experts that come to this repo.
 
 ## Synopsis
 
@@ -15,31 +15,31 @@ Program | Purpose
 jph.py  | Library of routines to manage the Multicast messaging
 sensor.py  | Routines to read sensors
 router.py  | Route message between multiple networks
-redis.py   | Store last state of all multicast messages 
-control.py | Command line interface for viewing/managing jph library
-sql.py     | Store messages in SQL
-flask.py   | WebServices interface
+redis.py   | Store last state of all messages in the network
+control.py | Command line interface for viewing/managing network
+sql.py     | Store network messages in SQL
+flask.py   | Web Interface
 generateSQL.py     | Generate SQL to create database from config
-static/config.json | Config file, ready by jph.py and used by all components
+static/config.json | Config file used by all components
 static/(www)       | Files for the web interface
 templates/(www)    | Files for the web interface  
 
 ## Sensor
 
-Sensors are very easy to add in python. The jph library will callback your sensors reading routine and sending data to the network is done with sendData() message. 
+Sensors are very easy to add in python. The jph library will callback the sensors reading routine and send data to the network using sendData(). 
 
-### Sensor supported are
+### Current supported Sensors
 
 Interface | Example
 --------- | -------
 Pipe | Return a value from a UNIX pipe
 JSON | Do a http request to read JSON
-ADC pi + | Analogue-to-Digital board output ![ADC Pi Plus](https://www.abelectronics.co.uk/p/56/ADC-Pi-Plus-Raspberry-Pi-Analogue-to-Digital-converter)
-ADAfruit | The Temperature & Humidity sensors ![AM2302](https://www.adafruit.com/products/393)
+ADC pi + | Analogue-to-Digital board output [ADC Pi Plus](https://www.abelectronics.co.uk/p/56/ADC-Pi-Plus-Raspberry-Pi-Analogue-to-Digital-converter)
+ADAfruit | The Temperature & Humidity sensors [AM2302](https://www.adafruit.com/products/393)
 
 ## Overview of Multicast bus
 
-Each component on te nework is identifed by a two characters, called *Codifiers*. There are two networks:
+Each component on te nework is identifed by a two characters, called **Codifiers**. There are two networks:
 
 1. Control bus - All components talk to each other on this bus, sending keep-alive messages and commands
 2. Data bus - Only collector components listen to this bus and sensors send data on this bus.
