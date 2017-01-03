@@ -1,4 +1,4 @@
-# pi Sensor Monitor
+# Raspberry Pi - Sensor Monitor
 
 I used this project to learn more about python, flask and messaging. I am new to python and would not mind any suggestions/advice from experts that come to this repo.
 
