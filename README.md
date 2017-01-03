@@ -6,7 +6,7 @@ I used this project to learn more about python, flask and asynchronous messaging
 
 The purpose of the project is to automate the control of Raspberry Pi sensors on the network. All the components communicate using a Multicast Messaging layer.
 
-![Multicast Network](https://github.com/judgewooden/pimonitor/raw/master/img/PiSensorMonitor.png)
+![Multicast Network](https://github.com/judgewooden/pimonitor/raw/master/static/network.png)
 
 ## 
 Program            | Purpose
