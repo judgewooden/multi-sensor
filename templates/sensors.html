@@ -28,7 +28,7 @@ i = show an info bubble
 {% for sensor in sensors %}
 	<div class="col-md-2">
 	  <div class="card card-block jph-box">
-		<div class="card-header {% if sensor.Active %} jph-error {% else %} jph-info {% endif %} jph-box-header" data-click="controls" id="{{ sensor.Codifier }}h">{{ sensor.ShortName }}</div>
+		<div class="card-header {% if sensor.Active %} jph-error {% else %} jph-info {% endif %} jph-box-header" data-click="controls" id="{{ sensor.Codifier }}h">{{ sensor.Codifier }} - {{ sensor.ShortName }}</div>
 		<div class="card-subheader jph-box-subheader" data-click="controls" id="{{ sensor.Codifier }}c"> 
 		  <button type="button" class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="Start the Sensor" id="{{ sensor.Codifier }}S"><i class="fa fa-play fa-inverse"></i></button>
 		  <button type="button" class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="Pause the Sensor" id="{{ sensor.Codifier }}H"><i class="fa fa-pause fa-inverse"></i></button>

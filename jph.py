@@ -330,7 +330,16 @@ class jph(object):
                 t=timeNow()
 
                 if t >= ctrlNextKeepAlive:
-                    self.sendCtrl(flag='I')
+                    try:
+                        self.sendCtrl(flag='I')
+                    except IOError as e:
+                        if e.errno == 101:   #Multicast can fail on wifi due to buzzy networks
+                            self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
+                            self.endCtrl()
+                            forever = False;
+                            break
+                        raise
+
                     if not self.IsActive:    # DOUWE ! should only apply if there is a data channel active
                          self.logger.debug("Data-  :      Processing currently HALTED.")
                     ctrlNextKeepAlive = t + (self.KeepAliveInterval)
