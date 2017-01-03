@@ -8,7 +8,7 @@ The purpose of the project is to automate the control of Raspberry Pi sensors on
 
 ![Multicast Network](https://github.com/judgewooden/multi-sensor/raw/master/static/network.png)
 
-## Overview of the programs
+## The programs
 
 Program | Purpose
 ------- | -------
@@ -24,7 +24,7 @@ static/config.json | Config file used by all components
 static/(www)       | Files for the web interface
 templates/(www)    | Files for the web interface  
 
-## Sensor
+## The Sensor
 
 Sensors are very easy to add in python. The jph library will callback the sensors reading routine and send data to the network using sendData(). 
 
@@ -37,7 +37,7 @@ JSON | Do a http request to read JSON
 ADC pi + | Analogue-to-Digital board output [ADC Pi Plus](https://www.abelectronics.co.uk/p/56/ADC-Pi-Plus-Raspberry-Pi-Analogue-to-Digital-converter)
 ADAfruit | The Temperature & Humidity sensors [AM2302](https://www.adafruit.com/products/393)
 
-## Overview of Multicast bus
+## The Multicast bus
 
 Each component on te nework is identifed by a two characters, called **Codifiers**. There are two networks:
 
@@ -46,16 +46,17 @@ Each component on te nework is identifed by a two characters, called **Codifiers
 
 For both busses each message carries a millisecond timevalue, sequence number and a to/from Codifier. The following message types are supported:
 
-
 Flag | Purpose
 ---- | -------
-n / N | New sequence start message
-I | Keep-Alive message
-C | Request to re-read the config and restart
-P | Ping message to a component 
-T | Time value response to a {P} message, responding with payload
-S | Start the Data channel callbacks
-H | Halt the Data channel callbacks
+I | **I** am alive
+C | Request to (re)read the **C**onfig and restart
+P | Request a time **P**ong message 
+T | **T**ime value response to a {P} message, responding with payload from {P}
+S | **S**tart the Data channel callbacks
+H | **H**alt the Data channel callbacks
+N/n | The sequence numbering from this point is **N**ew 
+
+Message with Codifier:@@ is broadcast to all
 
 ## Installation
 
