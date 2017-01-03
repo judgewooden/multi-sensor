@@ -52,8 +52,7 @@ def sensorinfo(Codifier):
     return render_template('sensorinfo.html',
             sensor=channel.getSensor(Codifier),
             redis=r.hgetall(Codifier),
-            sensordetail=json.dumps(channel.getSensor(Codifier))
-            )
+            sensordetail=json.dumps(channel.getSensor(Codifier)))
 
 @app.route('/sensormsg/<Codifier>/<flag>')
 def sensormsg(Codifier, flag):
