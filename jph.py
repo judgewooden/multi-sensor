@@ -272,6 +272,7 @@ class jph(object):
         try:
             self.DataSocket.sendto(packed_data, (self.DataAddress, self.DataPort))
         except socket.error as e:
+            print(e)
             if e.errno == 101:   #Multicast can fail on wifi due to buzzy networks
                 self.logger.warning("Data channel. Unexpected error: %s", sys.exc_info()[0])
             raise
@@ -334,6 +335,7 @@ class jph(object):
                     try:
                         self.sendCtrl(flag='I')
                     except socket.error as e:
+                        print(e)
                         if e.errno == 101:   #Multicast can fail on wifi due to buzzy networks
                             self.logger.warning("Ctrl Channel. Unexpected error: %s", sys.exc_info()[0])
                             self.endCtrl()

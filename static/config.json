@@ -345,13 +345,13 @@
             "Name":"Mix Temp between flow A & B",
             "Symbol":"C",
             "KeepAliveInterval":20,
-            "SensorInterval":10,
+            "SensorInterval":5,
             "TimeoutWarning":60,
             "Active":true,
             "Type":"Calculator",
             "Sensor":{
                 "__comment":"Mix temp = (flow1 * temp1 + flow2 * temp2)/(flow 1 + flow 2)",
-                "python":"mixflow.py",
+                "python":"mixtemp.py",
                 "Proxy":[{
                     "__comment":"this is just for test",
                     "Codifier":"PB"

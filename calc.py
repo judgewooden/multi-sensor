@@ -45,13 +45,50 @@ except Exception as e:
 #
 #r.hget(source, "DPacketsLost", 0)
 
+def jphlookup(var):
+    s=var.find("|")
+    if s > 0:
+        field=var[s+1:]
+        var=var[:s]
+        s=field.find("|")
+        if s > 0:
+            cache=field[:s]
+            field=field[s+1:]
+        else:
+            cache="redis"
+    else:
+        cache="redis"
+        field="Value"
+    var=var.strip()
+    cache=cache.strip()
+    field=field.strip()
+    print(var, cache, field)
+    if cache=='redis':
+        x=r.hget(var,field)
+        print(x)
+    return "VAR"
+
+def jphme(var):
+    new=""
+    s=var.find("{{")
+    if s > 0:
+        e=var.find("}}", s)
+        if e > 0:
+            return var[:s] + jphlookup(var[s+2:e]) + jphme(var[e+2:])
+        return var
+    return var
+
 class CalcHandler(object):
 
     # def __init__(self):
 
     def Calculate(self, Timestamp):
-        filename=channel.getMySensorElement("Proxy")
-        print(filename)
+        filename="custom/" + channel.getMySensorElement("python")
+        print("F", filename)
+        with open(filename, 'r') as fd:
+            code=fd.read()
+        print("C", code)
+        newcode = jphme(code)
         # channel.sendData(self.Counter)
 
 if __name__ == '__main__':
