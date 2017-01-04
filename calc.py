@@ -62,11 +62,11 @@ def jphlookup(var):
     var=var.strip()
     cache=cache.strip()
     field=field.strip()
-    print(var, cache, field)
     if cache=='redis':
-        x=r.hget(var,field)
-        print(x)
-    return "VAR"
+        return str(r.hget(var, field))
+    if cache=='config':
+        return str(channel.getSensor(var)[field])
+    return str(None)
 
 def jphme(var):
     new=""
@@ -80,16 +80,16 @@ def jphme(var):
 
 class CalcHandler(object):
 
-    # def __init__(self):
+    def __init__(self):
+        self.Counter=0
 
     def Calculate(self, Timestamp):
         filename="custom/" + channel.getMySensorElement("python")
-        print("F", filename)
         with open(filename, 'r') as fd:
             code=fd.read()
-        print("C", code)
-        newcode = jphme(code)
-        # channel.sendData(self.Counter)
+        exec(jphme(code))
+        self.Counter+=1
+        channel.sendData(self.Counter)
 
 if __name__ == '__main__':
  

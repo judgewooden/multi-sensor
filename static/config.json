@@ -341,30 +341,29 @@
             }
         }, {
             "Codifier":"PA",
-            "ShortName":"Mix Temperature",
-            "Name":"Mix Temp between flow A & B",
-            "Symbol":"C",
+            "ShortName":"Custom Calculator",
+            "Name":"Calculates",
+            "Symbol":" execs",
             "KeepAliveInterval":20,
-            "SensorInterval":5,
+            "SensorInterval":10,
             "TimeoutWarning":60,
             "Active":true,
             "Type":"Calculator",
             "Sensor":{
-                "__comment":"Mix temp = (flow1 * temp1 + flow2 * temp2)/(flow 1 + flow 2)",
                 "python":"mixtemp.py",
                 "Proxy":[{
-                    "__comment":"this is just for test",
                     "Codifier":"PB"
                 }]
             }
         }, {
             "Codifier":"PB",
-            "ShortName":"Dummy for now",
-            "Name":"Double result from a calculation",
-            "Symbol":"%",
+            "ShortName":"Mix Temperature",
+            "Name":"Mix between two Sensors",
+            "Symbol":"C",
             "DataType":"float",
             "Type":"Proxy",
             "Sensor":{
+                "__comment":"Mix temp = (flow1 * temp1 + flow2 * temp2)/(flow 1 + flow 2)",
                 "Codifier":"PA"
             }
         }

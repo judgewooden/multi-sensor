@@ -271,6 +271,8 @@ class jph(object):
 
         try:
             self.DataSocket.sendto(packed_data, (self.DataAddress, self.DataPort))
+        except IOError as t:
+            print (t)
         except socket.error as e:
             print(e)
             if e.errno == 101:   #Multicast can fail on wifi due to buzzy networks
@@ -334,6 +336,8 @@ class jph(object):
                 if t >= ctrlNextKeepAlive:
                     try:
                         self.sendCtrl(flag='I')
+                    except IOError as t:
+                        print (t)
                     except socket.error as e:
                         print(e)
                         if e.errno == 101:   #Multicast can fail on wifi due to buzzy networks
