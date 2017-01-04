@@ -269,7 +269,12 @@ class jph(object):
 
         packed_data = struct.pack("IQ1s2s2sI%ds" % (len(packed),), sequence, timestamp, flag, Codifier, to, len(packed), packed)
 
-        self.DataSocket.sendto(packed_data, (self.DataAddress, self.DataPort))
+        try:
+            self.DataSocket.sendto(packed_data, (self.DataAddress, self.DataPort))
+        except socket.error as e:
+            if e.errno == 101:   #Multicast can fail on wifi due to buzzy networks
+                self.logger.warning("Data channel. Unexpected error: %s", sys.exc_info()[0])
+            raise
 
     def sendCtrl(self, flag, timestamp=0, to="", timeComponent=0):
         if (self.CtrlSocket==0):
@@ -328,9 +333,9 @@ class jph(object):
                 if t >= ctrlNextKeepAlive:
                     try:
                         self.sendCtrl(flag='I')
-                    except IOError as e:
+                    except socket.error as e:
                         if e.errno == 101:   #Multicast can fail on wifi due to buzzy networks
-                            self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
+                            self.logger.warning("Ctrl Channel. Unexpected error: %s", sys.exc_info()[0])
                             self.endCtrl()
                             forever = False;
                             break
