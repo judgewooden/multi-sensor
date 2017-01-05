@@ -21,12 +21,12 @@ sensor.py  | Routines to read sensors
 router.py  | Route message between multiple networks (TBC)
 control.py | Command line interface for viewing/managing network
 sql.py     | Store network messages in SQL (TBC)
-generateSQL.py     | Generate SQL to create database from config (TBC)
 static/config.json | Config file used by all components
+generateSQL.py     | Generate SQL to create database from config (TBC)
 
 ## The Sensor
 
-Sensors are very easy to add in python. The jph library will callback the sensors reading routine and send data to the network using sendData(). 
+Sensors are easy to using python. The jph library will callback the sensors reading routine which can send data to the network using sendData(). 
 
 ### Current supported Sensors
 
@@ -36,7 +36,7 @@ Pipe | Return a value from a UNIX pipe
 JSON | Do a http request to read JSON
 ADC pi + | Analogue-to-Digital board output [ADC Pi Plus](https://www.abelectronics.co.uk/p/56/ADC-Pi-Plus-Raspberry-Pi-Analogue-to-Digital-converter)
 ADAfruit | The Temperature & Humidity sensors [AM2302](https://www.adafruit.com/products/393)
-Python | Make customized calculations 
+Python | Make customized calculations (using ninja2 style variable injection)
 
 ## The Multicast bus
 
@@ -51,13 +51,13 @@ Flag | Purpose
 ---- | -------
 I | **I** am alive
 C | Request to (re)read the **C**onfig and restart
-P | Request a time **P**ong message 
+P | **Ping** a component, requesting a {T} response message 
 T | **T**ime value response to a {P} message, responding with payload from {P}
 S | **S**tart the Data channel callbacks
 H | **H**alt the Data channel callbacks
 N/n | The sequence numbering from this point is **N**ew 
 
-Message with Codifier:@@ is broadcast to all
+Message with Codifier destination '@@'' is a broadcast to all
 
 ## Installation
 

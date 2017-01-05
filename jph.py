@@ -336,7 +336,7 @@ class jph(object):
                 if t >= makeNextSensorReading:
                     if self.IsActive:
                         timeCallback(t)
-                        ctrlNextKeepAlive = t + (self.KeepAliveInterval)
+                        ctrlNextKeepAlive = t + (self.KeepAliveInterval) 
                     makeNextSensorReading = t + self.SensorInterval
 
                 if t >= ctrlNextKeepAlive:
