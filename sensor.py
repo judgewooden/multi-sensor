@@ -37,49 +37,49 @@ except Exception as e:
     usage()
     sys.exit()
 
+# These two routines allow you to override sensor data into a text file for scripting 
+# or writing to files
+def jphlookup(var):
+    s=var.find("|")
+    if s > 0:
+        field=var[s+1:]
+        var=var[:s]
+        s=field.find("|")
+        if s > 0:
+            cache=field[:s].strip()
+            field=field[s+1:]
+        else:
+            cache="redis"
+    else:
+        cache="redis"
+        field="Value"
+    if cache=='redis':
+        return str(r.hget(var.strip(), field.strip()))
+    if cache=='config':
+        return str(channel.getSensor(var.strip())[field.strip()])
+    return str(None)
+
+def jphninja(var):
+    s=var.find("{{")
+    if s > 0:
+        e=var.find("}}", s)
+        if e > 0:
+            return var[:s] + jphlookup(var[s+2:e]) + jphninja(var[e+2:])
+    return var
+
 #
 # by making a Sensor a class you can store local variables
 # and make a function to check the sensor every x seconds but only update the 
 # data if the sensor changed within a specific tollerance
 # 
 # Also allow for enhanced inequiry capabilities using a peer-to-peer future prototcol
-#
 class PythonNinja(object):
-
-    def jphlookup(self, var):
-        s=var.find("|")
-        if s > 0:
-            field=var[s+1:]
-            var=var[:s]
-            s=field.find("|")
-            if s > 0:
-                cache=field[:s].strip()
-                field=field[s+1:]
-            else:
-                cache="redis"
-        else:
-            cache="redis"
-            field="Value"
-        if cache=='redis':
-            return str(r.hget(var.strip(), field.strip()))
-        if cache=='config':
-            return str(channel.getSensor(var.strip())[field.strip()])
-        return str(None)
-
-    def jphme(self, var):
-        s=var.find("{{")
-        if s > 0:
-            e=var.find("}}", s)
-            if e > 0:
-                return var[:s] + self.jphlookup(var[s+2:e]) + self.jphme(var[e+2:])
-        return var
-
     def run(self, Timestamp):
         t1=time.time() * 1000
         filename=channel.getMySensorElement("Filename")
         with open(filename, 'r') as fd:
             code=fd.read()
-        exec(self.jphme(code))
+        exec(jphninja(code))
         t2=time.time() * 1000
         channel.sendData(t2-t1)
 
@@ -100,25 +100,13 @@ class failsafeReader(object):
             raise WrongContent(response=response)
         else:
             if (len(response.text) > 1):
+                ### !!! BAD BODGE The input data is malformed, fix it with this replace() clause :(
                 json_data = json.loads(response.text.replace(",]}","]}"))
                 v=json_data[channel.getMySensorElement("Field")]
                 channel.sendData(data=v, Codifier="")
                 for proxy in channel.getMySensorElement("Proxy"):
                      v=json_data[proxy["Field"]]
                      code=str(proxy["Codifier"])
-                     channel.sendData(data=v, Codifier=str(proxy["Codifier"]))
-        # Spend some time catchign error codes
-        #  --- decide what should crash and when to continue
-        # except KeyError as e:
-        #     channel.logger.critical("Exception (Field not found?): %s", e)
-        # except requests.exceptions.ConnectionError as e:
-        #     channel.logger.warning("Unexpected not found: %s", e)
-        # except requests.exceptions.ReadTimeout as e:
-        #     logger.critical("Slow HTTP: %s", e)
-        # except ValueError as e:
-        #     logger.critical("Failed to read HTTP: %s", e)
-        # except Exception as e:
-        #     channel.logger.critical("Exception : %s", e)
 
 class ADCpiReader(object):
     def phobya2temp(self, voltageOut):
