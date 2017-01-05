@@ -28,7 +28,6 @@
   text-align: center;
   padding: 0px 0;
   font-size: 12px;
-  /* line-height: 1.428571429; */
   border-radius: 24px;
   box-shadow: none;
   margin-left: 1px;
@@ -42,7 +41,6 @@
   min-height: 70px; 
   box-shadow: none;
   background-color: #dddddd;
-  /* margin-bottom: 1em;  */
   padding: 0;
   overflow: hidden;
 }
@@ -50,7 +48,6 @@
   height: 15px;
   padding: 0;
   font-size: 11px;
-/*  font-weight: bold; */
   text-align: center;
   border-bottom: 1px solid transparent;
   margin-bottom: 0;
@@ -61,7 +58,7 @@
   padding: 0;
   line-height: 30px;
   text-align: center;
-  border: 1px solid transparent; /* dashed #f69c55; */
+  border: 1px solid transparent; 
 }
 .jph-box-value{
   height: 30px;
@@ -70,17 +67,8 @@
   font-size: 18px;
   text-align: center;
   text-align: center;
-  border: 1px solid transparent; /* dashed #f69c55; */
+  border: 1px solid transparent; 
 }
-/* not used 
-.jph-box-value-bar {
-  line-height:30px;
-}
-.jph-box-value-text{
-  text-align: center;
-  line-height: 30px;
-}
-*/
 .jph-box-footer{
   height: 15px;
   padding: 0;
@@ -100,7 +88,7 @@
 }
 .jph-proxy{
   color: #333;
-  background-color: #74e0d0;
+  background-color: #60d24a;
 }
 .jph-timeout{
   color: #fff;

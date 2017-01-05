@@ -100,7 +100,7 @@ class failsafeReader(object):
             raise WrongContent(response=response)
         else:
             if (len(response.text) > 1):
-                ### !!! BAD BODGE The input data is malformed, fix it with this replace() clause :(
+                ### !!! BAD BODGE The input data is malformed, fix it with this 'replace()'' clause :(
                 json_data = json.loads(response.text.replace(",]}","]}"))
                 v=json_data[channel.getMySensorElement("Field")]
                 channel.sendData(data=v, Codifier="")

@@ -385,6 +385,10 @@ class jph(object):
                         self.logger.debug("Ctrl-%s : recv %s-%s %d %d (len=%d)", flag, source, to, timestamp, sequence, length)
 
                         dataTime, isActive2 = struct.unpack('Q?', value)
+
+                        if ctrlCallback and self.IsActive:
+                            ctrlCallback("Ctrl=", flag, source, to, timestamp, sequence, length, sender, dataTime, isActive2)
+                            
                         if (to in (self.Codifier, "@@")):
                             if flag == 'C':
                                 self.logger.debug("Ctrl-C - recv %s %s Received request to reload config", source, timestamp)
@@ -414,5 +418,3 @@ class jph(object):
                                     logging.critical("There is another instance of %s running (time=%s)", self.Codifier, str(dataTime))
                                     sys.exit()
 
-                        if ctrlCallback and self.IsActive:
-                            ctrlCallback("Ctrl=", flag, source, to, timestamp, sequence, length, sender, dataTime, isActive2)

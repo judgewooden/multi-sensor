@@ -3,8 +3,8 @@
 # This will be called after all modules are loaded (see sensors.py)
 # channel (jph) will be establised
 # 
-# {{ }} syntax is:  Codifier | location | Field
-#  where location is either 'redis' or 'config'
+# {{ }} syntax is:  Codifier | Location | Field
+#  where Location is either 'redis' or 'config'
 #           ('redis' is default if ommitted)
 #           ('Value' is default if Field ommitted)
 #
