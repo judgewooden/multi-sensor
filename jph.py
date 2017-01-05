@@ -398,8 +398,11 @@ class jph(object):
                                 self.logger.debug("Ctrl-P - recv Ping Time info requested for %s", dataTime)
                                 self.sendCtrl(flag='T', to=source, timeComponent=dataTime)
                             if flag == 'H':
-                                self.logger.debug("Ctrl-H - recv Request to halt sensor (from=%s) (time=%s)", source, timestamp)
-                                self.IsActive=False
+                                if self.ProgramType in ["ControlProgram", "Flask", "RedisLoader"]:
+                                    self.logger.debug("Ctrl-H - recv SKIP Request to halt sensor (from=%s) (time=%s)", source, timestamp)
+                                else:
+                                    self.logger.debug("Ctrl-H - recv Request to halt sensor (from=%s) (time=%s)", source, timestamp)
+                                    self.IsActive=False
                                 ctrlNextKeepAlive=0
                             if flag == 'S':
                                 self.logger.debug("Ctrl-S - recv Request to start sensor (from=%s) (time=%s)", source, timestamp)

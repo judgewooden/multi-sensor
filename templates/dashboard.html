@@ -9,6 +9,7 @@
 </head>
 <!--
 id's are: Codifier +
+b = box
 h = header
 c = console menu
 v = value of the Sensors
@@ -16,7 +17,7 @@ t = footer (for time value)
 S = start icon
 H = pause icon
 P = heartbeat (ping)
-l = line-chart
+C = line-chart
 i = show an info bubble
 -->
 <body style="background:white;">
@@ -27,17 +28,17 @@ i = show an info bubble
   <div class="row">
 {% for sensor in sensors %}
 	<div class="col-md-2">
-	  <div class="card card-block jph-box">
-		<div class="card-header {% if sensor.Active %} jph-error {% else %} jph-info {% endif %} jph-box-header" data-click="controls" id="{{ sensor.Codifier }}h">{{ sensor.Codifier }} - {{ sensor.ShortName }}</div>
-		<div class="card-subheader jph-box-subheader" data-click="controls" id="{{ sensor.Codifier }}c"> 
+	  <div class="card card-block jph-box" data-click="controls" id="{{ sensor.Codifier }}b" >
+		<div class="card-header {% if sensor.Active %} jph-error {% else %} jph-info {% endif %} jph-box-header" id="{{ sensor.Codifier }}h">{{ sensor.Codifier }} - {{ sensor.ShortName }}</div>
+		<div class="card-subheader jph-box-subheader" id="{{ sensor.Codifier }}c"> 
 		  <button type="button" class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="Start the Sensor" id="{{ sensor.Codifier }}S"><i class="fa fa-play fa-inverse"></i></button>
 		  <button type="button" class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="Pause the Sensor" id="{{ sensor.Codifier }}H"><i class="fa fa-pause fa-inverse"></i></button>
 		  <button type="button" class="btn jph-btn jph-okay" data-trigger="focus" rel="popover" data-placement="bottom" data-html="true" data-content='<iframe frameborder="0" scrolling="yes" height="220" width="240" src="/sensorinfo/{{ sensor.Codifier }}"></iframe>' title="{{ sensor.Name }}" id="{{ sensor.Codifier }}i"><i class="fa fa-info fa-inverse"></i></button>
 		  <button type="button" class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="Ping the Sensor" id="{{ sensor.Codifier }}P"><i class="fa fa-heartbeat fa-inverse"></i></button>
-		  <button type="button" class="btn jph-btn jph-okay" data-btn="jphSTILL-TO-BE-DESIGNED" data-toggle="tooltip" data-placement="bottom" title="Show a line graph" id="{{ sensor.Codifier }}l"><i class="fa fa-line-chart fa-inverse"></i></button>
+		  <button type="button" class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="Reload Configuration" id="{{ sensor.Codifier }}C"><i class="fa fa-refresh fa-inverse"></i></button>
 		</div>
-		<div class="card-text jph-box-value" data-click="controls" id="{{ sensor.Codifier }}v"></div>
-		<div class="card-footer jph-box-footer" data-click="controls" id="{{ sensor.Codifier }}t"></div>
+		<div class="card-text jph-box-value" id="{{ sensor.Codifier }}v"></div>
+		<div class="card-footer jph-box-footer" id="{{ sensor.Codifier }}t"></div>
 	  </div>
 	</div>
 {% endfor %}
@@ -57,6 +58,7 @@ var ocard=""
 $(function() {
 	$('[data-click="controls"]').click(function (event) {
 	  var code=$(this).attr("id").substring(0,2); 
+	  console.log("code:", code);
 		if ((ocard != "") && (ocard!=code)) {
 			$('#'+ocard+'c').slideUp()
 			$('#'+ocard+'v').slideDown('slow')
@@ -228,7 +230,6 @@ var updateTimes = function() {
 			s.LastStatus=newStatus;
 		}
 		if (s.LastDTimestamp != 0) {
-			// d = new Date(s.LastDTimestamp * 1000);
 			d = parseInt(s.LastDTimestamp);
 			$("#"+s.Codifier+"t").html( time_ago(d) );
 		}

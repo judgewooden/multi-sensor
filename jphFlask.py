@@ -15,18 +15,18 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 r=FlaskRedis(app) 
 
 configURL="file:static/config.json"
-Codifier="CF"
-channel=jph.jph(configURL=configURL, Codifier=Codifier)
+MyCodifier="CF"
+channel=jph.jph(configURL=configURL, Codifier=MyCodifier)
 
 @app.route('/')
 def sensors():
     return render_template('dashboard.html', sensors = channel.getAllSensors())
 
 @app.route('/sensor/')
-@app.route('/sensor/<Codifier>')
-def show_sensor(Codifier=None):
+@app.route('/sensor/<codifier>')
+def show_sensor(codifier=None):
     a=[]
-    if (Codifier==None):
+    if (codifier==None):
         for sensors in channel.getAllSensors():
             if (r.hexists(sensors["Codifier"], "Codifier")):
                 a.append(r.hgetall(sensors["Codifier"]))
@@ -35,33 +35,34 @@ def show_sensor(Codifier=None):
                 p["Codifier"]=sensors["Codifier"]
                 a.append(p)
     else:
-        if (r.hexists(Codifier, "Codifier")):
-            a.append(r.hgetall(Codifier))
+        if (r.hexists(codifier, "Codifier")):
+            a.append(r.hgetall(codifier))
         else:
-            if (channel.getSensor(Codifier) == None):
+            if (channel.getSensor(codifier) == None):
                 return "Please provide a valid Sensor Codifier"
             p={}
-            p["Codifier"]=Codifier
+            p["Codifier"]=codifier
             a.append(p)
     return (Response(response=json.dumps(a),
             status=200, mimetype="application/json"))
 
-
-@app.route('/sensorinfo/<Codifier>')
-def sensorinfo(Codifier):
+@app.route('/sensorinfo/<codifier>')
+def sensorinfo(codifier):
     return render_template('sensorinfo.html',
-            sensor=channel.getSensor(Codifier),
-            redis=r.hgetall(Codifier),
-            sensordetail=json.dumps(channel.getSensor(Codifier)))
+            sensor=channel.getSensor(codifier),
+            redis=r.hgetall(codifier),
+            sensordetail=json.dumps(channel.getSensor(codifier)))
 
-@app.route('/sensormsg/<Codifier>/<flag>')
-def sensormsg(Codifier, flag):
+@app.route('/sensormsg/<codifier>/<flag>')
+def sensormsg(codifier, flag):
     p={}
     t=jph.timeNow()
-    p["Codifier"]=Codifier
+    if ( codifier == MyCodifier ):
+        codifier = "@@"
+    p["Codifier"]=codifier
     p["Flag"]=flag
     p["Timestamp"]=t
-    channel.sendCtrl(to=Codifier, flag=flag, timeComponent=t)
+    channel.sendCtrl(to=codifier, flag=flag, timeComponent=t)
     return (Response(response=json.dumps(p),
             status=200, mimetype="application/json"))
 

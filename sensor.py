@@ -105,8 +105,9 @@ class failsafeReader(object):
                 v=json_data[channel.getMySensorElement("Field")]
                 channel.sendData(data=v, Codifier="")
                 for proxy in channel.getMySensorElement("Proxy"):
-                     v=json_data[proxy["Field"]]
-                     code=str(proxy["Codifier"])
+                    v=json_data[proxy["Field"]]
+                    code=str(proxy["Codifier"])
+                    channel.sendData(data=v, Codifier=code)
 
 class ADCpiReader(object):
     def phobya2temp(self, voltageOut):
