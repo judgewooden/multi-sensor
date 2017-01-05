@@ -333,6 +333,12 @@ class jph(object):
             while forever:
                 t=timeNow()
 
+                if t >= makeNextSensorReading:
+                    if self.IsActive:
+                        timeCallback(t)
+                        ctrlNextKeepAlive = t + (self.KeepAliveInterval)
+                    makeNextSensorReading = t + self.SensorInterval
+
                 if t >= ctrlNextKeepAlive:
                     try:
                         self.sendCtrl(flag='I')
@@ -350,11 +356,6 @@ class jph(object):
                     if not self.IsActive:    # ! should only apply if there is a data channel used
                          self.logger.debug("Data-  :      Processing currently HALTED.")
                     ctrlNextKeepAlive = t + (self.KeepAliveInterval)
-
-                if t >= makeNextSensorReading:
-                    if self.IsActive:
-                        timeCallback(t)
-                    makeNextSensorReading = t + self.SensorInterval
 
                 timeout=float((max(0.001, (min(makeNextSensorReading, ctrlNextKeepAlive) - t)/1000)))
                 readable, writable, exceptional = select.select(inputs, [], [], timeout)

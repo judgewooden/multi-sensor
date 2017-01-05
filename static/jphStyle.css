@@ -95,8 +95,16 @@
   background-color: #dddddd;
 }
 .jph-ready{
+  color: #fff;
+  background-color: #60d24a;
+}
+.jph-proxy{
   color: #333;
   background-color: #74e0d0;
+}
+.jph-timeout{
+  color: #fff;
+  background-color: #b74f33;
 }
 .jph-error{
   color: #333;

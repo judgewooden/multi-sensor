@@ -36,6 +36,7 @@ Pipe | Return a value from a UNIX pipe
 JSON | Do a http request to read JSON
 ADC pi + | Analogue-to-Digital board output [ADC Pi Plus](https://www.abelectronics.co.uk/p/56/ADC-Pi-Plus-Raspberry-Pi-Analogue-to-Digital-converter)
 ADAfruit | The Temperature & Humidity sensors [AM2302](https://www.adafruit.com/products/393)
+Python | Make customized calculations 
 
 ## The Multicast bus
 

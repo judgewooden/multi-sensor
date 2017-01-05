@@ -44,30 +44,55 @@ except Exception as e:
 # 
 # Also allow for enhanced inequiry capabilities using a peer-to-peer future prototcol
 #
-def theOutput(chnl, flag, source, to, timestamp, sequence, length, sender, data, isActive):
+class PythonNinja(object):
 
-    comA = True if comAll in (source, to, "") else False
-    if (comFrom!=""):
-        comA = True if comFrom == source else False
-    if (comTo!=""):
-        comA = True if comTo == to else False
+    def jphlookup(self, var):
+        s=var.find("|")
+        if s > 0:
+            field=var[s+1:]
+            var=var[:s]
+            s=field.find("|")
+            if s > 0:
+                cache=field[:s].strip()
+                field=field[s+1:]
+            else:
+                cache="redis"
+        else:
+            cache="redis"
+            field="Value"
+        if cache=='redis':
+            return str(r.hget(var.strip(), field.strip()))
+        if cache=='config':
+            return str(channel.getSensor(var.strip())[field.strip()])
+        return str(None)
 
-    comC = True if comChnl in (chnl[:1], "") else False
+    def jphme(self, var):
+        s=var.find("{{")
+        if s > 0:
+            e=var.find("}}", s)
+            if e > 0:
+                return var[:s] + self.jphlookup(var[s+2:e]) + self.jphme(var[e+2:])
+        return var
 
-    if comA and comC:
-        print("%d %s%s %s-%s %d (len=%d) (active=%s) %s" % (timestamp, chnl, flag, source, to, sequence, length, isActive, data ), sender)
+    def run(self, Timestamp):
+        t1=time.time() * 1000
+        filename=channel.getMySensorElement("Filename")
+        with open(filename, 'r') as fd:
+            code=fd.read()
+        exec(self.jphme(code))
+        t2=time.time() * 1000
+        channel.sendData(t2-t1)
 
 class TempLinux(object):
-    def read(self, Timestamp):
+    def run(self, Timestamp):
         try:
             channel.sendData(float(os.popen(self.cmd).read())/1000)
         except AttributeError:
             self.cmd= ("/bin/cat " + channel.getMySensorElement("Pipe"))
             channel.sendData(float(os.popen(self.cmd).read())/1000)
-        # channel.sendData(random.randint(1,2147483647), Codifier="XX")
 
 class failsafeReader(object):
-    def read(self, Timestamp):
+    def run(self, Timestamp):
         # try:
         s=channel.getMySensorElement("URL")
         response=requests.get(s, timeout=(2.0, 10.0))
@@ -101,7 +126,7 @@ class ADCpiReader(object):
         temp=(0.0755*math.pow(ohm,2))-4.2327*ohm+60.589
         return temp
 
-    def read(self, Timestamp):
+    def run(self, Timestamp):
         v = adc.read_voltage(int(channel.getMySensorElement("Pin")))
         channel.sendData(data=self.phobya2temp(v))
         for proxy in channel.getMySensorElement("Proxy"):
@@ -109,7 +134,7 @@ class ADCpiReader(object):
             channel.sendData(data=self.phobya2temp(v), Codifier=str(proxy["Codifier"]))
 
 class ADAfruitReader(object):
-    def read(self, Timestamp):
+    def run(self, Timestamp):
         h, v = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, int(channel.getMySensorElement("Pin")))
         if h is None and v is None:
             print("SENSORS RETURN NO VALUES BRO")
@@ -128,6 +153,9 @@ if __name__ == '__main__':
     if type == "failsafeReader":
         import requests
         import json
+    if type == "PythonNinja":
+        import redis
+        r=redis.Redis()
     if type == "ADCpiReader":
         sys.path.append("/home/jphmonitor")
         sys.path.append('/home/jphmonitor/ABElectronics_Python_Libraries/ADCPi')
@@ -138,5 +166,5 @@ if __name__ == '__main__':
         adc = ADCPi(bus, 0x68, 0x69, 12)
 
     c=eval(type + '()')
-    channel.run(timeCallback=c.read )
+    channel.run(timeCallback=c.run )
 

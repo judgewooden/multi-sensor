@@ -49,41 +49,27 @@ i = show an info bubble
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
 
 <script>
-// var xmlhttp = new XMLHttpRequest();
-// xmlhttp.onreadystatechange = function() {
-// 	console.log ("return:", xmlhttp.readyState);
-// 	if ( xmlhttp.readyState == XMLHttpRequest.DONE ) {
-// 		console.log("data", xmlhttp.responseText);
-// 	}
-// }
-// xmlhttp.open("GET","/sensormsg/C1/H",true);
-// xmlhttp.send(null);
-
-// function checkData()
-// {
-//     alert(xmlhttp.readyState);
-// }
 
 //
 // Some AJAX navigation functions
 //
-var currentOpenConsole=""
+var ocard=""
 $(function() {
 	$('[data-click="controls"]').click(function (event) {
 	  var code=$(this).attr("id").substring(0,2); 
-		if ((currentOpenConsole != "") && (currentOpenConsole!=code)) {
-			$('#'+currentOpenConsole+'c').slideUp()
-			$('#'+currentOpenConsole+'v').slideDown('slow')
-			currentOpenConsole=""
+		if ((ocard != "") && (ocard!=code)) {
+			$('#'+ocard+'c').slideUp()
+			$('#'+ocard+'v').slideDown('slow')
+			ocard=""
 		}
 		if ($('#'+code+'c').css('display') != 'none') {
 			$('#'+code+'c').slideUp();
 			$('#'+code+'v').slideDown('slow');
-			currentOpenConsole=""
+			ocard=""
 		} else {
 			$('#'+code+'v').slideUp();
 			$('#'+code+'c').slideDown('slow');
-			currentOpenConsole=code;
+			ocard=code;
 		}
 	})
 })
@@ -116,11 +102,12 @@ $(function () {
 var RefreshRate=1000;           // Update Frequency for client browser (for poling version)
 
 var STATUS = {                  // enum the status per sensor
-	INIT : {value: -1},
+  INIT : {value: -1},
   INFO : {value: 0},
-  IWARNING : {value: 1}, 
-  DWARNING : {value: 2},
-  HEADING : {value: 3}
+  READY : {value: 1}, 
+  ERROR : {value: 2},
+  OKAY : {value: 3},
+  TIMEOUT : {value: 4}
 };
 
 // Load the Data arrays for working on the data
@@ -130,7 +117,6 @@ for (var key in mySensors) {
 	mySensors[key].LastDTimestamp=0;
 	mySensors[key].LastStatus=STATUS.INIT;
 }
-// console.log(mySensors);
 
 //
 // Check here if there is any stale date
@@ -140,75 +126,103 @@ var updateTimes = function() {
 	for ( i=mySensors.length;i--; ) {
 		s=mySensors[i];
 
-		// # REWRITE THIS !!!!  ((i needs to be fast and avoid duplication))
 		if (s.Active) {
-			if ((n - (s.TimeoutWarning * 1000)) > s.LastDTimestamp) {
-				newStatus=STATUS.DWARNING;
+			if ((n - (s.TimeoutWarning * 1000)) < s.LastDTimestamp) {
+				newStatus=STATUS.OKAY;
 			} else {
-				if ((n-(s.TimeoutWarning * 1000)) > s.LastITimestamp) {
-					newStatus=STATUS.IWARNING;
+				if ((n-(s.KeepAliveInterval * 1000)) < s.LastITimestamp) {
+					newStatus=STATUS.TIMEOUT;
 				} else {
-					newStatus=STATUS.HEADING;
+					newStatus=STATUS.ERROR;
 				}
 			}
 		} else {
-			newStatus=STATUS.INFO;
 			if (s.Type == "Proxy") {
 				p=findSensor(s.Sensor.Codifier);
 				if (p==null) {
 					console.log("Strange? Proxy sensors not found ", s.Sensor.Codifier );
 					continue;
 				}
-				if (p.LastStatus==STATUS.IWARNING) {
-					newStatus=STATUS.IWARNING;
-				} else {
-					if (p.LastStatus!=STATUS.INFO) {
-						if ((n - (p.TimeoutWarning * 1000)) > s.LastDTimestamp) {
-							newStatus=STATUS.DWARNING;
+				newStatus=STATUS.PROXY;
+				if (p.Active) {
+					if ((n - (p.TimeoutWarning * 1000)) < s.LastDTimestamp) {
+						newStatus=STATUS.OKAY;
+					} else {
+						if ( p.LastStatus == STATUS.ERROR ) {
+							newStatus=STATUS.ERROR;
 						} else {
-							newStatus=STATUS.HEADING;
+							newStatus=STATUS.TIMEOUT;
 						}
 					}
 				}
 			} else {
-				if (s.Codifier == "C3") console.log("C3 ", newStatus, time_ago(n-(s.TimeoutWarning * 1000)), time_ago(s.LastITimestamp));
-				if ((n-(s.TimeoutWarning * 1000)) < s.LastITimestamp) {
-					console.log("FALSEA");
-					newStatus=STATUS.IWARNING;
+				if ((n-(s.KeepAliveInterval * 1000)) < s.LastITimestamp) {
+					newStatus=STATUS.READY;
+				} else {
+					newStatus=STATUS.INFO;
 				}
 			}
 		}
 
+		if (s.Type=="Flask") {
+			if ( newStatus != STATUS.OKAY )
+				newStatus=STATUS.READY;
+		}
+
 		if (s.Type=="ControlProgram") {
-			if ( newStatus != STATUS.HEADING )
+			if ( newStatus != STATUS.OKAY )
 				newStatus=STATUS.INFO;
 		}
 
 		if ( newStatus != s.LastStatus) {
 			switch(newStatus) {
-				case STATUS.HEADING:
+				case STATUS.TIMEOUT:
+					$("#"+s.Codifier+"h").addClass("jph-timeout");
+					$("#"+s.Codifier+"h").removeClass("jph-proxy");
+					$("#"+s.Codifier+"h").removeClass("jph-ready");
+					$("#"+s.Codifier+"h").removeClass("jph-error");
+					$("#"+s.Codifier+"h").removeClass("jph-info");
+					$("#"+s.Codifier+"h").removeClass("jph-okay");
+					break;
+				case STATUS.OKAY:
 					$("#"+s.Codifier+"h").addClass("jph-okay");
+					$("#"+s.Codifier+"h").removeClass("jph-proxy");
 					$("#"+s.Codifier+"h").removeClass("jph-ready");
 					$("#"+s.Codifier+"h").removeClass("jph-error");
 					$("#"+s.Codifier+"h").removeClass("jph-info");
+					$("#"+s.Codifier+"h").removeClass("jph-timeout");
 					break;
-				case STATUS.DWARNING:
+				case STATUS.ERROR:
 					$("#"+s.Codifier+"h").addClass("jph-error");
+					$("#"+s.Codifier+"h").removeClass("jph-proxy");
 					$("#"+s.Codifier+"h").removeClass("jph-okay");
 					$("#"+s.Codifier+"h").removeClass("jph-ready");
 					$("#"+s.Codifier+"h").removeClass("jph-info");
+					$("#"+s.Codifier+"h").removeClass("jph-timeout");
 					break;
-				case STATUS.IWARNING:
+				case STATUS.PROXY:
+					$("#"+s.Codifier+"h").addClass("jph-proxy");
+					$("#"+s.Codifier+"h").removeClass("jph-okay");
+					$("#"+s.Codifier+"h").removeClass("jph-error");
+					$("#"+s.Codifier+"h").removeClass("jph-ready");
+					$("#"+s.Codifier+"h").removeClass("jph-info");
+					$("#"+s.Codifier+"h").removeClass("jph-timeout");
+					break;
+				case STATUS.READY:
 					$("#"+s.Codifier+"h").addClass("jph-ready");
+					$("#"+s.Codifier+"h").removeClass("jph-proxy");
 					$("#"+s.Codifier+"h").removeClass("jph-okay");
 					$("#"+s.Codifier+"h").removeClass("jph-error");
 					$("#"+s.Codifier+"h").removeClass("jph-info");
+					$("#"+s.Codifier+"h").removeClass("jph-timeout");
 					break;
 				case STATUS.INFO:
 					$("#"+s.Codifier+"h").addClass("jph-info");
+					$("#"+s.Codifier+"h").removeClass("jph-proxy");
 					$("#"+s.Codifier+"h").removeClass("jph-okay");
 					$("#"+s.Codifier+"h").removeClass("jph-error");
 					$("#"+s.Codifier+"h").removeClass("jph-ready");
+					$("#"+s.Codifier+"h").removeClass("jph-timeout");
 					break;
 			}
 			s.LastStatus=newStatus;
@@ -249,14 +263,13 @@ var updateValues = function() {
 };
 
 // Loop and update the screen all the time
-var IamInProgress = false;
-var ttimer = setInterval(function () {
-	if (IamInProgress)
-		return;
-	IamInProgress=true;
+var z = false;
+setInterval(function () {
+	if (z) return;
+	z=true;
 	updateValues();
 	updateTimes();
-	IamInProgress=false;
+	z=false;
 }, RefreshRate);
 
 function time_ago(time) { // add a parameter to add red items that are old than X time
