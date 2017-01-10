@@ -3,7 +3,9 @@
  * THIS SECTION HAS BEEN REVIEWED WITH BOOTSTRAP V4 
  ******
  */
-
+.jphGraph {
+  background-color: white;
+}
 .popover-title {
   color: blue;
   font-size: small;

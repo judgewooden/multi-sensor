@@ -69,7 +69,15 @@
             "TimeoutWarning":60,
             "Active":true,
             "DataType":"integer",
-            "Type":"Flask"
+            "Type":"Flask",
+            "Sensor":{
+                "SQL":{
+                    "Database":"mysensor6",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
         }, {
             "Codifier":"CC",
             "ShortName":"Control",
