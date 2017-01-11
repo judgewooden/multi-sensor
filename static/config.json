@@ -284,7 +284,7 @@
         }, {
             "Codifier":"A3",
             "ShortName":"Man-in Temp",
-            "Name":"Mainifold Temperature IN",
+            "Name":"Mainifold Temp IN",
             "Symbol":"C",
             "KeepAliveInterval":60,
             "SensorInterval":5,
@@ -303,8 +303,8 @@
             }
         }, {
             "Codifier":"A4",
-            "ShortName":"Man-out Temp1",
-            "Name":"Manifold1 Temperature OUT",
+            "ShortName":"Man-out MAD",
+            "Name":"Manifold Temp OUT MAD",
             "Symbol":"C",
             "DataType":"float",
             "Type":"Proxy",
@@ -313,8 +313,8 @@
             }
         }, {
             "Codifier":"A5",
-            "ShortName":"Man-out Temp2",
-            "Name":"Manifold2 Temperature OUT",
+            "ShortName":"Man-out Aqua",
+            "Name":"Manifold Temp OUT Aqua",
             "Symbol":"C",
             "DataType":"float",
             "Type":"Proxy",

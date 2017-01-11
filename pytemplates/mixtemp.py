@@ -10,15 +10,15 @@
 #
 #
 
-times = [{{ C3|DTimestamp }}, {{ A2|DTimestamp }}, {{ Y1|DTimestamp }}, {{ X1|DTimestamp }}]
+times = [{{ A4|DTimestamp }}, {{ A5|DTimestamp }}, {{ Y2|DTimestamp }}, {{ X2|DTimestamp }}]
 l=min(times)
 if (l!=None):
     n=jph.timeNow()
     if (n-l < 20000):
-        temp1 = {{ C3 }}
-        temp2 = {{ A2 }}
-        flow1 = {{ Y1 }}
-        flow2 = {{ X1 }}
+        temp1 = {{ A4 }}
+        temp2 = {{ A5 }}
+        flow1 = {{ Y2 }}
+        flow2 = {{ X2 }}
         try:
             a=((flow1 * temp1 + flow2 * temp2)/(flow1 + flow2))
         except Exception as e:
