@@ -53,9 +53,13 @@ db = create_engine(SQLALCHEMY_DATABASE_URI)
 # records = cursor.fetchall()
 # pprint.pprint(records)
 
-@app.route('/d')
+@app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html', sensors = channel.getAllSensors())
+
+@app.route('/diagram')
+def diagram():
+    return render_template('diagram.html', sensors = channel.getAllSensors())
 
 @app.route('/')
 def sensors():

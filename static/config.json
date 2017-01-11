@@ -1,4 +1,3 @@
-
 {
     "Multicast": {
         "Control-Channel": {
@@ -72,7 +71,7 @@
             "Type":"Flask",
             "Sensor":{
                 "SQL":{
-                    "Database":"mysensor6",
+                    "Database":"sensors",
                     "User":"jphadmin",
                     "Password":"~/.sqlpassword",
                     "Host":"127.0.0.1"
@@ -113,7 +112,7 @@
             "Type":"SQLLoader",
             "Sensor":{
                 "SQL":{
-                    "Database":"mysensor6",
+                    "Database":"sensors",
                     "User":"jphadmin",
                     "Password":"~/.sqlpassword",
                     "Host":"127.0.0.1"
