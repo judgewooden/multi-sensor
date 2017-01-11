@@ -61,9 +61,13 @@ def dashboard():
 def diagram():
     return render_template('diagram.html', sensors = channel.getAllSensors())
 
-@app.route('/')
+@app.route('/devel')
 def sensors():
     return render_template('graphdevel.html', sensors = channel.getAllSensors())
+
+@app.route('/')
+def sensors():
+    return render_template('landing.html', sensors = channel.getAllSensors())
 
 @app.route('/sensor/')
 @app.route('/sensor/<codifier>')

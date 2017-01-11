@@ -172,6 +172,20 @@
                 "Pipe":"/sys/class/thermal/thermal_zone0/temp"
             }
         }, {
+            "Codifier":"C4",
+            "ShortName":"pimonitor Temp",
+            "Name":"pimonitor CPU Temparature",
+            "Symbol":"C",
+            "KeepAliveInterval":30,
+            "TimeoutWarning":60,
+            "SensorInterval":5,
+            "Active":true,
+            "DataType":"float",
+            "Type":"TempLinux",
+            "Sensor":{
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
             "Codifier":"X1",
             "ShortName":"Aqua Flow",
             "Name":"Water sensors Rotations",
