@@ -282,9 +282,9 @@
                 "Codifier":"A1"
             }
         }, {
-            "Codifier":"A6",
-            "ShortName":"Manifold-in Temp",
-            "Name":"Manifold Temperature IN",
+            "Codifier":"A3",
+            "ShortName":"Man-in Temp",
+            "Name":"Mainifold Temperature IN",
             "Symbol":"C",
             "KeepAliveInterval":60,
             "SensorInterval":5,
@@ -294,19 +294,32 @@
             "Sensor":{
                 "Pin":"2",
                 "Proxy":[{
-                    "Codifier":"A6",
-                    "Pin":"1"
+                    "Codifier":"A4",
+                    "Pin":"3"
+                }, {
+                    "Codifier":"A5",
+                    "Pin":"4"
                 }]
             }
         }, {
-            "Codifier":"A7",
-            "ShortName":"Manifold-out Temp",
-            "Name":"Manifold Temperature OUT",
+            "Codifier":"A4",
+            "ShortName":"Man-out Temp1",
+            "Name":"Manifold1 Temperature OUT",
             "Symbol":"C",
-            "Type":"float",
+            "DataType":"float",
             "Type":"Proxy",
             "Sensor":{
-                "Codifier":"A6"
+                "Codifier":"A3"
+            }
+        }, {
+            "Codifier":"A5",
+            "ShortName":"Man-out Temp2",
+            "Name":"Manifold2 Temperature OUT",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"A3"
             }
         }, {
             "Codifier":"F1",
