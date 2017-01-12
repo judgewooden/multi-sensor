@@ -400,6 +400,137 @@
                 "__comment":"Mix temp = (flow1 * temp1 + flow2 * temp2)/(flow 1 + flow 2)",
                 "Codifier":"PA"
             }
+        }, {
+            "Codifier":"N1",
+            "ShortName":"Nest Status",
+            "Name":"Away or Home from Nest",
+            "Symbol":"",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "DataType":"bool",
+            "Active":true,
+            "Type":"NEST",
+            "Sensor":{
+                "Proxy":[{
+                    "Codifier":"N2"
+                }, {
+                    "Codifier":"N3"
+                }]
+            }
+        }, {
+            "Codifier":"N2",
+            "ShortName":"Nest Temperature",
+            "Name":"The Room Temperature",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"N1"
+            }
+        }, {
+            "Codifier":"N3",
+            "ShortName":"Nest Humidity",
+            "Name":"The Room Humidity",
+            "Symbol":"%",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"N1"
+            }
+        }, {
+            "Codifier":"W1",
+            "ShortName":"Power1",
+            "Name":"Power1 Consumption",
+            "Symbol":"W",
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":15,
+            "DataType":"float",
+            "Active":true,
+            "Type":"ZwavePower",
+            "Sensor":{
+                "Proxy":[{
+                    "Codifier":"W2"
+                }, {
+                    "Codifier":"W3"
+                }]
+            }
+        }, {
+            "Codifier":"W2",
+            "ShortName":"power2",
+            "Name":"Power2 Consumption",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W3",
+            "ShortName":"Energy",
+            "Name":"Energy Used",
+            "Symbol":"kwh",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"M1",
+            "ShortName":"Hash Aqua",
+            "Name":"Hash Aqua",
+            "Symbol":"MH/s",
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":120,
+            "DataType":"float",
+            "Active":true,
+            "Type":"DwarfpoolReader",
+            "Sensor":{
+                "URL":"http://dwarfpool.com/eth/api?wallet=0x03145c9f20af9272cc87ee62c27b608c3b004f6a&email=douwe.jong@gmail.com",
+                "Server":"AQUA",
+                "Proxy":[{
+                    "Codifier":"M2"
+                }]
+            }
+        }, {
+            "Codifier":"M2",
+            "ShortName":"Hash Aqua(c)",
+            "Name":"Calculated Hash Aqua",
+            "Symbol":"MH/s",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"M1"
+            }
+        }, {
+            "Codifier":"M3",
+            "ShortName":"Hash MAD",
+            "Name":"Hash MAD",
+            "Symbol":"MH/s",
+            "KeepAliveInterval":60,
+            "SensorInterval":6,
+            "TimeoutWarning":120,
+            "DataType":"float",
+            "Active":true,
+            "Type":"DwarfpoolReader",
+            "Sensor":{
+                "URL":"http://dwarfpool.com/eth/api?wallet=0x03145c9f20af9272cc87ee62c27b608c3b004f6a&email=douwe.jong@gmail.com",
+                "Server":"MAD",
+                "Proxy":[{
+                    "Codifier":"M4"
+                }]
+            }
+        }, {
+            "Codifier":"M4",
+            "ShortName":"Hash MAD(c)",
+            "Name":"Calculated Hash MAD",
+            "Symbol":"MH/s",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"M3"
+            }
         }
     ]
 }

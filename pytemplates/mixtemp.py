@@ -2,7 +2,7 @@
 # This will be called to perform a calculation 
 # - channel (jph) will be establised
 # - a pre-processor will fill in the variables betweek double curly brackets {{ }}
-# - The syntax of a variable is:  Codifier | Location | Field
+# - The syntax of a variable is:  {{ Codifier | Location | Field }}
 #    where Location is either 'redis' or 'config'
 #    defaults are ('redis' if Location is ommitted)
 #                 ('Value' if Field is ommitted)
