@@ -150,7 +150,8 @@ class DwarfpoolReader(object):
                 if (tn>self.tl):
                     self.tl=tn
                     channel.sendData(data=d["hashrate"])
-                    channel.sendData(data=d["hashrate_calculated"], Codifier=str(channel.getMySensorElement("Proxy")))
+                    for proxy in channel.getMySensorElement("Proxy"):
+                    channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"])
 
 
 if __name__ == '__main__':

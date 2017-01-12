@@ -482,10 +482,10 @@
             "Name":"Hash Aqua",
             "Symbol":"MH/s",
             "KeepAliveInterval":60,
-            "SensorInterval":5,
+            "SensorInterval":60,
             "TimeoutWarning":120,
-            "DataType":"float",
             "Active":true,
+            "DataType":"float",
             "Type":"DwarfpoolReader",
             "Sensor":{
                 "URL":"http://dwarfpool.com/eth/api?wallet=0x03145c9f20af9272cc87ee62c27b608c3b004f6a&email=douwe.jong@gmail.com",
@@ -500,6 +500,7 @@
             "Name":"Calculated Hash Aqua",
             "Symbol":"MH/s",
             "Type":"Proxy",
+            "DataType":"float",
             "Sensor":{
                 "Codifier":"M1"
             }
@@ -509,7 +510,7 @@
             "Name":"Hash MAD",
             "Symbol":"MH/s",
             "KeepAliveInterval":60,
-            "SensorInterval":6,
+            "SensorInterval":60,
             "TimeoutWarning":120,
             "DataType":"float",
             "Active":true,
