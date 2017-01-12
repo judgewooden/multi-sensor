@@ -1,82 +1,78 @@
 /*
  ******
- * THIS SECTION HAS BEEN REVIEWED WITH BOOTSTRAP V4 
+ * THIS SECTION IS STILL BEING REVIEWED
  ******
  */
-.jphGraph {
-  background-color: white;
+
+root {
+  font-size: 16px;
 }
-.popover-title {
-  color: blue;
-  font-size: small;
-  font-variant: small-caps;
-}
-.jph-popover-row-header {
-  text-decoration: underline;
-  font-weight: bold;
-  font-variant: small-caps;
-}
-.jph-popover-row {
-  font-size: x-small;
-  vertical-align: text-top;
+body {
+  clear:both;
+  style="background:white;
 }
 .jph-nav {
   padding-top: 2px;
   padding-bottom: 2px;
 }
-.jph-btn {
-  width: 24px;
-  height: 24px;
-  text-align: center;
-  padding: 0px 0;
-  font-size: 12px;
-  border-radius: 24px;
-  box-shadow: none;
-  margin-left: 1px;
-  margin-right: 1px;
-  margin-bottom: 3px;
-}
 .jph-box{
-  font-size: 11px;
+  font-size: 16px;
   border: .11em solid navy;
   border-radius: .5em;
-  min-height: 70px; 
+  height: 4.75em; 
+  min-width: 9.75em;
   box-shadow: none;
   background-color: #dddddd;
   padding: 0;
   overflow: hidden;
+  margin-bottom: .5em;
+  margin-left: .5em;
+}
+@media (min-width: 480px) {
+  .jph-box {
+    float: left;
+    width: 9.75em;
+  }
 }
 .jph-box-header{
-  height: 15px;
+  max-height: 1.5em;
   padding: 0;
-  font-size: 11px;
   text-align: center;
-  border-bottom: 1px solid transparent;
+  border-bottom: 0.063em solid transparent;
   margin-bottom: 0;
+  white-space: nowrap;
 }
-.jph-box-subheader{
-  height: 30px;
+.jph-box-buttons{
+  height: 1.875em;
   display: none; 
   padding: 0;
-  line-height: 30px;
   text-align: center;
-  border: 1px solid transparent; 
+  border: 0.063px solid transparent; 
+}
+.jph-btn {
+  display: inline-block;
+  width: 1.6em;
+  height: 1.6em;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0;
+  border-radius: 1.1em;
+  border: 0.163em solid transparent;
+  box-shadow: none;
+  white-space: nowrap;
 }
 .jph-box-value{
-  height: 30px;
   padding: 0;
-  line-height: 30px;
-  font-size: 18px;
+  font-size: 1.2em;
   text-align: center;
-  text-align: center;
-  border: 1px solid transparent; 
+  border: 0.063em solid transparent;
+  white-space: nowrap;
 }
 .jph-box-footer{
-  height: 15px;
   padding: 0;
-  font-size: 9px;
+  font-size: .65em;
   text-align: center;
-  border-top: 1px solid transparent;
+  border-top: 0.063em solid transparent;
   color: #333;
   background-color: #dddddd; 
 }
@@ -104,14 +100,31 @@
   color: #fff;
   background-color: #337ab7;
 }
-
+.popover-title {
+  color: blue;
+  font-size: small;
+  font-variant: small-caps;
+}
+.jph-popover-row-header {
+  text-decoration: underline;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+.jph-popover-row {
+  font-size: x-small;
+  vertical-align: text-top;
+}
 /*
  ******
- * DOUWE !!! FROM HERE EVERYTHING NEEDS TO BE REVIEWED 
+ * FROM HERE EVERYTHING NEEDS TO BE REWRITTEN 
  ******
  */
 
-/* the graph */
+/* the graph
+.jphGraph {
+  background-color: white;
+}
+
 svg.line-graph .title {
 	font-size: 14px;
 	text-decoration: underline;
@@ -168,7 +181,7 @@ svg.line-graph .date-label {
 	fill: #6E7B8B;
 }
 
-/* tool tips */
+/* tool tips 
 .d3-tip {
   line-height: 1;
   font-weight: normal;
@@ -195,15 +208,10 @@ svg.line-graph .date-label {
   top: 100%;
   left: 0;
 }
+ */
 
-/* The document */
-body {
-    font-family: "Helvetica Neue", Helvetica;
-}
-p {
-    clear:both;
-    top: 20px;
-}
+/* The document 
 div.aGraph {
         margin-bottom: 30px;
 }
+*/

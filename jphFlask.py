@@ -1,6 +1,10 @@
 from flask import Flask, url_for, render_template, Response, jsonify
 from flask_redis import FlaskRedis
-from sqlalchemy import *
+try:
+    from sqlalchemy import *
+    sqlokay=True
+except:
+    sqlokay=False
 
 import urllib2
 import json
@@ -24,34 +28,25 @@ configURL="file:static/config.json"
 MyCodifier="CF"
 channel=jph.jph(configURL=configURL, Codifier=MyCodifier)
 
-dbname=channel.getMySensorElement("SQL")["Database"]
-dbuser=channel.getMySensorElement("SQL")["User"]
-dbpass=channel.getMySensorElement("SQL")["Password"]
-dbhost=channel.getMySensorElement("SQL")["Host"]
+if sqlokay:
+    dbname=channel.getMySensorElement("SQL")["Database"]
+    dbuser=channel.getMySensorElement("SQL")["User"]
+    dbpass=channel.getMySensorElement("SQL")["Password"]
+    dbhost=channel.getMySensorElement("SQL")["Host"]
 
-try:
-    f = open(os.path.expanduser(dbpass))
-    sqlpassword=f.read().strip()
-    f.close
-except Exception as e:
-    channel.logger.critical("Unexpected error reading passwording: %s", e)
-    sys.exit()
+    try:
+        f = open(os.path.expanduser(dbpass))
+        sqlpassword=f.read().strip()
+        f.close
+    except Exception as e:
+        channel.logger.critical("Unexpected error reading passwording: %s", e)
+        sys.exit()
 
-SQLALCHEMY_DATABASE_URI = ("postgresql://%s:%s@%s:5432/%s" % (dbuser,sqlpassword,dbhost,dbname))
-# print (SQLALCHEMY_DATABASE_URI)
-
-import pprint
-db = create_engine(SQLALCHEMY_DATABASE_URI)
-# db.echo = True  # We want to see the SQL we're creating
-# metadata = MetaData(db)
-# sensor = Table('sensor_Q1', metadata, autoload=True)
-
-# qs=("dbname=%s user=%s password=%s host=%s " % (dbname, dbuser, sqlpassword, dbhost))
-# q=psycopg2.connect(qs)
-# cursor = q.cursor()
-# cursor.execute("SELECT * FROM sensor_Q1")
-# records = cursor.fetchall()
-# pprint.pprint(records)
+    SQLALCHEMY_DATABASE_URI = ("postgresql://%s:%s@%s:5432/%s" % (dbuser,sqlpassword,dbhost,dbname))
+    db = create_engine(SQLALCHEMY_DATABASE_URI)
+else:
+    print ("SQL IS NOT ACTIVE")
+    db = ""
 
 @app.route('/dashboard')
 def dashboard():
@@ -123,6 +118,9 @@ def sensormsg(codifier, flag):
 
 @app.route('/sensorts/<query>')
 def sensorts(query):
+    if not sqlokay:
+        return "SQL not initialized"
+
     try:
         jquery=json.loads(query)
     except:
