@@ -310,7 +310,7 @@ if __name__ == '__main__':
                 print("%s - Using this device" % (network.nodes[node].node_id))
                 mynodeid=network.nodes[node].node_id
                 mynode=ZWaveNode(mynodeid, network)
-                mynode.set_field("name", "JPH")
+                mynode.set_field(str("name"), str("JPH"))
                 break
 
 
