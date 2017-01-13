@@ -153,6 +153,48 @@ class DwarfpoolReader(object):
                     for proxy in channel.getMySensorElement("Proxy"):
                         channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"]))
 
+class NestReader(object):
+    def __init__(self):
+        try:
+            file=channel.getMySensorElement("Password")
+            line=open(os.path.expanduser(file)).read().splitlines()
+            self.nuser=line[0]
+            self.npass=line[1]
+        except:
+            channel.logger.critical("Failed to read Nest Password File")
+            sys.exit()
+        self.loadnest=False
+
+    def run(self, Timestamp):
+        if not self.loadnest:
+            try:
+                self.napi = nest.Nest(self.nuser, self.npass)
+                self.loadnest=True
+            except Exception as e:
+                channel.logger.critical("Can not connect to Nest")
+                return
+        nestAway=True;
+        nestTemp=-80;
+        nestHumidity=-1;
+        for structure in self.napi.structures:
+            for device in structure.devices:
+                nestAway=structure.away
+                nestTemp=float(device.temperature)
+                nestHumidity=float(device.humidity)
+        print("Away: %s, Temp: %f, Humidity: %f" % (str(nestAway), nestTemp, nestHumidity))
+        if (nestTemp==-80):
+            self.loadnest=False
+            channel.logger.critical("Unknown Error reading from Nest")
+            return
+        if nestAway:
+            nestAway=1
+        else:
+            nestAway=0
+        channel.sendData(data=nestAway)
+        channel.sendData(data=nestTemp, Codifier=str(channel.getMySensorElement("Proxy")[0]))
+        channel.sendData(data=nestHumidity, Codifier=str(channel.getMySensorElement("Proxy")[1]))
+
+
 if __name__ == '__main__':
 
     channel=jph.jph(configURL=configURL, Codifier=Codifier)
@@ -164,7 +206,9 @@ if __name__ == '__main__':
         import requests
         import json
         from datetime import datetime
-        from dateutil import tz
+        # from dateutil import tz
+    if type == "NestReader":
+        import nest
     if type == "failsafeReader":
         import requests
         import json

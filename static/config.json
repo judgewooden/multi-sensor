@@ -406,12 +406,13 @@
             "Name":"Away or Home from Nest",
             "Symbol":"",
             "KeepAliveInterval":60,
-            "SensorInterval":60,
+            "SensorInterval":5,
             "TimeoutWarning":60,
             "DataType":"bool",
             "Active":true,
-            "Type":"NEST",
+            "Type":"NestReader",
             "Sensor":{
+                "Password":"~/.nestpassword",
                 "Proxy":[{
                     "Codifier":"N2"
                 }, {
