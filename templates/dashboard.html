@@ -28,7 +28,7 @@ i = show an info bubble
 <div class="container-fluid">
 {% for sensor in sensors %}
 	<div class="jph-box" data-click="controls" id="{{ sensor.Codifier }}b" >
-		<div class="jph-box-header {% if sensor.Active %} jph-error {% else %} jph-info {% endif %}" id="{{ sensor.Codifier }}h">{{ sensor.Codifier }} - {{ sensor.ShortName }}</div>
+		<div class="jph-box-header {% if sensor.Active %} jph-error {% else %} jph-error {% endif %}" id="{{ sensor.Codifier }}h">{{ sensor.Codifier }} - {{ sensor.ShortName }}</div>
 		<div class="jph-box-buttons" id="{{ sensor.Codifier }}c"> 
 			<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Start the Sensor{% endif %}" id="{{ sensor.Codifier }}S"><i class="fa fa-play fa-inverse"></i></button>
 			<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Pause the Sensor{% endif %}" id="{{ sensor.Codifier }}H"><i class="fa fa-pause fa-inverse"></i></button>
