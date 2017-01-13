@@ -358,7 +358,7 @@
             "Active":true,
             "Type":"ADAfruitReader",
             "Sensor":{
-                "Pin":"21",
+                "Pin":"20",
                 "Proxy":[{
                     "Codifier":"F7"
                 }]
