@@ -214,7 +214,6 @@ class ZwavePower(object):
         Power1=-1;
         Power2=-1;
         Energy=-1
-        tnow=datetime.datetime.now()
         for val in network.nodes[node].get_sensors() :
             #print("node/name/index/instance : %s/%s/%s/%s" % (node,
             #                                                        network.nodes[node].name,
