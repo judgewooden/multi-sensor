@@ -181,7 +181,7 @@ class NestReader(object):
                 nestAway=structure.away
                 nestTemp=float(device.temperature)
                 nestHumidity=float(device.humidity)
-        print("Away: %s, Temp: %f, Humidity: %f" % (str(nestAway), nestTemp, nestHumidity))
+        # print("Away: %s, Temp: %f, Humidity: %f" % (str(nestAway), nestTemp, nestHumidity))
         if (nestTemp==-80):
             self.loadnest=False
             channel.logger.critical("Unknown Error reading from Nest")
@@ -191,8 +191,8 @@ class NestReader(object):
         else:
             nestAway=0
         channel.sendData(data=nestAway)
-        channel.sendData(data=nestTemp, Codifier=str(channel.getMySensorElement("Proxy")[0]))
-        channel.sendData(data=nestHumidity, Codifier=str(channel.getMySensorElement("Proxy")[1]))
+        channel.sendData(data=nestTemp, Codifier=str(channel.getMySensorElement("Proxy")[0]["Codifier"]))
+        channel.sendData(data=nestHumidity, Codifier=str(channel.getMySensorElement("Proxy")[1]["Codifier"]))
 
 
 if __name__ == '__main__':
