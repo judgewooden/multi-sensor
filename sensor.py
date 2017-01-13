@@ -176,11 +176,17 @@ class NestReader(object):
         nestAway=True;
         nestTemp=-80;
         nestHumidity=-1;
+        nestTempOutside=-80;
+        nestHumiOutside=-1;
         for structure in self.napi.structures:
+            nestAway=structure.away
             for device in structure.devices:
-                nestAway=structure.away
                 nestTemp=float(device.temperature)
                 nestHumidity=float(device.humidity)
+                nestTarget=float(device.target)
+        structure=self.napi.structures[0]
+        nestTempOutside=structure.weather.current.temperature
+        nestHumiOutside=structure.weather.current.humidity
         # print("Away: %s, Temp: %f, Humidity: %f" % (str(nestAway), nestTemp, nestHumidity))
         if (nestTemp==-80):
             self.loadnest=False
@@ -191,13 +197,17 @@ class NestReader(object):
         else:
             nestAway=0
         channel.sendData(data=nestAway)
-        channel.sendData(data=nestTemp, Codifier=str(channel.getMySensorElement("Proxy")[0]["Codifier"]))
-        channel.sendData(data=nestHumidity, Codifier=str(channel.getMySensorElement("Proxy")[1]["Codifier"]))
+        for proxy in channel.getMySensorElement("Proxy"):
+            print(proxy["Codifier"], proxy["Field"])
+            channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
+            # channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"]))
+        # channel.sendData(data=nestTemp, Codifier=str(channel.getMySensorElement("Proxy")[0]["Codifier"]))
+        # channel.sendData(data=nestHumidity, Codifier=str(channel.getMySensorElement("Proxy")[1]["Codifier"]))
 
 class ZwavePower(object):
     def __init__(self):
         print("__INIT__")
-    def run(self, Timestamp)
+    def run(self, Timestamp):
         mynode.refresh_info()
         myPower1=-1;
         myPower2=-1;
@@ -220,11 +230,9 @@ class ZwavePower(object):
                 myEnergy=network.nodes[node].get_sensor_value(val)
 
             if (myPower1==-1 or myPower2==-1 or myEnergy==-1):
-                print "Failed to obtain all values"
+                print("Failed to obtain all values")
 
             print("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (myPower1, myPower2, myEnergy))
-
-
 
 
 if __name__ == '__main__':
@@ -272,9 +280,9 @@ if __name__ == '__main__':
         options.set_logging(False)
         options.lock()
        
-        print "------------------------------------------------------------"
-        print "Waiting for network awaked : "
-        print "------------------------------------------------------------"
+        print("------------------------------------------------------------")
+        print("Waiting for network awaked : ")
+        print("------------------------------------------------------------")
         network = ZWaveNetwork(options, log=None, autostart=True)
         time_started = 0
         for i in range(0,300):
@@ -287,19 +295,19 @@ if __name__ == '__main__':
                 time_started += 1
                 time.sleep(1.0)
         if network.state<network.STATE_AWAKED:
-            print "."
-            print "Network is not awake but continue anyway"
+            print(".")
+            print("Network is not awake but continue anyway")
 
         mynodeid=-1
         for node in network.nodes:
-            print "%s - Product name / id / type : %s / %s / %s" % (network.nodes[node].node_id,network.nodes[node].product_name, network.nodes[node].product_id, network.nodes[node].product_type)
-            print "%s - Name : %s" % (network.nodes[node].node_id,network.nodes[node].name)
-            print "%s - Manufacturer name / id : %s / %s" % (network.nodes[node].node_id,network.nodes[node].manufacturer_name, network.nodes[node].manufacturer_id)
-            print "%s - Version : %s" % (network.nodes[node].node_id, network.nodes[node].version)
-            #print "%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string)
-            print "%s - Capabilities : %s" % (network.nodes[node].node_id,network.nodes[node].capabilities)
+            print("%s - Product name / id / type : %s / %s / %s" % (network.nodes[node].node_id,network.nodes[node].product_name, network.nodes[node].product_id, network.nodes[node].product_type))
+            print("%s - Name : %s" % (network.nodes[node].node_id,network.nodes[node].name))
+            print("%s - Manufacturer name / id : %s / %s" % (network.nodes[node].node_id,network.nodes[node].manufacturer_name, network.nodes[node].manufacturer_id))
+            print("%s - Version : %s" % (network.nodes[node].node_id, network.nodes[node].version))
+            #print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
+            print("%s - Capabilities : %s" % (network.nodes[node].node_id,network.nodes[node].capabilities))
             if "FGWPE Wall Plug"==network.nodes[node].product_name:
-                print "%s - Using this device" % (network.nodes[node].node_id)
+                print("%s - Using this device" % (network.nodes[node].node_id))
                 mynodeid=network.nodes[node].node_id
                 mynode=ZWaveNode(mynodeid, network)
                 mynode.set_field("name", "JPH")

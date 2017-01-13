@@ -412,11 +412,23 @@
             "Active":true,
             "Type":"NestReader",
             "Sensor":{
+                "Field":"nestAway",
                 "Password":"~/.nestpassword",
                 "Proxy":[{
+                    "Field":"nestTemp",
                     "Codifier":"N2"
                 }, {
+                    "Field":"nestHumidity",
                     "Codifier":"N3"
+                }, {
+                    "Field":"nestTarget",
+                    "Codifier":"N4"
+                }, {
+                    "Field":"nestTempOutside",
+                    "Codifier":"N5"
+                }, {
+                    "Field":"nestHumiOutside",
+                    "Codifier":"N6"
                 }]
             }
         }, {
@@ -433,6 +445,36 @@
             "Codifier":"N3",
             "ShortName":"Nest Humidity",
             "Name":"The Room Humidity",
+            "Symbol":"%",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"N1"
+            }
+        }, {
+            "Codifier":"N4",
+            "ShortName":"Nest Target",
+            "Name":"The Target User Temperature",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"N1"
+            }
+        }, {
+            "Codifier":"N5",
+            "ShortName":"Outside Temp",
+            "Name":"Nest outside Temperature",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"N1"
+            }
+        }, {
+            "Codifier":"N6",
+            "ShortName":"Outside Humidity",
+            "Name":"Nest Outside Humidity",
             "Symbol":"%",
             "DataType":"float",
             "Type":"Proxy",
