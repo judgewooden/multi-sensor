@@ -242,7 +242,7 @@ class ZwavePower(object):
                 self.mynode.set_field(str("name"), str("JPH"))
                 self.xnode=node
     def run(self, Timestamp):
-        mynode.refresh_info()
+        self.mynode.refresh_info()
         Power1=-1;
         Power2=-1;
         Energy=-1
