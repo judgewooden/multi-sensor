@@ -218,7 +218,7 @@ class ZwavePower(object):
         # print("------------------------------------------------------------")
         self.network = ZWaveNetwork(options, log=None, autostart=True)
         for i in range(0,300):
-            if self.network.state>=network.STATE_AWAKED:
+            if self.network.state>=self.network.STATE_AWAKED:
                 break
             else:
                 # sys.stdout.write(".")
