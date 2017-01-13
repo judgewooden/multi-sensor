@@ -198,7 +198,6 @@ class NestReader(object):
             nestAway=0
         channel.sendData(data=nestAway)
         for proxy in channel.getMySensorElement("Proxy"):
-            print(proxy["Codifier"], proxy["Field"])
             channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
             # channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"]))
         # channel.sendData(data=nestTemp, Codifier=str(channel.getMySensorElement("Proxy")[0]["Codifier"]))

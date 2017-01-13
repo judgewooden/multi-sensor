@@ -406,7 +406,7 @@
             "Name":"Away or Home from Nest",
             "Symbol":"",
             "KeepAliveInterval":60,
-            "SensorInterval":5,
+            "SensorInterval":60,
             "TimeoutWarning":60,
             "DataType":"bool",
             "Active":true,
