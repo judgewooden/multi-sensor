@@ -234,7 +234,9 @@ class ZwavePower(object):
             if (myPower1==-1 or myPower2==-1 or myEnergy==-1):
                 print("Failed to obtain all values")
 
+            print("------------------------------------------------------------")
             print("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (myPower1, myPower2, myEnergy))
+            print("------------------------------------------------------------")
 
 
 if __name__ == '__main__':
@@ -276,7 +278,8 @@ if __name__ == '__main__':
         print("Working Directory:", path)
 
         device="/dev/ttyACM0"
-        options = ZWaveOption(device, config_path=os.path.expanduser("~/zwave/config"),  user_path=".", cmd_line="")
+        c_path=os.path.expanduser("~/zwave/config")
+        options = ZWaveOption(device, config_path=str(c_path),  user_path=".", cmd_line="")
         options.set_log_file("/dev/null")
         options.set_console_output(False)
         options.set_logging(False)
