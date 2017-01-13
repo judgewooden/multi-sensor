@@ -246,7 +246,7 @@ class ZwavePower(object):
         Power1=-1;
         Power2=-1;
         Energy=-1
-        for val in self.network.nodes[self.node].get_sensors() :
+        for val in self.network.nodes[self.xnode].get_sensors() :
             #print("node/name/index/instance : %s/%s/%s/%s" % (node,
             # network.nodes[node].name,
             # network.nodes[node].values[val].index,
