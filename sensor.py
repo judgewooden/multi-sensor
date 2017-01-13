@@ -178,15 +178,18 @@ class NestReader(object):
         nestHumidity=-1;
         nestTempOutside=-80;
         nestHumiOutside=-1;
-        for structure in self.napi.structures:
-            nestAway=structure.away
-            for device in structure.devices:
-                nestTemp=float(device.temperature)
-                nestHumidity=float(device.humidity)
-                nestTarget=float(device.target)
-        structure=self.napi.structures[0]
-        nestTempOutside=structure.weather.current.temperature
-        nestHumiOutside=structure.weather.current.humidity
+        try:
+            for structure in self.napi.structures:
+                nestAway=structure.away
+                for device in structure.devices:
+                    nestTemp=float(device.temperature)
+                    nestHumidity=float(device.humidity)
+                    nestTarget=float(device.target)
+            structure=self.napi.structures[0]
+            nestTempOutside=structure.weather.current.temperature
+            nestHumiOutside=structure.weather.current.humidity
+        except:
+            channel.logger.critical("Unexpected Nest error: %s", sys.exc_info()[0])
         # print("Away: %s, Temp: %f, Humidity: %f" % (str(nestAway), nestTemp, nestHumidity))
         if (nestTemp==-80):
             self.loadnest=False
