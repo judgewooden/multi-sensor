@@ -255,12 +255,12 @@ class ZwavePower(object):
             # network.nodes[node].values[val].help,
             # network.nodes[node].get_sensor_value(val),
             # network.nodes[node].values[val].units))
-            if self.network.nodes[node].values[val].index==4:
-                Power1=self.network.nodes[node].get_sensor_value(val)
-            if self.network.nodes[node].values[val].index==8:
-                Power2=self.network.nodes[node].get_sensor_value(val)
-            if self.network.nodes[node].values[val].index==0:
-                Energy=self.network.nodes[node].get_sensor_value(val)
+            if self.network.nodes[self.xnode].values[val].index==4:
+                Power1=self.network.nodes[self.xnode].get_sensor_value(val)
+            if self.network.nodes[self.xnode].values[val].index==8:
+                Power2=self.network.nodes[self.xnode].get_sensor_value(val)
+            if self.network.nodes[self.xnode].values[val].index==0:
+                Energy=self.network.nodes[self.xnode].get_sensor_value(val)
 
         if (Power1==-1 or Power2==-1 or Energy==-1):
             channel.logger.critical("Failed to obtain Zwave values")
