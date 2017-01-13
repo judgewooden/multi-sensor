@@ -236,10 +236,9 @@ class ZwavePower(object):
         print("------------------------------------------------------------")
         print("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (Power1, Power2, Energy))
         print("------------------------------------------------------------")
-        channel.sendData(data=myPower1)
+        channel.sendData(data=channel.getMySensorElement("Field"))
         for proxy in channel.getMySensorElement("Proxy"):
             channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
-
 
 if __name__ == '__main__':
 
