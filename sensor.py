@@ -199,44 +199,73 @@ class NestReader(object):
             nestAway=1
         else:
             nestAway=0
-        channel.sendData(data=channel.getMySensorElement("Field"))
+        channel.sendData(data=eval(channel.getMySensorElement("Field")))
         for proxy in channel.getMySensorElement("Proxy"):
             channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
-            # channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"]))
-        # channel.sendData(data=nestTemp, Codifier=str(channel.getMySensorElement("Proxy")[0]["Codifier"]))
-        # channel.sendData(data=nestHumidity, Codifier=str(channel.getMySensorElement("Proxy")[1]["Codifier"]))
 
 class ZwavePower(object):
     def __init__(self):
         print("__INIT__")
+        os.chdir(os.path.expanduser("~/zwave"))
+        path=os.getcwd()
+        device=str("/dev/ttyACM0")
+        c_path=os.path.expanduser("~/zwave/config")
+        options = ZWaveOption(device, config_path=str(c_path),  user_path=str("."), cmd_line=str(""))
+        options.lock()
+       
+        # print("------------------------------------------------------------")
+        # print("Waiting for network awaked : ")
+        # print("------------------------------------------------------------")
+        self.network = ZWaveNetwork(options, log=None, autostart=True)
+        for i in range(0,300):
+            if self.network.state>=network.STATE_AWAKED:
+                break
+            else:
+                # sys.stdout.write(".")
+                # sys.stdout.flush()
+                time.sleep(1.0)
+        if self.network.state<self.network.STATE_AWAKED:
+            print(".")
+            channel.logger.warning("Zwave Network is not awake but continue anyway")
+
+        for node in self.network.nodes:
+            print("%s - Product name / id / type : %s / %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].product_name, self.network.nodes[node].product_id, self.network.nodes[node].product_type))
+            print("%s - Name : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].name))
+            print("%s - Manufacturer name / id : %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].manufacturer_name, self.network.nodes[node].manufacturer_id))
+            print("%s - Version : %s" % (self.network.nodes[node].node_id, self.network.nodes[node].version))
+            #print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
+            print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
+            if "FGWPE Wall Plug"==self.network.nodes[node].product_name:
+                print("%s - Using this device" % (self.network.nodes[node].node_id))
+                mynodeid=self.network.nodes[node].node_id
+                self.mynode=ZWaveNode(mynodeid, self.network)
+                self.mynode.set_field(str("name"), str("JPH"))
+                self.xnode=node
     def run(self, Timestamp):
         mynode.refresh_info()
         Power1=-1;
         Power2=-1;
         Energy=-1
-        for val in network.nodes[node].get_sensors() :
+        for val in self.network.nodes[self.node].get_sensors() :
             #print("node/name/index/instance : %s/%s/%s/%s" % (node,
-            #                                                        network.nodes[node].name,
-            #                                                        network.nodes[node].values[val].index,
-            #                                                        network.nodes[node].values[val].instance))
+            # network.nodes[node].name,
+            # network.nodes[node].values[val].index,
+            # network.nodes[node].values[val].instance))
             #print("%s/%s %s %s" % (network.nodes[node].values[val].label,
-            #                                    network.nodes[node].values[val].help,
-            #                                    network.nodes[node].get_sensor_value(val),
-            #                                    network.nodes[node].values[val].units))
-            if network.nodes[node].values[val].index==4:
-                Power1=network.nodes[node].get_sensor_value(val)
-            if network.nodes[node].values[val].index==8:
-                Power2=network.nodes[node].get_sensor_value(val)
-            if network.nodes[node].values[val].index==0:
-                Energy=network.nodes[node].get_sensor_value(val)
+            # network.nodes[node].values[val].help,
+            # network.nodes[node].get_sensor_value(val),
+            # network.nodes[node].values[val].units))
+            if self.network.nodes[node].values[val].index==4:
+                Power1=self.network.nodes[node].get_sensor_value(val)
+            if self.network.nodes[node].values[val].index==8:
+                Power2=self.network.nodes[node].get_sensor_value(val)
+            if self.network.nodes[node].values[val].index==0:
+                Energy=self.network.nodes[node].get_sensor_value(val)
 
         if (Power1==-1 or Power2==-1 or Energy==-1):
             channel.logger.critical("Failed to obtain Zwave values")
-
-        print("------------------------------------------------------------")
-        print("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (Power1, Power2, Energy))
-        print("------------------------------------------------------------")
-        channel.sendData(data=channel.getMySensorElement("Field"))
+        channel.logger.debug("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (Power1, Power2, Energy))
+        channel.sendData(data=eval(channel.getMySensorElement("Field")))
         for proxy in channel.getMySensorElement("Proxy"):
             channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
 
@@ -274,42 +303,6 @@ if __name__ == '__main__':
         from openzwave.network import ZWaveNetwork
         from openzwave.option import ZWaveOption
 
-        os.chdir(os.path.expanduser("~/zwave"))
-        path=os.getcwd()
-        device=str("/dev/ttyACM0")
-        c_path=os.path.expanduser("~/zwave/config")
-        options = ZWaveOption(device, config_path=str(c_path),  user_path=str("."), cmd_line=str(""))
-        options.lock()
-       
-        # print("------------------------------------------------------------")
-        # print("Waiting for network awaked : ")
-        # print("------------------------------------------------------------")
-        network = ZWaveNetwork(options, log=None, autostart=True)
-        for i in range(0,300):
-            if network.state>=network.STATE_AWAKED:
-                break
-            else:
-                # sys.stdout.write(".")
-                # sys.stdout.flush()
-                time.sleep(1.0)
-        if network.state<network.STATE_AWAKED:
-            print(".")
-            channel.logger.warning("Network is not awake but continue anyway")
-
-        mynodeid=-1
-        for node in network.nodes:
-            print("%s - Product name / id / type : %s / %s / %s" % (network.nodes[node].node_id,network.nodes[node].product_name, network.nodes[node].product_id, network.nodes[node].product_type))
-            print("%s - Name : %s" % (network.nodes[node].node_id,network.nodes[node].name))
-            print("%s - Manufacturer name / id : %s / %s" % (network.nodes[node].node_id,network.nodes[node].manufacturer_name, network.nodes[node].manufacturer_id))
-            print("%s - Version : %s" % (network.nodes[node].node_id, network.nodes[node].version))
-            #print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
-            print("%s - Capabilities : %s" % (network.nodes[node].node_id,network.nodes[node].capabilities))
-            if "FGWPE Wall Plug"==network.nodes[node].product_name:
-                print("%s - Using this device" % (network.nodes[node].node_id))
-                mynodeid=network.nodes[node].node_id
-                mynode=ZWaveNode(mynodeid, network)
-                mynode.set_field(str("name"), str("JPH"))
-                break
 
 
     c=eval(type + '()')
