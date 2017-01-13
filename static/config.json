@@ -493,9 +493,12 @@
             "Active":true,
             "Type":"ZwavePower",
             "Sensor":{
+                "Field":"Power1",
                 "Proxy":[{
+                    "Field":"Power2",
                     "Codifier":"W2"
                 }, {
+                    "Field":"Energy",
                     "Codifier":"W3"
                 }]
             }

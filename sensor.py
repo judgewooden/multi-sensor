@@ -199,7 +199,7 @@ class NestReader(object):
             nestAway=1
         else:
             nestAway=0
-        channel.sendData(data=nestAway)
+        channel.sendData(data=channel.getMySensorElement("Field"))
         for proxy in channel.getMySensorElement("Proxy"):
             channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
             # channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"]))
@@ -211,9 +211,9 @@ class ZwavePower(object):
         print("__INIT__")
     def run(self, Timestamp):
         mynode.refresh_info()
-        myPower1=-1;
-        myPower2=-1;
-        myEnergy=-1
+        Power1=-1;
+        Power2=-1;
+        Energy=-1
         tnow=datetime.datetime.now()
         for val in network.nodes[node].get_sensors() :
             #print("node/name/index/instance : %s/%s/%s/%s" % (node,
@@ -225,18 +225,21 @@ class ZwavePower(object):
             #                                    network.nodes[node].get_sensor_value(val),
             #                                    network.nodes[node].values[val].units))
             if network.nodes[node].values[val].index==4:
-                myPower1=network.nodes[node].get_sensor_value(val)
+                Power1=network.nodes[node].get_sensor_value(val)
             if network.nodes[node].values[val].index==8:
-                myPower2=network.nodes[node].get_sensor_value(val)
+                Power2=network.nodes[node].get_sensor_value(val)
             if network.nodes[node].values[val].index==0:
-                myEnergy=network.nodes[node].get_sensor_value(val)
+                Energy=network.nodes[node].get_sensor_value(val)
 
-            if (myPower1==-1 or myPower2==-1 or myEnergy==-1):
-                print("Failed to obtain all values")
+        if (Power1==-1 or Power2==-1 or Energy==-1):
+            channel.logger.critical("Failed to obtain Zwave values")
 
-            print("------------------------------------------------------------")
-            print("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (myPower1, myPower2, myEnergy))
-            print("------------------------------------------------------------")
+        print("------------------------------------------------------------")
+        print("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (Power1, Power2, Energy))
+        print("------------------------------------------------------------")
+        channel.sendData(data=myPower1)
+        for proxy in channel.getMySensorElement("Proxy"):
+            channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
 
 
 if __name__ == '__main__':
@@ -275,33 +278,25 @@ if __name__ == '__main__':
 
         os.chdir(os.path.expanduser("~/zwave"))
         path=os.getcwd()
-        print("Working Directory:", path)
-
-        device="/dev/ttyACM0"
+        device=str("/dev/ttyACM0")
         c_path=os.path.expanduser("~/zwave/config")
-        options = ZWaveOption(device, config_path=str(c_path),  user_path=".", cmd_line="")
-        options.set_log_file("/dev/null")
-        options.set_console_output(False)
-        options.set_logging(False)
+        options = ZWaveOption(device, config_path=str(c_path),  user_path=str("."), cmd_line=str(""))
         options.lock()
        
-        print("------------------------------------------------------------")
-        print("Waiting for network awaked : ")
-        print("------------------------------------------------------------")
+        # print("------------------------------------------------------------")
+        # print("Waiting for network awaked : ")
+        # print("------------------------------------------------------------")
         network = ZWaveNetwork(options, log=None, autostart=True)
-        time_started = 0
         for i in range(0,300):
             if network.state>=network.STATE_AWAKED:
-                print(" done")
                 break
             else:
-                sys.stdout.write(".")
-                sys.stdout.flush()
-                time_started += 1
+                # sys.stdout.write(".")
+                # sys.stdout.flush()
                 time.sleep(1.0)
         if network.state<network.STATE_AWAKED:
             print(".")
-            print("Network is not awake but continue anyway")
+            channel.logger.warning("Network is not awake but continue anyway")
 
         mynodeid=-1
         for node in network.nodes:
