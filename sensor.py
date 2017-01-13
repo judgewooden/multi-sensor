@@ -205,7 +205,6 @@ class NestReader(object):
 
 class ZwavePower(object):
     def __init__(self):
-        print("__INIT__")
         os.chdir(os.path.expanduser("~/zwave"))
         path=os.getcwd()
         device=str("/dev/ttyACM0")
@@ -221,26 +220,23 @@ class ZwavePower(object):
             if self.network.state>=self.network.STATE_AWAKED:
                 break
             else:
-                # sys.stdout.write(".")
-                # sys.stdout.flush()
                 time.sleep(1.0)
         if self.network.state<self.network.STATE_AWAKED:
-            print(".")
             channel.logger.warning("Zwave Network is not awake but continue anyway")
 
         for node in self.network.nodes:
-            print("%s - Product name / id / type : %s / %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].product_name, self.network.nodes[node].product_id, self.network.nodes[node].product_type))
-            print("%s - Name : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].name))
-            print("%s - Manufacturer name / id : %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].manufacturer_name, self.network.nodes[node].manufacturer_id))
-            print("%s - Version : %s" % (self.network.nodes[node].node_id, self.network.nodes[node].version))
+            # print("%s - Product name / id / type : %s / %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].product_name, self.network.nodes[node].product_id, self.network.nodes[node].product_type))
+            # print("%s - Name : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].name))
+            # print("%s - Manufacturer name / id : %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].manufacturer_name, self.network.nodes[node].manufacturer_id))
+            # print("%s - Version : %s" % (self.network.nodes[node].node_id, self.network.nodes[node].version))
             #print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
-            print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
+            # print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
             if "FGWPE Wall Plug"==self.network.nodes[node].product_name:
-                print("%s - Using this device" % (self.network.nodes[node].node_id))
                 mynodeid=self.network.nodes[node].node_id
                 self.mynode=ZWaveNode(mynodeid, self.network)
                 self.mynode.set_field(str("name"), str("JPH"))
                 self.xnode=node
+                break
     def run(self, Timestamp):
         self.mynode.refresh_info()
         Power1=-1;
