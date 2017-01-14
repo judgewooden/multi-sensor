@@ -80,7 +80,7 @@
         }, {
             "Codifier":"CC",
             "ShortName":"Control",
-            "Name":"Control, show number of message on Multicast Bus or latest Console message",
+            "Name":"Control Console Program",
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -398,6 +398,17 @@
             "Type":"Proxy",
             "Sensor":{
                 "__comment":"Mix temp = (flow1 * temp1 + flow2 * temp2)/(flow 1 + flow 2)",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PC",
+            "ShortName":"Delta-t MAD",
+            "Name":"Difference input output Water",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
                 "Codifier":"PA"
             }
         }, {

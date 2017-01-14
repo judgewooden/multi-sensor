@@ -11,6 +11,9 @@ body {
   clear:both;
   style="background:white;
 }
+.jph-auto {
+  font-size: 14px;
+}
 .jph-nav {
   padding-top: 2px;
   padding-bottom: 2px;

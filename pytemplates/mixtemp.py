@@ -39,3 +39,6 @@ if (l!=None):
             raise
         else:
             channel.sendData(data=a, Codifier="PB")
+
+dt={{ A4 }} - {{ A3 }}
+channel.sendData(data=dt, Codifier="PC")
