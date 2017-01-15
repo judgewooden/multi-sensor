@@ -97,7 +97,6 @@ def dashtable():
         if (r.hexists(c["Codifier"], "Codifier")):
             p.update(r.hgetall(c["Codifier"]))
         a.append(p)
-    print(json.dumps(a))
     return render_template('dashtable.html', sensors = a)
 
 @app.route('/sensorinfo/<codifier>')
