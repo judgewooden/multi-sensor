@@ -97,6 +97,7 @@ class failsafeReader(object):
         s=channel.getMySensorElement("URL")
         response=requests.get(s, timeout=(2.0, 10.0))
         if response.headers["content-type"] != "application/json":
+            channel.logger.error("Unexpected response from Arduino")
             raise WrongContent(response=response)
         else:
             if (len(response.text) > 1):
@@ -142,6 +143,7 @@ class DwarfpoolReader(object):
         s=channel.getMySensorElement("Server")
         response=requests.get(u, timeout=(2.0, 10.0))
         if response.headers["content-type"] != "application/json":
+            channel.logger.error("Unexpected response from Dwarfpool")
             raise WrongContent(response=response)
         else:
             if (len(response.text) > 1):
