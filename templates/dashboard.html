@@ -263,7 +263,7 @@ var updateValues = function() {
 };
 
 setInterval(function () {
-	if (z) return;
+	if (RefreshInProgress) return;
 	RefreshInProgress=true;
 	updateValues();
 	updateTimes();
