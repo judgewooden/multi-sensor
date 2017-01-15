@@ -89,6 +89,17 @@ def show_sensor(codifier=None):
     return (Response(response=json.dumps(a),
             status=200, mimetype="application/json"))
 
+@app.route('/dashtable')
+def dashtable():
+    a=[]
+    for c in channel.getAllSensors():
+        p=c.copy()
+        if (r.hexists(c["Codifier"], "Codifier")):
+            p.update(r.hgetall(c["Codifier"]))
+        a.append(p)
+    print(json.dumps(a))
+    return render_template('dashtable.html', sensors = a)
+
 @app.route('/sensorinfo/<codifier>')
 def sensorinfo(codifier):
     codifier=codifier[:2]

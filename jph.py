@@ -61,7 +61,7 @@ class jph(object):
     def __init__(self, configURL="", Codifier=""):
 
         if (os.getenv("JPH_DEBUG", "0")=="1"):
-            pri1Gnt("Using env variable JPH_DEBUG") 
+            print("Using env variable JPH_DEBUG") 
             logging.basicConfig(level=logging.DEBUG)
         else:
             logging.basicConfig(level=logging.WARN)
