@@ -54,7 +54,7 @@
             }
         },
         "root": {
-            "handlers":["syslog"],
+            "handlers":[],
             "level":"WARN"
         }
     },
