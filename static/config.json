@@ -54,8 +54,8 @@
             }
         },
         "root": {
-            "handlers":[],
-            "level":"WARN"
+            "handlers":["console"],
+            "level":"NOTSET"
         }
     },
     "Sensors":[{
