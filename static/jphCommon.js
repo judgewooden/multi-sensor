@@ -84,9 +84,9 @@ var toBoolean = function(value) {
 // 
 // Convert a boolean field in javascript true & false
 //  
-function findSensor (val) { 
-  for (var ai, i = mySensors.length; i--;)
-    if ((ai = mySensors[i]) && ai["Codifier"] == val)
+function findSensor (val, jphJSON) { 
+  for (var ai, i = jphJSON.length; i--;)
+    if ((ai = jphJSON[i]) && ai["Codifier"] == val)
       return ai;
   return null;
 }

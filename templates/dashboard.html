@@ -45,7 +45,7 @@ i = show an info bubble
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
-
+<script src="{{ url_for('static', filename='jphCommon.js') }}"></script>
 <script>
 
 //
@@ -99,6 +99,7 @@ $(function () {
 // Global Variables
 //
 var RefreshRate=1000;           // Update Frequency for client browser (for poling version)
+var RefreshInProgress = false;
 
 var STATUS = {                  // enum the status per sensor
   INIT : {value: -1},
@@ -137,7 +138,7 @@ var updateTimes = function() {
 			}
 		} else {
 			if (s.Type == "Proxy") {
-				p=findSensor(s.Sensor.Codifier);
+				p=findSensor(s.Sensor.Codifier, mySensors);
 				if (p==null) {
 					console.log("Strange? Proxy sensors not found ", s.Sensor.Codifier );
 					continue;
@@ -237,7 +238,7 @@ var updateValues = function() {
 	jQuery.getJSON("/sensor/").done(function(response) {
 		if ( response.length > 0) {
 			for (var key in response) {
-				s=findSensor(response[key].Codifier);
+				s=findSensor(response[key].Codifier, mySensors);
 				if (s==null) {
 					console.log("a new sensor:", reponse[key].Codifier);
 					alert("A new sensor was found please refresh the page");
@@ -257,95 +258,16 @@ var updateValues = function() {
 				}
 			}
 		}
+		RefreshInProgress=false;
 	});
 };
 
-// Loop and update the screen all the time
-var z = false;
 setInterval(function () {
 	if (z) return;
-	z=true;
+	RefreshInProgress=true;
 	updateValues();
 	updateTimes();
-	z=false;
 }, RefreshRate);
-
-function time_ago(time) { // add a parameter to add red items that are old than X time
-	switch (typeof time) {
-		case 'number': break;
-		case 'string': time = +new Date(time); break;
-		case 'object': if (time.constructor === Date) time = time.getTime(); break;
-		default: time = +new Date();
-	}
-	var time_formats = [
-		[60, 'seconds', 1], // 60
-		[120, '1 minute ago', '1 minute from now'], // 60*2
-		[3600, 'minutes', 60], // 60*60, 60
-		[7200, '1 hour ago', '1 hour from now'], // 60*60*2
-		[86400, 'hours', 3600], // 60*60*24, 60*60
-		[172800, 'Yesterday', 'Tomorrow'], // 60*60*24*2
-		[604800, 'days', 86400], // 60*60*24*7, 60*60*24
-		[1209600, 'Last week', 'Next week'], // 60*60*24*7*4*2
-		[2419200, 'weeks', 604800], // 60*60*24*7*4, 60*60*24*7
-		[4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
-		[29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
-		[58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
-		[2903040000, 'years', 29030400], // 60*60*24*7*4*12*100, 60*60*24*7*4*12
-		[5806080000, 'Last century', 'Next century'], // 60*60*24*7*4*12*100*2
-		[58060800000, 'centuries', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
-	];
-	var seconds = (+new Date() - time) / 1000,
-		token = 'ago', list_choice = 1;
-
-	if (seconds < 1 && seconds > 0) {
-		return 'Just now'
-	}
-	if (seconds < 0) {
-		seconds = Math.abs(seconds);
-		token = 'from now';
-		list_choice = 2;
-	}
-	var i = 0, format;
-	while (format = time_formats[i++])
-		if (seconds < format[0]) {
-			if (typeof format[2] == 'string')
-				return format[list_choice];
-			else
-				return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
-		}
-	return time;
-};
-
-var afronden = function( inputValue ) {
-   if (inputValue > 100)
-		   return Math.round(inputValue * 1) / 1;
-   else {
-	   if (inputValue > 10)
-		   return Math.round(inputValue * 10) / 10;
-	   else {
-		   if (inputValue > 1)
-			   return Math.round(inputValue * 100) / 100;
-		   else
-			   return Math.round(inputValue * 1000) / 1000;
-	   }
-	}
-};
-
-var toBoolean = function(value) {
-	var strValue = String(value).toLowerCase();
-	strValue = ((!isNaN(strValue) && strValue !== '0') &&
-		strValue !== '' &&
-		strValue !== 'null' &&
-		strValue !== 'undefined') ? '1' : strValue;
-	return strValue === 'true' || strValue === '1' ? true : false
-};
-
-function findSensor (val) { 
-  for (var ai, i = mySensors.length; i--;)
-	if ((ai = mySensors[i]) && ai["Codifier"] == val)
-	  return ai;
-  return null;
-}
 
 </script>
 </body>
