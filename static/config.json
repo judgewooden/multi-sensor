@@ -25,8 +25,8 @@
             }
         },
         "handlers":{
-            "errors":{
-                "level":"CRITICAL",
+            "operator":{
+                "level":"ERROR",
                 "class":"logging.StreamHandler",
                 "formatter":"verbose",
                 "stream":"ext://sys.stdout"
@@ -51,7 +51,7 @@
                 "level":"INFO"
             },
             "jphRedis": {
-                "handlers":["syslog"],
+                "handlers":["syslog", "console"],
                 "level":"INFO"
             },
             "jphPostgreSQL": {
@@ -60,7 +60,7 @@
             }
         },
         "root": {
-            "handlers":["errors"],
+            "handlers":["operator"],
             "level":"NOTSET"
         }
     },
