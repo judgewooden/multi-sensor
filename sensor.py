@@ -108,6 +108,8 @@ class failsafeReader(object):
                     v=json_data[proxy["Field"]]
                     code=str(proxy["Codifier"])
                     channel.sendData(data=v, Codifier=code)
+            else:
+                channel.logger.error("Did not receive a response from Arduino")
 
 class ADCpiReader(object):
     def phobya2temp(self, voltageOut):
@@ -126,7 +128,7 @@ class ADAfruitReader(object):
     def run(self, Timestamp):
         h, v = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, int(channel.getMySensorElement("Pin")))
         if h is None and v is None:
-            print("SENSORS RETURN NO VALUES BRO")
+            channel.logger.error("Sensor reading returned no data")
         else:
             channel.sendData(data=v)
             for proxy in channel.getMySensorElement("Proxy"):
@@ -152,6 +154,8 @@ class DwarfpoolReader(object):
                     channel.sendData(data=d["hashrate"])
                     for proxy in channel.getMySensorElement("Proxy"):
                         channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"]))
+            else:
+                channel.logger.error("Did not receive a response from Dwarfpool")
 
 class NestReader(object):
     def __init__(self):
@@ -172,7 +176,7 @@ class NestReader(object):
                 self.loadnest=True
             except Exception as e:
                 channel.logger.critical("Can not connect to Nest")
-                return
+                sys.exit()
         nestAway=True;
         nestTemp=-80;
         nestHumidity=-1;
@@ -189,11 +193,11 @@ class NestReader(object):
             nestTempOutside=structure.weather.current.temperature
             nestHumiOutside=structure.weather.current.humidity
         except:
-            channel.logger.critical("Unexpected Nest error: %s", sys.exc_info()[0])
+            channel.logger.error("Unexpected Nest error: %s", sys.exc_info()[0])
         # print("Away: %s, Temp: %f, Humidity: %f" % (str(nestAway), nestTemp, nestHumidity))
         if (nestTemp==-80):
             self.loadnest=False
-            channel.logger.critical("Unknown Error reading from Nest")
+            channel.logger.error("Unknown Error reading from Nest")
             return
         if nestAway:
             nestAway=1
@@ -222,7 +226,7 @@ class ZwavePower(object):
             else:
                 time.sleep(1.0)
         if self.network.state<self.network.STATE_AWAKED:
-            channel.logger.warning("Zwave Network is not awake but continue anyway")
+            channel.logger.error("Zwave Network is not awake but continue anyway")
 
         for node in self.network.nodes:
             # print("%s - Product name / id / type : %s / %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].product_name, self.network.nodes[node].product_id, self.network.nodes[node].product_type))
@@ -259,7 +263,7 @@ class ZwavePower(object):
                 Energy=self.network.nodes[self.xnode].get_sensor_value(val)
 
         if (Power1==-1 or Power2==-1 or Energy==-1):
-            channel.logger.critical("Failed to obtain Zwave values")
+            channel.logger.error("Failed to obtain Zwave values")
         channel.logger.debug("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (Power1, Power2, Energy))
         channel.sendData(data=eval(channel.getMySensorElement("Field")))
         for proxy in channel.getMySensorElement("Proxy"):

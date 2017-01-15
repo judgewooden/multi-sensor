@@ -133,7 +133,6 @@ class jph(object):
 
         try:
             f=""
-            print("NAME: ",self.ProgramType)
             for l in self.configJSON["Logging"]["loggers"]:
                 if l == self.ProgramType:
                     f=l
@@ -273,12 +272,13 @@ class jph(object):
 
         try:
             self.DataSocket.sendto(packed_data, (self.DataAddress, self.DataPort))
-        except IOError as t:
-            print (t)
+        # TODO ::::: REVIEW THIS !!!!
+        # except IOError as t:
+        #     print (t)
         except socket.error as e:
             print(e)
             if e.errno == 101:   #Multicast can fail on wifi due to buzzy networks
-                self.logger.warning("Data channel. Unexpected error: %s", sys.exc_info()[0])
+                self.logger.critical("Data channel. Unexpected error: %s", sys.exc_info()[0])
             raise
 
     def sendCtrl(self, flag, timestamp=0, to="", timeComponent=0):
@@ -344,12 +344,13 @@ class jph(object):
                 if t >= ctrlNextKeepAlive:
                     try:
                         self.sendCtrl(flag='I')
-                    except IOError as t:
-                        print (t)
+                    # TODO :::::: REVIEW THIS
+                    # except IOError as t:
+                    #     print (t)
                     except socket.error as e:
-                        print(e)
+                        # print(e)
                         if e.errno == 101: #Multicast can fail on wifi 
-                            self.logger.warning("Ctrl Channel. Unexpected error: %s", sys.exc_info()[0])
+                            self.logger.error("Ctrl Channel. Unexpected error: %s", sys.exc_info()[0])
                             self.endCtrl()
                             forever = False;
                             break
@@ -405,7 +406,7 @@ class jph(object):
                                 self.sendCtrl(flag='T', to=source, timeComponent=dataTime)
                             if flag == 'H':
                                 if self.ProgramType in ["ControlProgram", "Flask", "jphRedis"]:
-                                    self.logger.warning("Ctrl-H - recv SKIP Request to halt sensor (from=%s) (time=%s)", source, timestamp)
+                                    self.logger.info("Ctrl-H - recv Request to halt sensor IGNORING (from=%s) (time=%s)", source, timestamp)
                                 else:
                                     self.logger.info("Ctrl-H - recv Request to halt sensor (from=%s) (time=%s)", source, timestamp)
                                     self.IsActive=False
