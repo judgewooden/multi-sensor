@@ -55,7 +55,7 @@
         },
         "root": {
             "handlers":["console"],
-            "level":"WARN"
+            "level":"CRITICAL"
         }
     },
     "Sensors":[{
