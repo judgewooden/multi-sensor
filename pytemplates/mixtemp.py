@@ -40,5 +40,15 @@ if (l!=None):
         else:
             channel.sendData(data=a, Codifier="PB")
 
-dt={{ A4 }} - {{ A3 }}
-channel.sendData(data=dt, Codifier="PC")
+#
+# This function calculates the delta temp for MAD
+#
+times = [{{ A4|DTimestamp }}, {{ A3|DTimestamp }}]
+l=min(times)
+if (l!=None):
+    n=jph.timeNow()
+    if (n-l < 20000):
+        dt={{ A4 }} - {{ A3 }}
+        channel.sendData(data=dt, Codifier="PC")
+
+

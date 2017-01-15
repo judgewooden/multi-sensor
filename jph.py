@@ -61,7 +61,7 @@ class jph(object):
     def __init__(self, configURL="", Codifier=""):
 
         if (os.getenv("JPH_DEBUG", "0")=="1"):
-            print("Using env variable JPH_DEBUG") 
+            pri1Gnt("Using env variable JPH_DEBUG") 
             logging.basicConfig(level=logging.DEBUG)
         else:
             logging.basicConfig(level=logging.WARN)
@@ -130,10 +130,12 @@ class jph(object):
             self.logger.critical(err)
             raise Exception(err)
 
+
         try:
             f=""
+            print("NAME: ",self.ProgramType)
             for l in self.configJSON["Logging"]["loggers"]:
-                if l == __name__ + '-' + self.Codifier:
+                if l == self.ProgramType:
                     f=l
             if f == "":
                 for l in self.configJSON["Logging"]["loggers"]:
@@ -141,7 +143,7 @@ class jph(object):
                         f=l
             if f == "":
                 for l in self.configJSON["Logging"]["loggers"]:
-                    if l == "default":
+                    if l == "jphMonitor":
                         f=l
         except Exception as e:
             err=("Unexpected JSON error (processing logger): %s" % (e))
@@ -346,7 +348,7 @@ class jph(object):
                         print (t)
                     except socket.error as e:
                         print(e)
-                        if e.errno == 101:   #Multicast can fail on wifi due to buzzy networks
+                        if e.errno == 101: #Multicast can fail on wifi 
                             self.logger.warning("Ctrl Channel. Unexpected error: %s", sys.exc_info()[0])
                             self.endCtrl()
                             forever = False;
@@ -402,14 +404,14 @@ class jph(object):
                                 self.logger.debug("Ctrl-P - recv Ping Time info requested for %s", dataTime)
                                 self.sendCtrl(flag='T', to=source, timeComponent=dataTime)
                             if flag == 'H':
-                                if self.ProgramType in ["ControlProgram", "Flask", "RedisLoader"]:
-                                    self.logger.debug("Ctrl-H - recv SKIP Request to halt sensor (from=%s) (time=%s)", source, timestamp)
+                                if self.ProgramType in ["ControlProgram", "Flask", "jphRedis"]:
+                                    self.logger.warning("Ctrl-H - recv SKIP Request to halt sensor (from=%s) (time=%s)", source, timestamp)
                                 else:
-                                    self.logger.debug("Ctrl-H - recv Request to halt sensor (from=%s) (time=%s)", source, timestamp)
+                                    self.logger.info("Ctrl-H - recv Request to halt sensor (from=%s) (time=%s)", source, timestamp)
                                     self.IsActive=False
                                 ctrlNextKeepAlive=0
                             if flag == 'S':
-                                self.logger.debug("Ctrl-S - recv Request to start sensor (from=%s) (time=%s)", source, timestamp)
+                                self.logger.info("Ctrl-S - recv Request to start sensor (from=%s) (time=%s)", source, timestamp)
                                 self.IsActive=True
                                 ctrlNextKeepAlive=0
                             if flag in ('I', 'N'):
@@ -417,4 +419,3 @@ class jph(object):
                                 if dataTime > self.ConfigTimestamp and source == self.Codifier:
                                     logging.critical("There is another instance of %s running (time=%s)", self.Codifier, str(dataTime))
                                     sys.exit()
-

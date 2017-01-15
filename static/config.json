@@ -40,15 +40,15 @@
             }
         },
         "loggers":{
-            "default": {
+            "jphMonitor": {
                 "handlers":["syslog", "console"],
                 "level":"INFO"
             },
-            "mRedis": {
-                "handlers":["syslog", "console"],
+            "jphRedis": {
+                "handlers":["syslog"],
                 "level":"INFO"
             },
-            "mSQL": {
+            "jphPostgress": {
                 "handlers":["syslog", "console"],
                 "level":"INFO"
             }
@@ -109,7 +109,7 @@
             "TimeoutWarning":60,
             "Active":true,
             "DataType":"integer",
-            "Type":"SQLLoader",
+            "Type":"jphPostgreSQL",
             "Sensor":{
                 "SQL":{
                     "Database":"sensors",
@@ -128,7 +128,7 @@
             "TimeoutWarning":60,
             "Active":true,
             "DataType":"integer",
-            "Type":"RedisLoader"
+            "Type":"jphRedis"
         }, {
             "Codifier":"C1",
             "ShortName":"kastpi Temp",
@@ -187,7 +187,7 @@
             }
         }, {
             "Codifier":"X1",
-            "ShortName":"Aqua Flow",
+            "ShortName":"MAD Flow",
             "Name":"Water sensors Rotations",
             "Symbol":"rpm",
             "KeepAliveInterval":60,
@@ -209,7 +209,7 @@
             }
         }, {
             "Codifier":"X2",
-            "ShortName":"Aqua Liters",
+            "ShortName":"MAD Liters",
             "Name":"Liters Per Minute",
             "Symbol":"lpm",
             "Type":"Proxy",
@@ -228,7 +228,7 @@
             }
         }, {
             "Codifier":"Y1",
-            "ShortName":"MAD Flow",
+            "ShortName":"AQUA Flow",
             "Name":"Water sensors Rotations",
             "Symbol":"rpm",
             "KeepAliveInterval":60,
@@ -247,7 +247,7 @@
             }
         }, {
             "Codifier":"Y2",
-            "ShortName":"MAD Liters",
+            "ShortName":"AQUA Liters",
             "Name":"Liters Per Minute",
             "Symbol":"lpm",
             "Type":"Proxy",
