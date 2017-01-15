@@ -21,7 +21,7 @@
             "verbose":{
                 "class":"logging.Formatter",
                 "datefmt":"%I:%M:%S",
-                "format":"%(levelname)s (%(lineno)d) %(message)s"
+                "format":"%(name)s %(levelname)s (%(lineno)d) %(message)s"
             }
         },
         "handlers":{
@@ -48,7 +48,7 @@
                 "handlers":["syslog"],
                 "level":"INFO"
             },
-            "jphPostgress": {
+            "jphPostgreSQL": {
                 "handlers":["syslog", "console"],
                 "level":"INFO"
             }
