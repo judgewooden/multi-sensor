@@ -25,8 +25,14 @@
             }
         },
         "handlers":{
+            "errors":{
+                "level":"CRITICAL",
+                "class":"logging.StreamHandler",
+                "formatter":"verbose",
+                "stream":"ext://sys.stdout"
+            },
             "console":{
-                "level":"WARN",
+                "level":"INFO",
                 "class":"logging.StreamHandler",
                 "formatter":"verbose",
                 "stream":"ext://sys.stdout"
@@ -54,7 +60,7 @@
             }
         },
         "root": {
-            "handlers":["console"],
+            "handlers":["errors"],
             "level":"NOTSET"
         }
     },
