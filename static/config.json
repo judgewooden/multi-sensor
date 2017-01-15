@@ -54,8 +54,8 @@
             }
         },
         "root": {
-            "handlers":["console"],
-            "level":"CRITICAL"
+            "handlers":["syslog"],
+            "level":"WARN"
         }
     },
     "Sensors":[{
