@@ -129,7 +129,7 @@ class ADAfruitReader(object):
     def run(self, Timestamp):
         h, v = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, int(channel.getMySensorElement("Pin")))
         if h is None and v is None:
-            channel.logger.error("Sensor reading returned no data")
+            channel.logger.error("Adafruit_DHT sensor reading returned no data")
         else:
             channel.sendData(data=v)
             for proxy in channel.getMySensorElement("Proxy"):
