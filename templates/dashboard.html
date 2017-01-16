@@ -26,6 +26,21 @@ i = show an info bubble
 {% include "menubar.html" %}
 <div style="position:relative;width:100%"></div>
 <div class="container-fluid">
+	<div>
+		<label>Update:
+		<select id="RefreshButton" aria-controls="example" class="">
+		<option selected value="1" >1 second</option>
+		<option value="5">5 seconds</option>
+		<option value="10">10 seconds</option>
+		<option value="30">30 seconds</option>
+		<option value="60">1 minute</option>
+		<option value="300">5 minutes</option>
+		<option value="600">10 minutes</option>
+		<option value="1800">30 minutes</option>
+		<option value="3600">1 hour</option>
+		</select> </label>
+		<button id="UpdateNow" aria-controls="example" class="">Update Now</button>
+	</div>
 {% for sensor in sensors %}
 	<div class="jph-box" data-click="controls" id="{{ sensor.Codifier }}b" >
 		<div class="jph-box-header {% if sensor.Active %} jph-error {% else %} jph-error {% endif %}" id="{{ sensor.Codifier }}h">{{ sensor.Codifier }} - {{ sensor.ShortName }}</div>
@@ -77,6 +92,22 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 })
 
+$(function () {
+  $('#UpdateNow').click(function (userselect) {
+	refreshData()
+  });
+})
+
+$(function () {
+  $('#RefreshButton').click(function (userselect) {
+	RefreshRate=userselect.target.value;
+	clearInterval( myInterval );
+	myInterval = setInterval(function () {
+		refreshData()
+	}, RefreshRate * 1000);
+  });
+})
+
 $('[rel="popover"]').popover({
 	offset: '-15em 0em'
 });
@@ -98,7 +129,7 @@ $(function () {
 //
 // Global Variables
 //
-var RefreshRate=1000;           // Update Frequency for client browser (for poling version)
+var RefreshRate=1;           // Update Frequency for client browser (for poling version)
 var RefreshInProgress = false;
 
 var STATUS = {                  // enum the status per sensor
@@ -262,12 +293,17 @@ var updateValues = function() {
 	});
 };
 
-setInterval(function () {
+refreshData = function() {
 	if (RefreshInProgress) return;
 	RefreshInProgress=true;
 	updateValues();
 	updateTimes();
-}, RefreshRate);
+	self.refreshData();
+}
+
+myInterval = setInterval(function () {
+	refreshData()
+}, RefreshRate * 1000);
 
 </script>
 </body>

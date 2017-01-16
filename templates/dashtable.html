@@ -27,7 +27,7 @@ i = show an info bubble
 {% include "menubar.html" %}
 <div style="position:relative;width:100%"></div>
 <div class="container-fluid">
-<table id="example" class="cell-border hover order-column nowrap" width="100%">
+<table id="jphTable" class="cell-border hover order-column nowrap" width="100%">
 	<thead>
 		<tr>
 			<th>Codifier</th>
@@ -101,7 +101,7 @@ $(document).ready(function() {
 				$(this).html(dateFormat(x, "yy-mm-dd HH:MM:ss"))
 		}
 	});
-  $('#example').DataTable({
+  $('#jphTable').DataTable({
   	"lengthMenu": [[15, 30, 60, 120, 200, -1], [15, 30, 60, 120, 200, "All"]]
   });
 })
