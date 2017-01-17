@@ -57,9 +57,7 @@ def openSocket(address, port, enable_local_loop=1, bind_to_interface="", do_not_
     return tsocket
 
 class jph(object):
-
     def __init__(self, configURL="", Codifier=""):
-
         if (os.getenv("JPH_DEBUG", "0")=="1"):
             print("Using env variable JPH_DEBUG") 
             logging.basicConfig(level=logging.DEBUG)
@@ -91,7 +89,6 @@ class jph(object):
         except Exception as e:
             self.logger.critical("Failed to JSON config (URL:%s): %s", self.configURL, e)
             raise ValueError(e)
-
         f=""
         try:
             for s in self.configJSON["Sensors"]:
@@ -129,7 +126,6 @@ class jph(object):
             err=("Unexpected JSON error (processing Logging config): %s" % (e))
             self.logger.critical(err)
             raise Exception(err)
-
 
         try:
             f=""
