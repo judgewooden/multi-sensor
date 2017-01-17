@@ -260,7 +260,10 @@ var updateTimes = function() {
 		}
 		if (s.LastDTimestamp != 0) {
 			d = parseInt(s.LastDTimestamp);
-			$("#"+s.Codifier+"t").html( time_ago(d) );
+			if (refreshData==1)
+				$("#"+s.Codifier+"t").html( time_ago(d) );
+			else
+				$("#"+s.Codifier+"t").html( dateFormat(d, "yy-mm-dd HH:MM:ss") );
 		}
 	}
 }
