@@ -1,19 +1,29 @@
 from flask import Flask, url_for, render_template, Response, jsonify
+print ("hello1")
 from flask_redis import FlaskRedis
+print ("hello2")
 try:
     from sqlalchemy import *
     sqlokay=True
 except:
     sqlokay=False
+print ("hello3")
 
 import urllib2
+print ("hello4")
 import json
+print ("hello5")
 import sys
+print ("hello6")
 import time
+print ("hello7")
 import struct
+print ("hello8")
 # import random
 import jph
+print ("hello9")
 import os
+print ("hello10")
 # import psycopg2
 
 app = Flask(__name__)

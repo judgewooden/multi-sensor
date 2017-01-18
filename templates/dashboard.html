@@ -99,7 +99,7 @@ $(function () {
 })
 
 $(function () {
-  $('#RefreshButton').click(function (userselect) {
+  $('#RefreshButton').change(function (userselect) {
 	RefreshRate=userselect.target.value;
 	clearInterval( myInterval );
 	myInterval = setInterval(function () {
