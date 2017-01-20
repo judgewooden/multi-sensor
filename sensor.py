@@ -82,7 +82,7 @@ class PythonNinja(object):
         exec(jphninja(code))
         t2=time.time() * 1000
         channel.sendData(t2-t1)
-        return jph.SELF.GOOD
+        return jph.STATE.GOOD
 
 class TempLinux(object):
     def run(self, Timestamp):
@@ -91,7 +91,7 @@ class TempLinux(object):
         except AttributeError:
             self.cmd= ("/bin/cat " + channel.getMySensorElement("Pipe"))
             channel.sendData(float(os.popen(self.cmd).read())/1000)
-        return jph.SELF.GOOD
+        return jph.STATE.GOOD
 
 class failsafeReader(object):
     def run(self, Timestamp):
