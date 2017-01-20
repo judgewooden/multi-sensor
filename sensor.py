@@ -149,14 +149,18 @@ class DwarfpoolReader(object):
             if (len(response.text) > 1):
                 j=json.loads(response.text)
                 print(j)
-                d=j["workers"][s]
-                tp=datetime.strptime(d["last_submit"], "%a, %d %b %Y %H:%M:%S %Z")
-                tn=(tp - datetime(1970,1,1)).total_seconds()
-                if (tn>self.tl):
-                    self.tl=tn
-                    channel.sendData(data=d["hashrate"])
-                    for proxy in channel.getMySensorElement("Proxy"):
-                        channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"]))
+                try:
+                    d=j["workers"][s]
+                except:
+                    channel.logger.error("Dwarfpool server not found: %s", s)
+                else:
+                    tp=datetime.strptime(d["last_submit"], "%a, %d %b %Y %H:%M:%S %Z")
+                    tn=(tp - datetime(1970,1,1)).total_seconds()
+                    if (tn>self.tl):
+                        self.tl=tn
+                        channel.sendData(data=d["hashrate"])
+                        for proxy in channel.getMySensorElement("Proxy"):
+                            channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"]))
             else:
                 channel.logger.error("Did not receive a response from Dwarfpool")
 
