@@ -82,6 +82,7 @@ class PythonNinja(object):
         exec(jphninja(code))
         t2=time.time() * 1000
         channel.sendData(t2-t1)
+        return jph.SELF.GOOD
 
 class TempLinux(object):
     def run(self, Timestamp):
@@ -90,6 +91,7 @@ class TempLinux(object):
         except AttributeError:
             self.cmd= ("/bin/cat " + channel.getMySensorElement("Pipe"))
             channel.sendData(float(os.popen(self.cmd).read())/1000)
+        return jph.SELF.GOOD
 
 class failsafeReader(object):
     def run(self, Timestamp):
@@ -109,8 +111,10 @@ class failsafeReader(object):
                     v=json_data[proxy["Field"]]
                     code=str(proxy["Codifier"])
                     channel.sendData(data=v, Codifier=code)
+                return jph.STATE.GOOD
             else:
                 channel.logger.error("Did not receive a response from Arduino")
+        return jph.STATE.FAILED
 
 class ADCpiReader(object):
     def phobya2temp(self, voltageOut):
@@ -124,16 +128,19 @@ class ADCpiReader(object):
         for proxy in channel.getMySensorElement("Proxy"):
             v = adc.read_voltage(int(proxy["Pin"]))
             channel.sendData(data=self.phobya2temp(v), Codifier=str(proxy["Codifier"]))
+        return jph.STATE.GOOD
 
 class ADAfruitReader(object):
     def run(self, Timestamp):
         h, v = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, int(channel.getMySensorElement("Pin")))
         if h is None and v is None:
             channel.logger.error("Adafruit_DHT sensor reading returned no data")
+            return jph.STATE.FAILED
         else:
             channel.sendData(data=v)
             for proxy in channel.getMySensorElement("Proxy"):
                  channel.sendData(data=h, Codifier=str(proxy["Codifier"]))
+            return jph.STATE.GOOD
 
 class DwarfpoolReader(object):
     def __init__(self):
@@ -148,7 +155,6 @@ class DwarfpoolReader(object):
         else:
             if (len(response.text) > 1):
                 j=json.loads(response.text)
-                print(j)
                 try:
                     d=j["workers"][s]
                 except:
@@ -161,8 +167,10 @@ class DwarfpoolReader(object):
                         channel.sendData(data=d["hashrate"])
                         for proxy in channel.getMySensorElement("Proxy"):
                             channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"]))
+                    return jph.STATE.GOOD
             else:
                 channel.logger.error("Did not receive a response from Dwarfpool")
+        return jph.STATE.FAILED
 
 class NestReader(object):
     def __init__(self):
@@ -205,7 +213,7 @@ class NestReader(object):
         if (nestTemp==-80):
             self.loadnest=False
             channel.logger.error("Unknown Error reading from Nest")
-            return
+            return jph.STATE.FAILED
         if nestAway:
             nestAway=1
         else:
@@ -213,6 +221,7 @@ class NestReader(object):
         channel.sendData(data=eval(channel.getMySensorElement("Field")))
         for proxy in channel.getMySensorElement("Proxy"):
             channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
+        return jph.STATE.GOOD
 
 class ZwavePower(object):
     def __init__(self):
@@ -253,6 +262,7 @@ class ZwavePower(object):
         Power1=-1;
         Power2=-1;
         Energy=-1
+        withErrors=False
         for val in self.network.nodes[self.xnode].get_sensors() :
             #print("node/name/index/instance : %s/%s/%s/%s" % (node,
             # network.nodes[node].name,
@@ -271,10 +281,14 @@ class ZwavePower(object):
 
         if (Power1==-1 or Power2==-1 or Energy==-1):
             channel.logger.error("Failed to obtain Zwave values")
+            withErrors=True
         channel.logger.debug("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (Power1, Power2, Energy))
         channel.sendData(data=eval(channel.getMySensorElement("Field")))
         for proxy in channel.getMySensorElement("Proxy"):
             channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
+        if withErrors:
+            return jph.STATE.WITHERRORS
+        return jph.STATE.GOOD
 
 if __name__ == '__main__':
 

@@ -41,6 +41,11 @@ Ctrl & Data Sequence numbers are reset when the config is loaded Ctrl Channel is
 def timeNow():
     return long((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000) 
 
+class STATE(object):
+    GOOD = 1         # Sensor was read and data was send with no error
+    WITHERRORS = 2   # Sensor was read and data was send with erro
+    FAILED = 2       # Sensor was not read and no data send
+
 def openSocket(address, port, enable_local_loop=1, bind_to_interface="", do_not_load_multicast=False):
     tAddr = socket.getaddrinfo(address, None)[0]
     tsocket = socket.socket(tAddr[0], socket.SOCK_DGRAM)
@@ -334,8 +339,9 @@ class jph(object):
 
                 if t >= makeNextSensorReading:
                     if self.IsActive:
-                        timeCallback(t)
-                        ctrlNextKeepAlive = t + (self.KeepAliveInterval) 
+                        state=timeCallback(t)
+                        if state==STATE.GOOD:
+                            ctrlNextKeepAlive = t + (self.KeepAliveInterval) 
                     makeNextSensorReading = t + self.SensorInterval
 
                 if t >= ctrlNextKeepAlive:
