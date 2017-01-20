@@ -334,7 +334,7 @@ class jph(object):
                     err=("Unexpected JSON error (processing SensorInterval'): %s" % (e))
                     self.logger.critical(err)
                     raise ValueError(err)
-                makeNextSensorReading = timeNow() + self.SensorInterval
+                makeNextSensorReading = 0 #timeNow() + self.SensorInterval
             else:
                 makeNextSensorReading = 32503680000000
 

@@ -49,9 +49,13 @@ class postgreSQLHandler(object):
         self.Counter=0
         self.q=None
         self.DataType={}
+        self.LastTime=0
 
     def publish(self, Timestamp):
-        channel.sendData(self.Counter)
+        if self.LastTime!=0:   # Skip the first time to build up an average
+            t=jph.timeNow()
+            channel.sendData(int(self.Counter*60/(t-self.LastTime)/1000))
+        self.LastTime=jph.timeNow()
         self.Counter=0
 
     def initdb(self):
