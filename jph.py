@@ -41,6 +41,9 @@ Ctrl & Data Sequence numbers are reset when the config is loaded Ctrl Channel is
 def timeNow():
     return long((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000) 
 
+#
+# Sensor reading return state
+#
 class STATE(object):
     GOOD = 1         # Sensor was read and data was send with no error
     WITHERRORS = 2   # Sensor was read and data was send with erro
@@ -281,7 +284,9 @@ class jph(object):
             print(e)
             if e.errno == 101:   #Multicast can fail on wifi due to buzzy networks
                 self.logger.critical("Data channel. Unexpected error: %s", sys.exc_info()[0])
-            raise
+                self.endData()   #force the socket open on the next call
+            else:
+                raise
 
     def sendCtrl(self, flag, timestamp=0, to="", timeComponent=0):
         if (self.CtrlSocket==0):
