@@ -16,10 +16,12 @@ body {
 .jph-notify-show {
   display: block;
   width: 100%;
+  text-align: center;
 }
 .jph-notify-hide {
-  width: 100%;
   display: none;
+  width: 100%;
+  text-align: center;
 }
 .jph-auto {
   font-size: 14px;
