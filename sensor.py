@@ -148,6 +148,7 @@ class DwarfpoolReader(object):
         else:
             if (len(response.text) > 1):
                 j=json.loads(response.text)
+                print(j)
                 d=j["workers"][s]
                 tp=datetime.strptime(d["last_submit"], "%a, %d %b %Y %H:%M:%S %Z")
                 tn=(tp - datetime(1970,1,1)).total_seconds()
