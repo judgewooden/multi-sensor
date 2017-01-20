@@ -1,35 +1,24 @@
-from flask import Flask, url_for, render_template, Response, jsonify
-print ("hello1")
+from flask import Flask, url_for, render_template, Response, jsonify, request, redirect, flash
 from flask_redis import FlaskRedis
-print ("hello2")
-try:
-    from sqlalchemy import *
-    sqlokay=True
-except:
-    sqlokay=False
-print ("hello3")
-
+import flask_login as login
+from flask_sqlalchemy import SQLAlchemy
 import urllib2
-print ("hello4")
 import json
-print ("hello5")
 import sys
-print ("hello6")
 import time
-print ("hello7")
 import struct
-print ("hello8")
-# import random
 import jph
-print ("hello9")
 import os
-print ("hello10")
-# import psycopg2
+import bcrypt
 
+#
+# Configure Flask & Redis
+#
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-
-r=FlaskRedis(app) 
+app.secret_key = 'super secret key'
+app.config['SESSION_TYPE'] = 'redis'
+r=FlaskRedis(app)     
 
 #
 # Configure the JPH app
@@ -38,25 +27,88 @@ configURL="file:static/config.json"
 MyCodifier="CF"
 channel=jph.jph(configURL=configURL, Codifier=MyCodifier)
 
-if sqlokay:
-    dbname=channel.getMySensorElement("SQL")["Database"]
-    dbuser=channel.getMySensorElement("SQL")["User"]
-    dbpass=channel.getMySensorElement("SQL")["Password"]
-    dbhost=channel.getMySensorElement("SQL")["Host"]
+#
+# Configure the database
+#
+dbname=channel.getMySensorElement("SQL")["Database"]
+dbuser=channel.getMySensorElement("SQL")["User"]
+dbpass=channel.getMySensorElement("SQL")["Password"]
+dbhost=channel.getMySensorElement("SQL")["Host"]
 
-    try:
-        f = open(os.path.expanduser(dbpass))
-        sqlpassword=f.read().strip()
-        f.close
-    except Exception as e:
-        channel.logger.critical("Unexpected error reading passwording: %s", e)
-        sys.exit()
+try:
+    f = open(os.path.expanduser(dbpass))
+    sqlpassword=f.read().strip()
+    f.close
+except Exception as e:
+    channel.logger.critical("Unexpected error reading password file: %s", e)
+    sys.exit()
 
-    SQLALCHEMY_DATABASE_URI = ("postgresql://%s:%s@%s:5432/%s" % (dbuser,sqlpassword,dbhost,dbname))
-    db = create_engine(SQLALCHEMY_DATABASE_URI)
-else:
-    print ("SQL IS NOT ACTIVE")
-    db = ""
+# SQLALCHEMY_DATABASE_URI = ("postgresql://%s:%s@%s:5432/%s" % (dbuser,sqlpassword,dbhost,dbname))
+app.config['SQLALCHEMY_DATABASE_URI'] = ("postgresql://%s:%s@%s:5432/%s" % (dbuser,sqlpassword,dbhost,dbname))
+if (os.getenv("JPH_DEBUG", "0")=="1"):
+    app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    __tablename__ = 'users'
+    email = db.Column(db.String(120), primary_key=True)
+    password = db.Column(db.String(120))
+
+    # def __init__(self):
+    #     self.email=email
+    #     self.password=password
+    #     self.authenticated=False
+
+    # Flask-Login integration
+    def is_authenticated(self):
+        return self.authenticated
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.email
+
+    # Required for administrative interface
+    def __unicode__(self):
+        return self.username
+
+# Initialize flask-login
+login_manager = login.LoginManager()
+login_manager.init_app(app)
+
+# Create user loader function
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.query(User).get(user_id)
+
+@app.route('/login',methods=['GET','POST'])
+def userauthentication():
+    if request.method == 'GET':
+        return render_template('login.html')
+
+    print("Login request received for: ", request.form["email"])
+    dbuser=db.session.query(User).filter_by(email=request.form["email"]).first()
+    if dbuser:
+        pw=str(request.form["password"].encode('utf-8'))
+        if bcrypt.checkpw(pw, str(dbuser.password)):
+            dbuser.authenticated = True
+            login.login_user(dbuser, remember = True)
+            return redirect(url_for('index'))
+    flash("Invalid login")
+    return redirect(url_for('userauthentication'))
+
+@app.route("/logout", methods=['GET'])
+@login.login_required
+def logout():
+    user = login.current_user
+    user.authenticated = False
+    login.logout_user()
+    return redirect(url_for('userauthentication'))
 
 @app.route('/dashboard')
 def dashboard():
@@ -121,18 +173,26 @@ def sensorinfo(codifier):
 
 @app.route('/sensormsg/<codifier>/<flag>')
 def sensormsg(codifier, flag):
-    codifier=codifier[:2]
-    flag=flag[:1]
-    if (channel.getSensor(codifier) == None):
-        return "Please provide a valid Codifier"
     p={}
-    t=jph.timeNow()
-    if ( codifier == MyCodifier ):
-        codifier = "@@"
-    p["Codifier"]=codifier
-    p["Flag"]=flag
-    p["Timestamp"]=t
-    channel.sendCtrl(to=codifier, flag=flag, timeComponent=t)
+    if (login.current_user.is_authenticated == False):
+        p["message"]="Only available for logged in users"
+        p["status"]="error"
+        print(p)
+    else:
+        codifier=codifier[:2]
+        flag=flag[:1]
+        if (channel.getSensor(codifier) == None):
+            p["message"]="Please provide a valid Codifier"
+            p["status"]="warning"
+        else:
+            t=jph.timeNow()
+            if ( codifier == MyCodifier ):
+                codifier = "@@"
+            p["Codifier"]=codifier
+            p["Flag"]=flag
+            p["Timestamp"]=t
+            p["status"]="success"
+            channel.sendCtrl(to=codifier, flag=flag, timeComponent=t)
     return (Response(response=json.dumps(p),
             status=200, mimetype="application/json"))
 
@@ -170,7 +230,7 @@ def sensorts(query):
 
     p=[]
     try:
-        results = db.engine.execute(text(query))
+        results = db.engine.execute(query)
     except:
         return "Unknown Error with DB engine"
     # answer=results.fetchall()
@@ -194,4 +254,4 @@ def sensorts(query):
     return (Response(response=json.dumps(p), status=200, mimetype="application/json"))
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True)
+    app.run(debug=True, use_reloader=False, host='0.0.0.0')

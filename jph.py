@@ -89,6 +89,7 @@ class jph(object):
         except Exception as e:
             self.logger.critical("Failed to JSON config (URL:%s): %s", self.configURL, e)
             raise ValueError(e)
+
         f=""
         try:
             for s in self.configJSON["Sensors"]:
