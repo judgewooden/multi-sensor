@@ -50,6 +50,9 @@ class RedisHandler(object):
         self.LastDataSequence={}
         self.LastCtrlSequence={}
         self.LastTime=0
+        self.LostMessageRepeat=0
+        self.LostMessageLastTime=0
+        self.LostMessageDisabled=False
 
     def publish(self, Timestamp):
         if self.LastTime!=0:   # Skip the first time to build up an average
@@ -71,6 +74,15 @@ class RedisHandler(object):
             if source in self.LastDataSequence:
                 diff=sequence - self.LastDataSequence[source]
                 if diff != 1:
+                    t=jph.timeNow()
+                    sincelast=((t-self.LostMessageLastTime) / 1000)
+                    print("sincelast:", sincelast)
+                    if (sincelast<60):
+                        self.LostMessageRepeat+=1
+                    else:
+                        self.LostMessageRepeat+=0
+
+                    self.LostMessageLastTime=jph.timeNow()
                     channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, (diff-1))
                     r.hincrby(source, "DPacketsLost", (diff-1))
                 self.Counter+=1
