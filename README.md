@@ -1,6 +1,6 @@
 # Raspberry Pi - Sensor Monitor
 
-I used this project to learn more about python,ajavascript, css, flask and more. I am new to these and would not mind any suggestions/advice from experts that come to this repo.
+I used this project to learn more about python  javascript, css, flask and more. I am new to these and would not mind any suggestions/advice from experts that come to this repo.
 
 ## Synopsis
 
@@ -15,11 +15,11 @@ Program | Purpose
 jph.py  | Library of routines to manage the Multicast messaging
 jphRedis.py   | Store last state of all messages in the network
 jphFlask.py   | Web Servers Gateway Interface
-jphPostgreSQL.py   | Web Servers Gateway Interface
+jphPostgreSQL.py   | Store the data in a postgreSQL database
 static/(www)       | Files for the Web interface
 static/config.json | Config file used by all components
 templates/(www)    | Files for the web interface  
-sensor.py  | Routines that read the sensors directly
+sensor.py  | Routines that read the sensors 
 control.py | Command line interface for viewing/managing network
 router.py  | Route message between multiple networks (TBC)
 generateSQL.py     | Generate SQL to create database from config (TBC)
@@ -27,9 +27,9 @@ requirements.txt | (TBC)
 
 ## The JPH library
 
-Each component (e.g. server, sensor, data element) in the network is idenified by a two character code called a Codifier. The JPH library will read the configuration and load the enviroment for a Codifier managing the managing the control flow using three call backs:
+Each component (e.g. server, sensor, data element) in the network is idenified by a two character code called a Codifier. The JPH library will read the configuration and load the enviroment for a Codifier managing the control flow using three call backs:
 
-  | Call back type | Usage
+Nr.  | Call back type | Usage
 - | -------------- | ------
 1 | a timer | Called every 'SensorInterval' seconds. Is typically used to tell a sensor to perform a calculation.
 2 | Control | Called everytime there is a control message received from another component
