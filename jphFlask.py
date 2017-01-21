@@ -125,6 +125,9 @@ def index():
 def logview(): 
     loghist=[]
     with open('/var/log/jph.log') as f:
+        f.seek (0, 2)                           # Seek @ EOF
+        fsize = f.tell()                        # Get Size
+        f.seek (max (fsize-(120*1000), 0), 0)   # Set pos @ last n chars
         for line in f:
             loghist.append(line)
 
