@@ -131,7 +131,7 @@ def logview():
         for line in f:
             loghist.append(line)
 
-    return render_template('logview.html', loghist=loghist)
+    return render_template('logview.html', loghist=loghist[1:])
 
 @app.route('/logstream')
 def logstream():
