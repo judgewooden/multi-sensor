@@ -54,6 +54,8 @@ class RedisHandler(object):
     def publish(self, Timestamp):
         if self.LastTime!=0:   # Skip the first time to build up an average
             t=jph.timeNow()
+            print(self.Counter,60, (t-self.LastTime)/1000)
+            print(int(self.Counter*60/(t-self.LastTime)/1000))
             channel.sendData(int(self.Counter*60/(t-self.LastTime)/1000))
         self.LastTime=jph.timeNow()
         self.Counter=0
