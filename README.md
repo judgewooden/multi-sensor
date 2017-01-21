@@ -29,9 +29,9 @@ requirements.txt | (TBC)
 
 Each component (e.g. server, sensor, data element) in the network is idenified by a two character code called a Codifier. The JPH library will read the configuration and load the enviroment for a Codifier managing the control flow using three call backs:
 
-Nr.  | Call back type | Usage
-- | -------------- | ------
-1 | a timer | Called every 'SensorInterval' seconds. Is typically used to tell a sensor to perform a calculation.
+Nr. | Call back type | Usage
+--- | -------------- | ------
+1   | a timer        | Called every 'SensorInterval' seconds. Is typically used to tell a sensor to perform a calculation.
 2 | Control | Called everytime there is a control message received from another component
 3 | Data | Called everytime there is a data message received from another component
 
