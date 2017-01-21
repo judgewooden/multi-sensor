@@ -37,15 +37,18 @@ Nr. | Call back type | Usage
 
 The library exposes the following functions:
 
-| Function | Purpose |
-| -------- | ------- |
-| jph()    | usage: channel=jph(configURL, Codifier)
-Returns the channel for all communication with the JPH network|
-|          | where: configURL = (location of the configuration file)
-|          |        Codifier = The Codifier
-| timeNow() | usage: milliseconds=timeNow()
-|           | Returns the current time in milliseconds
-
+| Function | Purpose 
+| -------- | ------- 
+| jph()    | Returns the channel for all communication with the JPH network
+| timeNow() | Returns the current time in milliseconds
+| getConfig() | Returns the entire configuration
+| getAllSensors() | Returns the array of all Codifiers 
+| getSensor() | Returns a specific Sensor's configuration
+| getMySensor() | Returns my configuration
+| getMySensorElement() | Returns an element in my configuration
+| sendData() | Sends data on the Data Channel
+| sendCtrl() | Sends a message on the Control Channel
+| run() | Manage the state of the network and provide call back hooks
 
 ## The Sensor
 
@@ -59,13 +62,16 @@ Pipe | Return a value from a UNIX pipe
 JSON | Do a http request to read JSON
 ADC pi + | Analogue-to-Digital board output [ADC Pi Plus](https://www.abelectronics.co.uk/p/56/ADC-Pi-Plus-Raspberry-Pi-Analogue-to-Digital-converter)
 ADAfruit | The Temperature & Humidity sensors [AM2302](https://www.adafruit.com/products/393)
+Dwarfpool | Read the current state of the mining on Dwarfpool
+Nest | Read the data from a nest device
+Zwave | Read the data from a zwave enabled device
 Python | Make customized calculations (using ninja2 style variable injection)
 
 ## The Multicast bus
 
 There are two networks:
 
-1. Control bus - All components talk to each other on this bus, sending keep-alive messages and commands
+1. Control bus - All components talk to each other on this bus, sending keep-alive messages and commands.
 2. Data bus - Only collector components listen to this bus and sensors send data on this bus.
 
 For both busses each message carries a millisecond timevalue, sequence number and a to/from Codifier. The following message types are supported:
@@ -74,7 +80,7 @@ Flag | Purpose
 ---- | -------
 I | **I** am alive
 C | Request to (re)read the **C**onfig and restart
-P | **Ping** a component, requesting a {T} response message 
+P | **P**ing a component, requesting a {T} response message 
 T | **T**ime value response to a {P} message, responding with payload from {P}
 S | **S**tart the Data channel callbacks
 H | **H**alt the Data channel callbacks
