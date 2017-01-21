@@ -1,4 +1,4 @@
-from flask import Flask, url_for, render_template, Response, jsonify, request, redirect, flash
+from flask import Flask, url_for, render_template, Response, jsonify, request, redirect, flash, send_file
 from flask_redis import FlaskRedis
 import flask_login as login
 from flask_sqlalchemy import SQLAlchemy
@@ -55,11 +55,6 @@ class User(db.Model):
     email = db.Column(db.String(120), primary_key=True)
     password = db.Column(db.String(120))
 
-    # def __init__(self):
-    #     self.email=email
-    #     self.password=password
-    #     self.authenticated=False
-
     # Flask-Login integration
     def is_authenticated(self):
         return self.authenticated
@@ -91,7 +86,6 @@ def userauthentication():
     if request.method == 'GET':
         return render_template('login.html')
 
-    print("Login request received for: ", request.form["email"])
     dbuser=db.session.query(User).filter_by(email=request.form["email"]).first()
     if dbuser:
         pw=str(request.form["password"].encode('utf-8'))
@@ -99,6 +93,7 @@ def userauthentication():
             dbuser.authenticated = True
             login.login_user(dbuser, remember = True)
             return redirect(url_for('index'))
+            
     flash("Invalid login")
     return redirect(url_for('userauthentication'))
 
@@ -125,6 +120,21 @@ def sensors():
 @app.route('/')
 def index():
     return render_template('index.html', sensors = channel.getAllSensors())
+
+@app.route('/logview')
+def logview():
+    return render_template('logview.html')
+
+@app.route('/logstream')
+def logstream():
+    # def generate():
+    #     with open('/var/log/daemon.log') as f:
+    #         while True:
+    #             yield f.read()
+    #             time.sleep(1)
+
+    # return app.response_class(generate(), mimetype='text/plain')
+    return send_file('/var/log/jph.log', mimetype='text/plain')
 
 @app.route('/sensor/')
 @app.route('/sensor/<codifier>')

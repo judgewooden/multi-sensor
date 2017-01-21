@@ -51,7 +51,7 @@
                 "level":"INFO"
             },
             "jphRedis": {
-                "handlers":["syslog", "console"],
+                "handlers":["syslog"],
                 "level":"INFO"
             },
             "jphPostgreSQL": {

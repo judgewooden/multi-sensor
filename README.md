@@ -1,6 +1,6 @@
 # Raspberry Pi - Sensor Monitor
 
-I used this project to learn more about python  javascript, css, flask and more. I am new to these and would not mind any suggestions/advice from experts that come to this repo.
+I used this project to learn more about python, javascript, css, flask and more. I am new to these and would not mind any suggestions/advice from people that come to this repo.
 
 ## Synopsis
 
@@ -13,7 +13,7 @@ The purpose of the project is to monitor & control Raspberry Pi based sensors on
 Program | Purpose
 ------- | -------
 jph.py  | Library of routines to manage the Multicast messaging
-jphRedis.py   | Store last state of all messages in the network
+jphRedis.py   | Cache last state of all messages in the network
 jphFlask.py   | Web Servers Gateway Interface
 jphPostgreSQL.py   | Store the data in a postgreSQL database
 static/(www)       | Files for the Web interface
@@ -31,7 +31,7 @@ Each component (e.g. server, sensor, data element) in the network is identified 
 
 Nr. | Call back type | Usage
 --- | -------------- | ------
-1   | a timer        | Called every 'SensorInterval' seconds. Is typically used to tell a sensor to perform a calculation.
+1   | a timer        | Called every 'SensorInterval' seconds. Is typically used to tell a sensor to perform a reading.
 2 | Control | Called everytime there is a control message received from another component
 3 | Data | Called everytime there is a data message received from another component
 

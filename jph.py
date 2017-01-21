@@ -36,7 +36,7 @@ C   - Message to request a JSON reload and CTRL+DATA Channel Restart
     ?   indicate if senders data cannel is active (ignore)
 
 Ctrl & Data Sequence numbers are reset when the config is loaded Ctrl Channel is started
-    -   Sensequently the Ctrl / Data channel will keep their own sequences for data loss detection
+    -   Subsequently the Ctrl / Data channel will keep their own sequences for data loss detection
 """
 def timeNow():
     return long((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000) 
@@ -46,8 +46,8 @@ def timeNow():
 #
 class STATE(object):
     GOOD = 1         # Sensor was read and data was send with no error
-    WITHERRORS = 2   # Sensor was read and data was send with erro
-    FAILED = 2       # Sensor was not read and no data send
+    WITHERRORS = 2   # Sensor was read and data was send with errors in logfile
+    FAILED = 2       # Sensor was not read and no data send in logfile
 
 def openSocket(address, port, enable_local_loop=1, bind_to_interface="", do_not_load_multicast=False):
     tAddr = socket.getaddrinfo(address, None)[0]
