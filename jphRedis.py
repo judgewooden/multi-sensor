@@ -85,12 +85,12 @@ class RedisHandler(object):
                                 self.LostMessageEnabled=False
                                 channel.logger.warning("Lost messages logging disabled for 1 hour (too many)")
                     else:
-                        if self.LostMessageEnabled:
+                        if not self.LostMessageEnabled:
                             channel.logger.warning("%d Lost messages surpressed. Reenabled.", self.LostMessageRepeat)
                         self.LostMessageRepeat+=0
                         self.LostMessageEnabled=True
 
-                    if not self.LostMessageEnabled:
+                    if self.LostMessageEnabled:
                         self.LostMessageLastTime=jph.timeNow()
                         channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, (diff-1))
                     r.hincrby(source, "DPacketsLost", (diff-1))
