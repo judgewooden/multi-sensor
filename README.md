@@ -1,10 +1,10 @@
 # Raspberry Pi - Sensor Monitor
 
-I used this project to learn more about python, flask and messaging. I am new to python and would not mind any suggestions/advice from experts that come to this repo.
+I used this project to learn more about python,ajavascript, css, flask and more. I am new to these and would not mind any suggestions/advice from experts that come to this repo.
 
 ## Synopsis
 
-The purpose of the project is to automate the control of Raspberry Pi sensors on the network. All the components communicate using a Multicast Messaging layer.
+The purpose of the project is to monitor & control Raspberry Pi based sensors on the network.
 
 ![Multicast Network](https://github.com/judgewooden/multi-sensor/raw/master/static/network.png)
 
@@ -15,18 +15,41 @@ Program | Purpose
 jph.py  | Library of routines to manage the Multicast messaging
 jphRedis.py   | Store last state of all messages in the network
 jphFlask.py   | Web Servers Gateway Interface
+jphPostgreSQL.py   | Web Servers Gateway Interface
 static/(www)       | Files for the Web interface
-templates/(www)    | Files for the web interface  
-sensor.py  | Routines to read sensors
-router.py  | Route message between multiple networks (TBC)
-control.py | Command line interface for viewing/managing network
-sql.py     | Store network messages in SQL (TBC)
 static/config.json | Config file used by all components
+templates/(www)    | Files for the web interface  
+sensor.py  | Routines that read the sensors directly
+control.py | Command line interface for viewing/managing network
+router.py  | Route message between multiple networks (TBC)
 generateSQL.py     | Generate SQL to create database from config (TBC)
+requirements.txt | (TBC)
+
+## The JPH library
+
+Each component (e.g. server, sensor, data element) in the network is idenified by a two character code called a Codifier. The JPH library will read the configuration and load the enviroment for a Codifier managing the managing the control flow using three call backs:
+
+  | Call back type | Usage
+- | -------------- | ------
+1 | a timer | Called every 'SensorInterval' seconds. Is typically used to tell a sensor to perform a calculation.
+2 | Control | Called everytime there is a control message received from another component
+3 | Data | Called everytime there is a data message received from another component
+
+The library exposes the following functions:
+
+Function | Purpose
+-------- | -------
+jph()    | usage: channel=jph(configURL, Codifier)
+         | Returns the channel for all communication with the JPH network
+         | where: configURL = (location of the configuration file)
+         |        Codifier = The Codifier
+timeNow() | usage: milliseconds=timeNow()
+          | Returns the current time in milliseconds
+
 
 ## The Sensor
 
-Sensors are easy to using python. The jph library will callback the sensors reading routine which can send data to the network using sendData(). 
+The jph library will callback the sensors reading routine which can send data to the network using sendData(). 
 
 ### Current supported Sensors
 

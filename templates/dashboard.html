@@ -39,7 +39,6 @@ var ocard=""
 $(function() {
 	$('[data-click="controls"]').click(function (event) {
 	  var code=$(this).attr("id").substring(0,2); 
-	  console.log("code:", code);
 		if ((ocard != "") && (ocard!=code)) {
 			$('#'+ocard+'c').slideUp()
 			$('#'+ocard+'v').slideDown('slow')
