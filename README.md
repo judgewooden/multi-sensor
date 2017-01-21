@@ -27,7 +27,7 @@ requirements.txt | (TBC)
 
 ## The JPH library
 
-Each component (e.g. server, sensor, data element) in the network is idenified by a two character code called a Codifier. The JPH library will read the configuration and load the enviroment for a Codifier managing the control flow using three call backs:
+Each component (e.g. server, sensor, data element) in the network is identified by a two character code called a **Codifier**. The JPH library will read the configuration and load the enviroment for a Codifier managing the control flow using three call backs:
 
 Nr. | Call back type | Usage
 --- | -------------- | ------
@@ -37,14 +37,14 @@ Nr. | Call back type | Usage
 
 The library exposes the following functions:
 
-Function | Purpose
--------- | -------
-jph()    | usage: channel=jph(configURL, Codifier)
-         | Returns the channel for all communication with the JPH network
-         | where: configURL = (location of the configuration file)
-         |        Codifier = The Codifier
-timeNow() | usage: milliseconds=timeNow()
-          | Returns the current time in milliseconds
+| Function | Purpose |
+| -------- | ------- |
+| jph()    | usage: channel=jph(configURL, Codifier) |
+|          | Returns the channel for all communication with the JPH network
+|          | where: configURL = (location of the configuration file)
+|          |        Codifier = The Codifier
+| timeNow() | usage: milliseconds=timeNow()
+|           | Returns the current time in milliseconds
 
 
 ## The Sensor
@@ -63,7 +63,7 @@ Python | Make customized calculations (using ninja2 style variable injection)
 
 ## The Multicast bus
 
-Each component on te nework is identifed by a two characters, called **Codifiers**. There are two networks:
+There are two networks:
 
 1. Control bus - All components talk to each other on this bus, sending keep-alive messages and commands
 2. Data bus - Only collector components listen to this bus and sensors send data on this bus.
