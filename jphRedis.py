@@ -52,7 +52,7 @@ class RedisHandler(object):
         self.LastTime=0
         self.LostMessageRepeat=0
         self.LostMessageLastTime=0
-        self.LostMessageDisabled=False
+        self.LostMessageEnabled=True
 
     def publish(self, Timestamp):
         if self.LastTime!=0:   # Skip the first time to build up an average
@@ -76,14 +76,23 @@ class RedisHandler(object):
                 if diff != 1:
                     t=jph.timeNow()
                     sincelast=((t-self.LostMessageLastTime) / 1000)
-                    print("sincelast:", sincelast)
-                    if (sincelast<60):
-                        self.LostMessageRepeat+=1
-                    else:
-                        self.LostMessageRepeat+=0
+                    print("sincelast:", sincelast, self.LostMessageRepeat, self.LostMessageEnabled)
 
-                    self.LostMessageLastTime=jph.timeNow()
-                    channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, (diff-1))
+                    if (sincelast<(60*60):
+                        self.LostMessageRepeat+=1
+                        if (self.LostMessageRepeat>9): 
+                            if self.LostMessageEnabled:
+                                self.LostMessageEnabled=False
+                                channel.logger.warning("Lost messages logging disabled for 1 hour (too many)")
+                    else:
+                        if self.LostMessageEnabled:
+                            channel.logger.warning("%d Lost messages surpressed. Reenabled.", self.LostMessageRepeat)
+                        self.LostMessageRepeat+=0
+                        self.LostMessageEnabled=True
+
+                    if not self.LostMessageEnabled:
+                        self.LostMessageLastTime=jph.timeNow()
+                        channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, (diff-1))
                     r.hincrby(source, "DPacketsLost", (diff-1))
                 self.Counter+=1
             self.LastDataSequence[source]=sequence
