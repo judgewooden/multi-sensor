@@ -122,8 +122,13 @@ def index():
     return render_template('index.html', sensors = channel.getAllSensors())
 
 @app.route('/logview')
-def logview():
-    return render_template('logview.html')
+def logview(): 
+    loghist=[]
+    with open('/var/log/jph.log') as f:
+        for line in f:
+            loghist.append(line)
+
+    return render_template('logview.html', loghist=loghist)
 
 @app.route('/logstream')
 def logstream():

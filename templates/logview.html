@@ -1,27 +1,52 @@
 {% extends "layout.html" %}
 {% block body %}
 <div class="container-fluid" style="padding:8px">
-<pre id="output" style="border: 2px solid grey; overflow:auto;">></pre>
+<table id="output" class="display compact">
+<thead>
+<tr>
+<th>Log Entry</th>
+</tr>
+</thead>
+<tbody>
+{% for line in loghist %} 
+<tr style='padding-top:1px;padding-bottom:1px'>
+<td>
+{{ line }}
+</td>
+</tr>
+{% endfor %}
+</tbody>  
+</table>
 </div>
 <script>
 
-var getWheigth = function(value) {
-    return $(window).innerHeight() - 60;
-}
-// ;
-//     z=x-80;
-//     console.log(x,z);
-//     return z;
+// <div class="container-fluid" style="padding:8px">
+// <table id="output" style="border: 2px solid grey; overflow:auto;"></table>
+// </div>
+
+// var getWheigth = function(value) {
+//     return $(window).innerHeight() - 60;
 // }
+// // ;
+// //     z=x-80;
+// //     console.log(x,z);
+// //     return z;
+// // }
 
-$(function(){
-  $('#output').css({ height: getWheigth() });
-  $(window).resize(function(){
-    $('#output').css({ height: getWheigth() });
-  });
+// $(function(){
+//   $('#output').css({ height: getWheigth() });
+//   $(window).resize(function(){
+//     $('#output').css({ height: getWheigth() });
+//   });
+// });
+
+// $("#output").load('{{ url_for('logstream') }}');
+
+$(document).ready(function() {
+    $('#output').DataTable({
+      "compact": true
+    });
 });
-
-$("#output").load('{{ url_for('logstream') }}');
     // var output = document.getElementById('output');
 
     // var xhr = new XMLHttpRequest();
