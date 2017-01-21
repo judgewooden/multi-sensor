@@ -39,8 +39,8 @@ The library exposes the following functions:
 
 | Function | Purpose |
 | -------- | ------- |
-| jph()    | usage: channel=jph(configURL, Codifier) |
-|          | Returns the channel for all communication with the JPH network
+| jph()    | usage: channel=jph(configURL, Codifier)
+Returns the channel for all communication with the JPH network|
 |          | where: configURL = (location of the configuration file)
 |          |        Codifier = The Codifier
 | timeNow() | usage: milliseconds=timeNow()
