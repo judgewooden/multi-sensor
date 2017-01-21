@@ -78,7 +78,7 @@ class RedisHandler(object):
                     sincelast=((t-self.LostMessageLastTime) / 1000)
                     print("sincelast:", sincelast, self.LostMessageRepeat, self.LostMessageEnabled)
 
-                    if (sincelast<(60*60):
+                    if sincelast<(60*60):
                         self.LostMessageRepeat+=1
                         if (self.LostMessageRepeat>9): 
                             if self.LostMessageEnabled:
