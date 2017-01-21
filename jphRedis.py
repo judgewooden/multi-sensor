@@ -50,9 +50,9 @@ class RedisHandler(object):
         self.LastDataSequence={}
         self.LastCtrlSequence={}
         self.LastTime=0
-        self.LostMessageRepeat=0
-        self.LostMessageLastTime=0
-        self.LostMessageEnabled=True
+        self.LostMessageRepeat={}
+        self.LostMessageLastTime={}
+        self.LostMessageEnabled={}
 
     def publish(self, Timestamp):
         if self.LastTime!=0:   # Skip the first time to build up an average
@@ -74,29 +74,34 @@ class RedisHandler(object):
             if source in self.LastDataSequence:
                 diff=sequence - self.LastDataSequence[source]
                 if diff != 1:
-                    t=jph.timeNow()
-                    sincelast=((t-self.LostMessageLastTime) / 1000)
-                    print("sincelast:", sincelast, self.LostMessageRepeat, self.LostMessageEnabled)
+                    if source in self.LostMessageRepeat:    
+                        t=jph.timeNow()
+                        sincelast=((t-self.LostMessageLastTime[source]) / 1000)
+                        print(source, "sincelast:", sincelast, self.LostMessageRepeat[source], self.LostMessageEnabled[source])
 
-                    if sincelast<(60*60):
-                        self.LostMessageRepeat+=1
-                        if (self.LostMessageRepeat>9): 
-                            if self.LostMessageEnabled:
-                                self.LostMessageEnabled=False
-                                channel.logger.warning("Lost messages logging disabled for 1 hour (too many)")
+                        if sincelast<(60*60):
+                            self.LostMessageRepeat[source]+=1
+                            if (self.LostMessageRepeat[source]>5): 
+                                if self.LostMessageEnabled[source]:
+                                    self.LostMessageEnabled[source]=False
+                                    channel.logger.warning("Lost messages for %s surpressed for 1 hour (too many)", source)
+                        else:
+                            if not self.LostMessageEnabled[source]:
+                                channel.logger.warning("%d Lost messages for %s repressed.", self.LostMessageRepeat[source], source)
+                            self.LostMessageRepeat[source]+=0
+                            self.LostMessageEnabled[source]=True
+
                     else:
-                        if not self.LostMessageEnabled:
-                            channel.logger.warning("%d Lost messages surpressed. Reenabled.", self.LostMessageRepeat)
-                        self.LostMessageRepeat+=0
-                        self.LostMessageEnabled=True
+                        self.LostMessageEnabled[source]=True
+                        self.LostMessageRepeat[source]=0
 
-                    if self.LostMessageEnabled:
-                        self.LostMessageLastTime=jph.timeNow()
+                    if self.LostMessageEnabled[source]:
+                        self.LostMessageLastTime[source]=jph.timeNow()
                         channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, (diff-1))
                     r.hincrby(source, "DPacketsLost", (diff-1))
-                self.Counter+=1
-            self.LastDataSequence[source]=sequence
+                    self.Counter+=1
 
+            self.LastDataSequence[source]=sequence
             r.hset(source, "Value",data)
             r.hset(source, "DTimestamp",timestamp)
             self.Counter+=3
