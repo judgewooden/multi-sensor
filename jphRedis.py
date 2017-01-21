@@ -55,12 +55,12 @@ class RedisHandler(object):
         if self.LastTime!=0:   # Skip the first time to build up an average
             t=jph.timeNow()
             a=self.Counter*(60/((t-self.LastTime)/1000))
-            b=(60/((t-self.LastTime)/1000))
-            c=self.Counter*b
-            print(self.Counter,60, (t-self.LastTime)/1000)
-            print(a, int(a), int(self.Counter*60/(t-self.LastTime)/1000))
-            print(a,b,c)
-            channel.sendData(int(self.Counter*60/(t-self.LastTime)/1000))
+            # b=(60/((t-self.LastTime)/1000))
+            # c=self.Counter*b
+            # print(self.Counter,60, (t-self.LastTime)/1000)
+            # print(a, int(a), int(self.Counter*60/(t-self.LastTime)/1000))
+            # print(a,b,c)
+            channel.sendData(int(a))
         self.LastTime=jph.timeNow()
         self.Counter=0
 
