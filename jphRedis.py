@@ -77,7 +77,7 @@ class RedisHandler(object):
                     if source in self.LostMessageRepeat:    
                         t=jph.timeNow()
                         sincelast=((t-self.LostMessageLastTime[source]) / 1000)
-                        print(source, "sincelast:", sincelast, self.LostMessageRepeat[source], self.LostMessageEnabled[source])
+                        # print(source, "sincelast:", sincelast, self.LostMessageRepeat[source], self.LostMessageEnabled[source])
 
                         if sincelast<(60*60):
                             self.LostMessageRepeat[source]+=1
@@ -97,7 +97,7 @@ class RedisHandler(object):
 
                     if self.LostMessageEnabled[source]:
                         self.LostMessageLastTime[source]=jph.timeNow()
-                        channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, (diff-1))
+                        channel.logger.warning("%d Lost Message(s) detected for %s Data Channel", (diff-1), source)
                     r.hincrby(source, "DPacketsLost", (diff-1))
                     self.Counter+=1
 
@@ -119,7 +119,7 @@ class RedisHandler(object):
             if source in self.LastCtrlSequence:
                 diff=sequence - self.LastCtrlSequence[source]
                 if diff != 1:
-                    channel.logger.warning("%d %s%s %s Lost=%d", timestamp, chnl, flag, source, (diff-1))
+                    channel.logger.warning("%d Lost Message(s) detected for %s Control Channel", (diff-1), source)
                     r.hincrby(source, "CPacketsLost", (diff-1))
                     self.Counter+=1
             self.LastCtrlSequence[source]=sequence
