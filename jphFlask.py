@@ -130,7 +130,6 @@ def logview():
         f.seek (max (fsize-(120*1000), 0), 0)   # Set pos @ last n chars
         for line in f:
             loghist.append(line)
-
     return render_template('logview.html', loghist=loghist[1:])
 
 @app.route('/logstream')
