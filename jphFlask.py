@@ -10,6 +10,7 @@ import struct
 import jph
 import os
 import bcrypt
+import getopt
 
 #
 # Configure Flask & Redis
