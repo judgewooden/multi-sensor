@@ -54,6 +54,13 @@ class RedisHandler(object):
         self.LostMessageLastTime={}
         self.LostMessageEnabled={}
 
+    def LostReset(self):
+        if source in self.LostMessageRepeat:    
+            if not self.LostMessageEnabled[source]:
+                channel.logger.warning("%d Lost messages for %s repressed. (restart)", self.LostMessageRepeat[source], source)
+        self.LostMessageEnabled[source]=True
+        self.LostMessageRepeat[source]=0
+
     def publish(self, Timestamp):
         if self.LastTime!=0:   # Skip the first time to build up an average
             t=jph.timeNow()
@@ -75,24 +82,21 @@ class RedisHandler(object):
                 diff=sequence - self.LastDataSequence[source]
                 if diff != 1:
                     if not source in self.LostMessageRepeat:    
-                        self.LostMessageEnabled[source]=True
-                        self.LostMessageRepeat[source]=0
+                        self.LostReset()
 
                     t=jph.timeNow()
                     sincelast=((t-self.LostMessageLastTime[source]) / 1000)
                     # print(source, "sincelast:", sincelast, self.LostMessageRepeat[source], self.LostMessageEnabled[source])
 
-                    if sincelast<(60*60):
+                    if sincelast<(60*15):   # 3 messsages in 15 minutes
                         self.LostMessageRepeat[source]+=1
-                        if (self.LostMessageRepeat[source]>2): 
-                            if self.LostMessageEnabled[source]:
-                                self.LostMessageEnabled[source]=False
-                                channel.logger.warning("Lost messages for %s surpressed (too many)", source)
                     else:
-                        if not self.LostMessageEnabled[source]:
-                            channel.logger.warning("%d Lost messages for %s repressed. (restart)", self.LostMessageRepeat[source], source)
-                        self.LostMessageRepeat[source]=0
-                        self.LostMessageEnabled[source]=True
+                        self.LostReset()
+                        
+                    if (self.LostMessageRepeat[source]>2): 
+                        if self.LostMessageEnabled[source]:
+                            self.LostMessageEnabled[source]=False
+                            channel.logger.warning("Lost messages for %s surpressed (too many)", source)
 
                     self.LostMessageLastTime[source]=jph.timeNow()
                     if self.LostMessageEnabled[source]:
@@ -134,11 +138,13 @@ class RedisHandler(object):
                 r.hset(source, "HTimestamp", timestamp)
             if flag == 'S':
                 r.hset(source, "STimestamp", timestamp)
+                self.LostReset()
             if flag == 'I':
                 r.hset(source, "ITimestamp", timestamp)
                 r.hset(source, "IsActive", isActive)
             if flag == 'C':
                 r.hset(source, "CTimestamp", timestamp)
+                self.LostReset()
 
             channel.logger.debug("%d %s%s %s Data=%d", timestamp, chnl, flag, source, data)
 
