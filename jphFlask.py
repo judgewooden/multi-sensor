@@ -25,6 +25,29 @@ r=FlaskRedis(app)
 #
 configURL="file:static/config.json"
 MyCodifier="CF"
+
+# -------------
+# Read Startup Parameters
+# -------------
+def usage():
+    print("Usage: -u <url>", __file__)
+    print("\t-u <url> : load the JSON configuration from a url")
+    print("\t-c <code>: The Sensor that this program needs to manage") 
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "hu:c:", ["help", "url=", "code="])
+    for opt, arg in opts:
+        if opt in ("-h", "help"):
+            raise
+        elif opt in ("-u", "--url"):
+            configURL=arg
+        elif opt in ("-c", "--code"):
+            MyCodifier=arg
+except Exception as e:
+    print("Error: %s" % e)
+    usage()
+    sys.exit()
+
 channel=jph.jph(configURL=configURL, Codifier=MyCodifier)
 
 #

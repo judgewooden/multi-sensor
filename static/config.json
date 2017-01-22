@@ -595,6 +595,66 @@
             "Sensor":{
                 "Codifier":"M3"
             }
+        },{
+            "Codifier":"cf",
+            "ShortName":"Flask Devel",
+            "Name":"Web Interface Development",
+            "Symbol":"",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"Flask",
+            "Sensor":{
+                "SQL":{
+                    "Database":"sensors",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
+        }, {
+            "Codifier":"cc",
+            "ShortName":"devel",
+            "Name":"Control Console Program Development",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"ControlProgram"
+        }, {
+            "Codifier":"r1",
+            "ShortName":"Redis-devel",
+            "Name":"Redis-Cache on devel",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"jphRedis"
+        }, {
+            "Codifier":"q1",
+            "ShortName":"SQL-devel",
+            "Name":"Postgress SQL adaptor on devel",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"jphPostgreSQL",
+            "Sensor":{
+                "SQL":{
+                    "Database":"sensors",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
         }
     ]
 }

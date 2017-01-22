@@ -21,8 +21,8 @@ static/config.json | Config file used by all components
 templates/(www)    | Files for the web interface  
 sensor.py  | Routines that read the sensors 
 control.py | Command line interface for viewing/managing network
+generateSQL.py     | Generate SQL to create database from config 
 router.py  | Route message between multiple networks (TBC)
-generateSQL.py     | Generate SQL to create database from config (TBC)
 requirements.txt | (TBC)
 
 ## The JPH library
@@ -32,8 +32,8 @@ Each component (e.g. server, sensor, data element) in the network is identified 
 Nr. | Call back type | Usage
 --- | -------------- | ------
 1   | a timer        | Called every 'SensorInterval' seconds. Is typically used to tell a sensor to perform a reading.
-2 | Control | Called everytime there is a control message received from another component
-3 | Data | Called everytime there is a data message received from another component
+2 | Control | Called everytime there is a control message received from another component.
+3 | Data | Called everytime there is a data message received from another component.
 
 The library exposes the following functions:
 
@@ -72,9 +72,9 @@ Python | Make customized calculations (using ninja2 style variable injection)
 There are two networks:
 
 1. Control bus - All components talk to each other on this bus, sending keep-alive messages and commands.
-2. Data bus - Only collector components listen to this bus and sensors send data on this bus.
+2. Data bus - Collector components listens to this bus and sensors components send data on this bus. 
 
-For both busses each message carries a millisecond timevalue, sequence number and a to/from Codifier. The following message types are supported:
+For both busses each message carries a millisecond time value, sequence number and a to/from Codifier. The following message types are supported:
 
 Flag | Purpose
 ---- | -------
@@ -86,8 +86,22 @@ S | **S**tart the Data channel callbacks
 H | **H**alt the Data channel callbacks
 N/n | The sequence numbering from this point is **N**ew 
 
-Message with Codifier destination '@@'' is a broadcast to all
+Message with Codifier destination '@@'' is a broadcast to all.
 
 ## Installation
 
-TBC
+#to enable multicast in kvm 
+sudo ip link set dev macvtap0 allmulticast on
+
+apt-get update
+apt-get upgrade
+apt-get install python-setuptools python-dev build-essential 
+easy_install pip 
+apt-get install git
+
+-- For redis
+
+apt-get install redis-server
+pip instal redis
+
+

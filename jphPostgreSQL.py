@@ -12,7 +12,7 @@ import time
 # Globals
 # -------------
 configURL="file:static/config.json"
-Codifier="Q1"
+Codifier=""
 
 # -------------
 # Read Startup Parameters

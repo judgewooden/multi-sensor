@@ -12,7 +12,7 @@ import time
 # Globals
 # -------------
 configURL="file:static/config.json"
-Codifier="R1"
+Codifier=""
 
 # -------------
 # Read Startup Parameters
@@ -96,7 +96,7 @@ class RedisHandler(object):
                         if (self.LostMessageRepeat[source]>2): 
                             if self.LostMessageEnabled[source]:
                                 self.LostMessageEnabled[source]=False
-                                channel.logger.warning("Lost messages for %s surpressed (too many)", source)
+                                channel.logger.warning("Lost messages logging for %s surpressed (too many)", source)
 
                     self.LostMessageLastTime[source]=jph.timeNow()
                     if self.LostMessageEnabled[source]:
