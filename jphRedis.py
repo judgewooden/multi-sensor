@@ -57,7 +57,7 @@ class RedisHandler(object):
     def LostReset(self, source):
         if source in self.LostMessageRepeat:    
             if not self.LostMessageEnabled[source]:
-                channel.logger.warning("%d Lost messages for %s repressed. (restart)", self.LostMessageRepeat[source], source)
+                channel.logger.warning("%d Lost messages for %s repressed.", self.LostMessageRepeat[source], source)
         self.LostMessageEnabled[source]=True
         self.LostMessageRepeat[source]=0
 

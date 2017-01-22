@@ -167,7 +167,9 @@ class DwarfpoolReader(object):
                         channel.sendData(data=d["hashrate"])
                         for proxy in channel.getMySensorElement("Proxy"):
                             channel.sendData(data=d["hashrate_calculated"], Codifier=str(proxy["Codifier"]))
-                    return jph.STATE.GOOD
+                        return jph.STATE.GOOD
+                    else:
+                        return jph.STATE.NOREADING
             else:
                 channel.logger.error("Did not receive a response from Dwarfpool")
         return jph.STATE.FAILED

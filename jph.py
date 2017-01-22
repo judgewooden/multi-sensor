@@ -47,7 +47,8 @@ def timeNow():
 class STATE(object):
     GOOD = 1         # Sensor was read and data was send with no error
     WITHERRORS = 2   # Sensor was read and data was send with errors in logfile
-    FAILED = 2       # Sensor was not read and no data send in logfile
+    FAILED = 3       # Sensor was not read and no data send in logfile
+    NOREADING = 4    # Sensor was read but data is still from previous reading
 
 def openSocket(address, port, enable_local_loop=1, bind_to_interface="", do_not_load_multicast=False):
     tAddr = socket.getaddrinfo(address, None)[0]
