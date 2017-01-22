@@ -54,7 +54,7 @@ class RedisHandler(object):
         self.LostMessageLastTime={}
         self.LostMessageEnabled={}
 
-    def LostReset(self):
+    def LostReset(self, source):
         if source in self.LostMessageRepeat:    
             if not self.LostMessageEnabled[source]:
                 channel.logger.warning("%d Lost messages for %s repressed. (restart)", self.LostMessageRepeat[source], source)
@@ -82,7 +82,7 @@ class RedisHandler(object):
                 diff=sequence - self.LastDataSequence[source]
                 if diff != 1:
                     if not source in self.LostMessageRepeat:    
-                        self.LostReset()
+                        self.LostReset(source)
 
                     t=jph.timeNow()
                     sincelast=((t-self.LostMessageLastTime[source]) / 1000)
@@ -91,8 +91,8 @@ class RedisHandler(object):
                     if sincelast<(60*15):   # 3 messsages in 15 minutes
                         self.LostMessageRepeat[source]+=1
                     else:
-                        self.LostReset()
-                        
+                        self.LostReset(source)
+
                     if (self.LostMessageRepeat[source]>2): 
                         if self.LostMessageEnabled[source]:
                             self.LostMessageEnabled[source]=False
@@ -101,6 +101,7 @@ class RedisHandler(object):
                     self.LostMessageLastTime[source]=jph.timeNow()
                     if self.LostMessageEnabled[source]:
                         channel.logger.warning("%d Lost Message(s) detected for %s Data Channel", (diff-1), source)
+                        
                     r.hincrby(source, "DPacketsLost", (diff-1))
                     self.Counter+=1
 
@@ -138,13 +139,13 @@ class RedisHandler(object):
                 r.hset(source, "HTimestamp", timestamp)
             if flag == 'S':
                 r.hset(source, "STimestamp", timestamp)
-                self.LostReset()
+                self.LostReset(source)
             if flag == 'I':
                 r.hset(source, "ITimestamp", timestamp)
                 r.hset(source, "IsActive", isActive)
             if flag == 'C':
                 r.hset(source, "CTimestamp", timestamp)
-                self.LostReset()
+                self.LostReset(source)
 
             channel.logger.debug("%d %s%s %s Data=%d", timestamp, chnl, flag, source, data)
 
