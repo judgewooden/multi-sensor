@@ -81,7 +81,7 @@ class RedisHandler(object):
             if source in self.LastDataSequence:
                 diff=sequence - self.LastDataSequence[source]
                 if diff != 1:
-                    if not source in self.LostMessageLastTime   
+                    if not source in self.LostMessageLastTime:  
                         self.LostReset(source)
                     else:
                         t=jph.timeNow()
