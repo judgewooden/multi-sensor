@@ -117,6 +117,16 @@ pip install bcrypt
 apt-get install postgresql
 apt-get install libpq-dev
 pip install psycopg2
-export JPH_DEBUG=0
-python 
 
+cat "secretPassword" > ~/.sqlpassword
+export JPH_DEBUG=0
+python generatePostgreSQL -c q1 -d > /tmp/x
+sudo -u postgres psql < /tmp/x
+
+-- For logfiles
+
+apt-get install syslog-ng
+echo "destination d_jph { file(\"/var/log/jph.log\"); };" > /tmp/x
+echo "filter f_jph { program(\"jph*\" type(glob)); };" >> /tmp/x
+echo "log { source(s_src); filter(f_jph); destination(d_jph); };" >> /tmp/x
+cp /tmp/x /etc/syslog-ng/conf.d/jph.conf
