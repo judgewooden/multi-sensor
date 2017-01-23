@@ -91,31 +91,40 @@ Message with Codifier destination '@@'' is a broadcast to all.
 ## Installation
 
 ####Note: to enable multicast in kvm 
+
 sudo ip link set dev macvtap0 allmulticast on
+```
 
 -- Prepare the unix box
 
+```
 apt-get update
 apt-get upgrade
 apt-get install python-setuptools python-dev build-essential 
 easy_install pip 
 apt-get install git
+```
 
 -- For redis
 
+```
 apt-get install redis-server
 pip install redis
+```
 
 -- For Flask
 
+```
 pip install Flask
 pip install Flask_redis
 pip install Flask_login
 pip install Flask_sqlalchemy
 pip install bcrypt
+```
 
 -- For postgreSQL
 
+```
 apt-get install postgresql
 apt-get install libpq-dev
 pip install psycopg2
@@ -124,11 +133,12 @@ cat "secretPassword" > ~/.sqlpassword
 export JPH_DEBUG=0
 python generatePostgreSQL -c q1 -d > /tmp/x
 sudo -u postgres psql < /tmp/x
+```
 
 -- For logfiles
 
-apt-get install syslog-ng
 ```
+apt-get install syslog-ng
 echo "destination d_jph { file(\"/var/log/jph.log\"); };" > /tmp/x
 echo "filter f_jph { program(\"jph*\" type(glob)); };" >> /tmp/x
 echo "log { source(s_src); filter(f_jph); destination(d_jph); };" >> /tmp/x
@@ -137,9 +147,11 @@ cp /tmp/x /etc/syslog-ng/conf.d/jph.conf
 
 -- Add users
 
+```
 export JPH_DEBUG=0
 python generatePostgreSQL -c q1 -p user_name:password > /tmp/x
 sudo -u postgres psql < /tmp/x
+```
 
 -- Startup test instance
 
