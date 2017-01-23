@@ -596,7 +596,7 @@
                 "Codifier":"M3"
             }
         },{
-            "Codifier":"cf",
+            "Codifier":"ZF",
             "ShortName":"Flask Devel",
             "Name":"Web Interface Development",
             "Symbol":"",
@@ -615,7 +615,7 @@
                 }
             }
         }, {
-            "Codifier":"cc",
+            "Codifier":"ZC",
             "ShortName":"devel",
             "Name":"Control Console Program Development",
             "Symbol":"p/m",
@@ -626,7 +626,7 @@
             "DataType":"integer",
             "Type":"ControlProgram"
         }, {
-            "Codifier":"r1",
+            "Codifier":"ZR",
             "ShortName":"Redis-devel",
             "Name":"Redis-Cache on devel",
             "Symbol":"p/m",
@@ -637,7 +637,7 @@
             "DataType":"integer",
             "Type":"jphRedis"
         }, {
-            "Codifier":"q1",
+            "Codifier":"ZQ",
             "ShortName":"SQL-devel",
             "Name":"Postgress SQL adaptor on devel",
             "Symbol":"p/m",

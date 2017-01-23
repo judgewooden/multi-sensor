@@ -114,7 +114,7 @@ if __name__ == '__main__':
         sqlpassword=f.read().strip()
         f.close
     except Exception as e:
-        logger.critical("Unexpected error reading passwording: %s", e)
+        channel.logger.critical("Unexpected error reading password: %s", e)
         sys.exit()
 
     channel.logger.debug("Startup PostgreSQL")

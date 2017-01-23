@@ -102,6 +102,21 @@ apt-get install git
 -- For redis
 
 apt-get install redis-server
-pip instal redis
+pip install redis
 
+-- For Flask
+
+pip install Flask
+pip install Flask_redis
+pip install Flask_login
+pip install Flask_sqlalchemy
+pip install bcrypt
+
+-- For postgreSQL
+
+apt-get install postgresql
+apt-get install libpq-dev
+pip install psycopg2
+export JPH_DEBUG=0
+python 
 

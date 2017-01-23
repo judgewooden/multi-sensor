@@ -94,8 +94,8 @@ f.close
 
 if comDB:
     createDB()
-    # for sensor in channel.getAllSensors():
-    #    sqltable(sensor)
+    for sensor in channel.getAllSensors():
+       sqltable(sensor)
 
 if comTarget!="":
     sqltable(channel.getSensor(comTarget))
