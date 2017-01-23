@@ -92,9 +92,7 @@ Message with Codifier destination '@@'' is a broadcast to all.
 
 ####Note: to enable multicast in kvm 
 
-```
-sudo ip link set dev macvtap0 allmulticast on
-```
+``` sudo ip link set dev macvtap0 allmulticast on ```
 
 -- Prepare the unix box
 
