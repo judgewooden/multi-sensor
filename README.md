@@ -1,4 +1,4 @@
-# Raspberry Pi - Sensor Monitor
+# Raspberry Pi - Sensor Monitor (unix)
 
 I used this project to learn more about python, javascript, css, flask and more. I am new to these and would not mind any suggestions/advice from people that come to this repo.
 
@@ -90,8 +90,10 @@ Message with Codifier destination '@@'' is a broadcast to all.
 
 ## Installation
 
-#to enable multicast in kvm 
+#Note: to enable multicast in kvm 
 sudo ip link set dev macvtap0 allmulticast on
+
+-- Prepare the unix box
 
 apt-get update
 apt-get upgrade
@@ -130,3 +132,14 @@ echo "destination d_jph { file(\"/var/log/jph.log\"); };" > /tmp/x
 echo "filter f_jph { program(\"jph*\" type(glob)); };" >> /tmp/x
 echo "log { source(s_src); filter(f_jph); destination(d_jph); };" >> /tmp/x
 cp /tmp/x /etc/syslog-ng/conf.d/jph.conf
+
+-- Add users
+
+export JPH_DEBUG=0
+python generatePostgreSQL -c q1 -p user_name:password > /tmp/x
+sudo -u postgres psql < /tmp/x
+
+-- Startup test instance
+
+
+
