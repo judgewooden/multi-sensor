@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+{% block body %}
+<br>
+<!--
+<div style="margin:auto;position:absolute; width:50%;height:50%;vertical-align:middle;text-align:center;background:blue;">
+<div style="margin:auto;position:relative;top:0;left:0;bottom:0;right:0;background:blue;">
+  <div style="margin:auto;background:red;">
+-->
+<div style="position:relative;display:table-cell">
+  <div style="height:22px"></div>
+  <img style="float:left;border:5;padding:5:width:700px;height:380px" src={{ url_for('static', filename='components.png') }}>
+  <div id="Y2" Class="jph-auto" style="position:absolute;top:0.0em;left:81.7em">N/A</div>
+  <div id="X2" Class="jph-auto" style="position:absolute;top:0.0em;left:73.5em">N/A</div>
+
+  <div id="W1" Class="jph-auto" style="position:absolute;top:0.0em;left:65.5em">N/A</div>
+  <div id="A3" Class="jph-auto" style="position:absolute;top:0.0em;left:59.5em">N/A</div>
+  <div id="A4" Class="jph-auto" style="position:absolute;top:0.0em;left:53.7em">N/A</div>
+  <div id="A5" Class="jph-auto" style="position:absolute;top:0.0em;left:48.0em">N/A</div>
+
+  <div id="F6" Class="jph-auto" style="position:absolute;top:0.0em;left:42.5em">N/A</div>
+  <div id="F1" Class="jph-auto" style="position:absolute;top:0.0em;left:36.3em">N/A</div>
+  <div id="A1" Class="jph-auto" style="position:absolute;top:0.0em;left:30.7em">N/A</div>
+  <div id="A2" Class="jph-auto" style="position:absolute;top:0.0em;left:24.7em">N/A</div>
+
+  <div id="R1" Class="jph-auto" style="position:absolute;top:0.0em;left:17.4em">N/A</div>
+  <div id="Q1" Class="jph-auto" style="position:absolute;top:0.0em;left:10.3em">N/A</div>
+  <div id="N2" Class="jph-auto" style="position:absolute;top:0.0em;left:2.0em">N/A</div>
+
+  <div id="C4" Class="jph-auto" style="position:absolute;top:21.3em;left:21.5em">N/A</div>
+  <div id="C1" Class="jph-auto" style="position:absolute;top:21.3em;left:42.5em">N/A</div>
+  <div id="C2" Class="jph-auto" style="position:absolute;top:21.3em;left:62.5em">N/A</div>
+</div>
+<script>
+//
+// Global Variables
+//
+var RefreshRate=1000;           // Update Frequency for client browser (for poling version)
+var RefreshInProgress = false;
+
+var mySensors = {{ sensors|tojson }};
+var Sensors = new Array();
+
+var STATUS = {                  // enum the status per sensor
+  INIT : {value: -1},
+  OKAY : {value: 0},
+  ERROR : {value: 1} 
+}
+
+var initSensors = function() {
+  var dash = document.getElementsByClassName("jph-auto");
+  var i;
+  for (var i = 0; i < dash.length; i++) {
+    p = findSensor(dash[i].id, mySensors);
+    if (p==null) {
+      console.log("Strange? Sensors not found ", dash[i].id );
+      continue;
+    }
+    sy=p.Symbol;
+    if (p.Type == "Proxy") {
+      p=findSensor(p.Sensor.Codifier, mySensors);
+      if (p==null) {
+        console.log("Strange? Proxy sensors not found ", s.Sensor.Codifier );
+        continue;
+      }
+    }
+    temp={
+      id: dash[i].id,
+      lv: -1,                       // Last timestamp a value was updated
+      to: p.TimeoutWarning * 1000,  // timeout period from config
+      sy: sy,                       // Symbol
+      ls: STATUS.INIT               // last status field
+    }
+    Sensors.push(temp);
+  }
+  MySensors="";                     // Freeup some RAM
+};
+
+var updateValues = function() {
+  jQuery.getJSON("/sensor/").done(function(response) {
+    if ( response.length > 0) {
+      n=parseInt((Date.now()-RefreshRate));
+      for (var i = 0; i < Sensors.length; i++) {
+        for (var key in response) {
+          t=parseInt(response[key].DTimestamp);
+          if (t>0) {
+            // console.log(t, Sensors[i].id, response[key].Codifier)
+            if (Sensors[i].id == response[key].Codifier) {
+              if (t>Sensors[i].lv) {
+                $("#"+Sensors[i].id).html( afronden(parseFloat(response[key].Value).toFixed(1)) + "" + Sensors[i].sy);
+                Sensors[i].lv = t;
+              }
+              break;
+            }
+          }
+        }
+        if ((n - (Sensors[i].to)) < Sensors[i].lv) 
+          newStatus = STATUS.OKAY;
+        else
+          newStatus = STATUS.ERROR;
+        if(Sensors[i].ls != newStatus) {
+          switch(newStatus) {
+            case STATUS.OKAY:
+              $("#"+Sensors[i].id).addClass("jph-white");
+              $("#"+Sensors[i].id).removeClass("jph-error");
+              break;
+            case STATUS.ERROR:
+              $("#"+Sensors[i].id).addClass("jph-error");
+              $("#"+Sensors[i].id).removeClass("jph-white");
+              break;
+          }
+        }
+        // Do colours here
+      }
+    }
+    RefreshInProgress = false;
+  })
+}
+
+initSensors();
+
+setInterval(function () {
+  if (RefreshInProgress) return;
+  RefreshInProgress = true;
+  updateValues();
+}, RefreshRate);
+
+</script>
+{% endblock %}
+
