@@ -1,27 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>JPH Monitor</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
-    integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jphStyle.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css') }}">
-</head>
-<body style="background:white;">
-{% include "menubar.html" %}
-<div style="position:relative;width:100%;height:100%;display:table-cell;vertical-align:middle;text-align:center">
-  <img style="border:5:width:1000px;height:500px" src={{ url_for('static', filename='diagram.png') }}>
-  <div id="X2" Class="jph-auto" style="position:absolute;top:5em;left:11em">N/A</div>
-  <div id="Y2" Class="jph-auto" style="position:absolute;top:20.4em;left:11em">N/A</div>
-  <div id="PB" Class="jph-auto" style="position:absolute;top:13em;left:72em">N/A</div>
+{% extends "layout.html" %}
+{% block body %}
+<br>
+<!--
+<div style="margin:auto;position:absolute; width:50%;height:50%;vertical-align:middle;text-align:center;background:blue;">
+<div style="margin:auto;position:relative;top:0;left:0;bottom:0;right:0;background:blue;">
+  <div style="margin:auto;background:red;">
+-->
+<div style="position:relative;display:table-cell">
+  <img style="border:5;padding:5:width:1200px;height:700px" src={{ url_for('static', filename='diagram.png') }}>
+  <div style="font-size:14px;position:absolute;top:1.4em;left:7.3em">
+    <div id="N2" Class="jph-auto" style="float:left">N/A</div>
+    <p style="float:left;font-size:14px">&nbsp(Target:</p>
+    <div id="N4" Class="jph-auto" style="float:left">N/A</div>
+    <p style="float:left;font-size:14px">)</p>
+  </div>
+  <div id="N3" Class="jph-auto" style="position:absolute;top:2.9em;left:7.3em">N/A</div>
+  <div id="A4" Class="jph-auto" style="position:absolute;top:5.2em;left:66.2em">N/A</div>
+  <div id="X1" Class="jph-auto" style="position:absolute;top:5.2em;left:13.1em">N/A</div>
+  <div id="X2" Class="jph-auto" style="position:absolute;top:5.2em;left:21.5em">N/A</div>
+  <div id="A5" Class="jph-auto" style="position:absolute;top:18.3em;left:66.2em">N/A</div>
+  <div id="Y1" Class="jph-auto" style="position:absolute;top:18.3em;left:13.1em">N/A</div>
+  <div id="Y2" Class="jph-auto" style="position:absolute;top:18.3em;left:21.5em">N/A</div>
+  <div id="A3" Class="jph-auto" style="position:absolute;top:11.1em;left:9.5em">N/A</div>
+  <div id="PB" Class="jph-auto" style="position:absolute;top:11.1em;left:78em">N/A</div>
+  <div id="F6" Class="jph-auto" style="position:absolute;top:28em;left:7.3em">N/A</div>
+  <div id="F7" Class="jph-auto" style="position:absolute;top:29.5em;left:7.3em">N/A</div>
+  <div id="A1" Class="jph-auto" style="position:absolute;top:35.4em;left:35em">N/A</div>
+  <div id="A2" Class="jph-auto" style="position:absolute;top:35.4em;left:9.8em">N/A</div>
+  <div id="F1" Class="jph-auto" style="position:absolute;top:47em;left:7.3em">N/A</div>
+  <div id="F2" Class="jph-auto" style="position:absolute;top:48.3em;left:7.3em">N/A</div>
+  <div id="N5" Class="jph-auto" style="position:absolute;top:47em;left:19.5em">N/A</div>
+  <div id="N6" Class="jph-auto" style="position:absolute;top:48.5em;left:19.5em">N/A</div>
 </div>
-<div style="clear:both"></div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
-<script src="{{ url_for('static', filename='jphCommon.js') }}"></script>
 <script>
 //
 // Global Variables
@@ -75,7 +85,7 @@ var updateValues = function() {
         for (var key in response) {
           t=parseInt(response[key].DTimestamp);
           if (t>0) {
-            console.log(t, Sensors[i].id, response[key].Codifier)
+            // console.log(t, Sensors[i].id, response[key].Codifier)
             if (Sensors[i].id == response[key].Codifier) {
               if (t>Sensors[i].lv) {
                 $("#"+Sensors[i].id).html( afronden(parseFloat(response[key].Value).toFixed(1)) + "" + Sensors[i].sy);
@@ -92,12 +102,12 @@ var updateValues = function() {
         if(Sensors[i].ls != newStatus) {
           switch(newStatus) {
             case STATUS.OKAY:
-              $("#"+Sensors[i].id).addClass("jph-okay");
+              $("#"+Sensors[i].id).addClass("jph-white");
               $("#"+Sensors[i].id).removeClass("jph-error");
               break;
             case STATUS.ERROR:
               $("#"+Sensors[i].id).addClass("jph-error");
-              $("#"+Sensors[i].id).removeClass("jph-okay");
+              $("#"+Sensors[i].id).removeClass("jph-white");
               break;
           }
         }
@@ -117,6 +127,5 @@ setInterval(function () {
 }, RefreshRate);
 
 </script>
+{% endblock %}
 
-</body>
-</html>

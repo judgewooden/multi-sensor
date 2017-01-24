@@ -137,6 +137,10 @@ def dashboard():
 def diagram():
     return render_template('diagram.html', sensors = channel.getAllSensors())
 
+@app.route('/component')
+def component():
+    return render_template('component.html', sensors = channel.getAllSensors())
+
 @app.route('/devel')
 def sensors():
     return render_template('graphdevel.html', sensors = channel.getAllSensors())

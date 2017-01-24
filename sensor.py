@@ -211,6 +211,7 @@ class NestReader(object):
             nestHumiOutside=structure.weather.current.humidity
         except:
             channel.logger.error("Unexpected Nest error: %s", sys.exc_info()[0])
+            return jph.STATE.FAILED
         # print("Away: %s, Temp: %f, Humidity: %f" % (str(nestAway), nestTemp, nestHumidity))
         if (nestTemp==-80):
             self.loadnest=False

@@ -88,13 +88,13 @@ N/n | The sequence numbering from this point is **N**ew
 
 Message with Codifier destination '@@'' is a broadcast to all.
 
-## Installation
+# Installation
 
-####Note: to enable multicast in kvm 
+####Note: to enable multicast in kvm. Run the following on the host.
 ```
 sudo ip link set dev macvtap0 allmulticast on
 ```
-####Prepare the unix box
+####Prepare the O/S
 ```
 apt-get update
 apt-get upgrade
@@ -126,7 +126,7 @@ export JPH_DEBUG=0
 python generatePostgreSQL -c q1 -d > /tmp/x
 sudo -u postgres psql < /tmp/x
 ```
-####For logfiles
+####For log files
 ```
 apt-get install syslog-ng
 echo "destination d_jph { file(\"/var/log/jph.log\"); };" > /tmp/x
