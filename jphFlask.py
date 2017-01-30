@@ -120,6 +120,11 @@ class Graphs(db.Model):
 def load_user(user_id):
     return db.session.query(User).get(user_id)
 
+@login_manager.unauthorized_handler
+def handle_needs_login():
+    flash("You have to be logged in to access this page.")
+    return redirect(url_for('userauthentication', next=request.endpoint))
+
 @app.route('/login',methods=['GET','POST'])
 def userauthentication():
     if request.method == 'GET':
