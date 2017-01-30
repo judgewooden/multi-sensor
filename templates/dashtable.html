@@ -27,7 +27,7 @@
 	<tbody>
 {% for sensor in sensors %}		
 		<tr>
-			<td class="dt-center">{{ sensor.Codifier }}</td>
+			<td class="dt-center"><a href="/sensorboard/{{ sensor.Codifier }}">{{ sensor.Codifier }}</a></td>
 			<td class="dt-left">{{ sensor.ShortName }}</td>
 			<td class="dt-right" data-type="float">{{ sensor.Value }}</td>
 			<td class="dt-centre">{{ sensor.Symbol }}</td>
@@ -69,9 +69,11 @@ $(document).ready(function() {
 				$(this).html(dateFormat(x, "yy-mm-dd HH:MM:ss"))
 		}
 	});
-  $('#jphTable').DataTable({
+  oTable = $('#jphTable').DataTable({
+  	"scrollX": true,
   	"lengthMenu": [[10, 20, 30, 60, 120, 200, -1], [10, 20, 30, 60, 120, 200, "All"]]
   });
+
 })
 </script>
 {% endblock %}

@@ -1,0 +1,393 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container-fluid">
+	<div style="width:100%">
+		<label>Update:
+		<select id="RefreshButton" aria-controls="example" class="">
+		<option selected value="1" >Real-time</option>
+		<option value="5">5 seconds</option>
+		<option value="10">10 seconds</option>
+		<option value="30">30 seconds</option>
+		<option value="60">1 minute</option>
+		<option value="300">5 minutes</option>
+		<option value="600">10 minutes</option>
+		<option value="1800">30 minutes</option>
+		<option value="3600">1 hour</option>
+		</select> </label>
+		<button id="UpdateNow" aria-controls="example" class="">Update</button>
+		<label>Select:
+		<select id="CodifierButton" aria-controls="example" class="">
+{% for soption in sensors %}
+		<option {% if soption.Codifier == sensor.Codifier %}selected{% endif %} value="{{ soption.Codifier }}">{{ soption.Codifier }} - {{ soption.ShortName }}</option> {% endfor %}
+		</select></label>
+	</div>
+	<div style="width:100%">
+		<div class="jph-sens-box" data-click="controls" id="{{ sensor.Codifier }}b" >
+			<div class="jph-box-header {% if sensor.Active %} jph-info {% else %} jph-info {% endif %}" id="{{ sensor.Codifier }}h">{{ sensor.Codifier }} - {{ sensor.ShortName }}</div>
+			<div class="jph-box-buttons" id="{{ sensor.Codifier }}c"> 
+				<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Start the Sensor{% endif %}" id="{{ sensor.Codifier }}S"><i class="fa fa-play fa-inverse"></i></button>
+				<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Pause the Sensor{% endif %}" id="{{ sensor.Codifier }}H"><i class="fa fa-pause fa-inverse"></i></button>
+				<button type="button" class="btn jph-btn jph-okay" data-trigger="focus" rel="jph-popover" data-placement="bottom" data-html="true" data-content='<iframe scrolling="yes" class="jph-iframe-popover" src="/sensorinfo/{{ sensor.Codifier }}"></iframe>' title="{{ sensor.Name }}" id="{{ sensor.Codifier }}i"><i class="fa fa-info fa-inverse"></i></button>
+				<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Ping the Sensor{% endif %}" id="{{ sensor.Codifier }}P"><i class="fa fa-heartbeat fa-inverse"></i></button>
+				<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Reload Configuration{% endif %}" id="{{ sensor.Codifier }}C"><i class="fa fa-refresh fa-inverse"></i></button>
+			</div>
+			<div class="card-text jph-box-value" id="{{ sensor.Codifier }}v"></div>
+			<div class="card-footer jph-box-footer" id="{{ sensor.Codifier }}t"></div>
+		</div>
+		<div id="{{ sensor.Codifier }}Graph" class="jph-sgraph-box"></div>
+	</div>
+	<div id="{{ sensor.Codifier }}Log" class="jph-log-box" style="clear:left;width:100%">
+		<table id="{{ sensor.Codifier }}Table"></table>
+	</div>
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
+<script>
+var source1 = {
+  "Name": "Graph1",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 300,
+    "LeftLegend": "LeftLegend",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "RightLegend",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "bottom",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 1,
+    "HideAxisLeft": 1,
+    "HideAxisRight": 1,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "{{ sensor.Codifier }}",
+        "Codifier": "{{ sensor.Codifier }}",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Hidden": "0",
+        "Frequency": "0.00",
+        "Filter": "-1.00",
+        "Smoothing": "1"
+      }
+    ]
+  }
+};
+var l1 = new LineGraph({containerId: '{{ sensor.Codifier }}Graph', data: source1});
+//
+// Some AJAX navigation functions
+//
+var ocard=""
+$(function() {
+	$('[data-click="controls"]').click(function (event) {
+	  var code=$(this).attr("id").substring(0,2); 
+		if ((ocard != "") && (ocard!=code)) {
+			console.log("I am here");
+			$('#'+ocard+'c').slideUp()
+			$('#'+ocard+'v').slideDown('slow')
+			ocard=""
+		}
+		if ($('#'+code+'c').css('display') != 'none') {
+			console.log("I am her2");
+			$('#'+code+'c').slideUp();
+			$('#'+code+'v').slideDown('slow');
+			// ocard=""
+		} else {
+			console.log("I am her3");
+			$('#'+code+'v').slideUp();
+			$('#'+code+'c').slideDown('slow');
+			ocard=code;
+		}
+	})
+})
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+
+$(function () {
+  $('#CodifierButton').click(function (userselect) {
+  	var open = $(this).data("isopen");
+		if (open) {
+			nextCodifier=userselect.target.value;
+      window.location = "/sensorboard/" + nextCodifier;
+		}
+		$(this).data("isopen", !open);
+  });
+})
+
+$(function () {
+  $('#UpdateNow').click(function (userselect) {
+	updateLog();
+	refreshData();
+    l1.refreshData();
+  });
+})
+
+$(function () {
+  $('#RefreshButton').change(function (userselect) {
+	RefreshRate=userselect.target.value;
+	clearInterval( myInterval );
+	myInterval = setInterval(function () {
+		refreshData()
+	}, RefreshRate * 1000);
+	l1.setRefreshRate(RefreshRate);
+	refreshData();
+  });
+})
+
+$('[rel="jph-popover"]').popover({
+	offset: '-15em 0em'
+});
+
+$(function () {
+	$('[data-btn="jphbtn"]').click(function (event) {
+		var code=$(this).attr("id").substring(0,2); 
+		var type=$(this).attr("id").substring(2,3); 
+		var url="/sensormsg/" + code + "/" + type;
+		$(this).tooltip('hide');
+		$("#"+code+"t").html( "" );
+		jQuery.getJSON(url).done(function(response) {
+			if (response.status == "error") {
+				$('#jph-notice').html(response.message);
+				$("#jph-notice-bar").removeClass("jph-warning");
+				$("#jph-notice-bar").addClass("jph-error");
+				$('#jph-notice-bar').slideDown('slow');
+			} else {
+				msg = "Send: " + response.Flag + " to " + response.Codifier;
+				$('#jph-notice').html(msg);
+				$("#jph-notice-bar").removeClass("jph-error");
+				$("#jph-notice-bar").addClass("jph-warning");
+				$('#jph-notice-bar').slideDown('slow');
+			}
+		})
+	})
+})
+
+//
+// Global Variables
+//
+var RefreshRate=1;           // Update Frequency for client browser (for poling version)
+var RefreshInProgress = false;
+
+var STATUS = {                  // enum the status per sensor
+  INIT : {value: -1},
+  INFO : {value: 0},
+  READY : {value: 1}, 
+  ERROR : {value: 2},
+  OKAY : {value: 3},
+  TIMEOUT : {value: 4}
+};
+
+// Load the Data arrays for working on the data
+var mySensors = {{ sensors|tojson }};
+for (var key in mySensors) {
+	mySensors[key].LastITimestamp=0;
+	mySensors[key].LastDTimestamp=0;
+	mySensors[key].LastStatus=STATUS.INIT;
+}
+
+var updateLog = function() {
+	var tr, td, tbody, text;
+    var table = $('#{{ sensor.Codifier }}Table')[0]
+
+	while (table.firstChild) {
+		table.removeChild(table.firstChild);
+	}
+    tbody = document.createElement('tbody');
+    table.appendChild(tbody);
+
+	$.ajax({
+    	type : "GET",
+        dataType : "json",
+        url: '/sensorlog/{{ sensor.Codifier }}',
+        success: function(answer, textStatus, request){
+        	console.log(textStatus, request);
+        	for (var row = 0; row < answer.length; row++) {
+        		tr = document.createElement('tr');
+        		td = document.createElement('td');	
+        		text = document.createTextNode(answer[row]);
+        		td.appendChild(text);
+        		tr.appendChild(td);
+        		tbody.appendChild(tr);
+        	}
+        },
+		error: function(request, textStatus, errorThrown) {
+			console.log("Request:", request);
+			console.log("Text   :", textStatus);
+			console.log("Thrown :", errorThrown);
+			alert(" Server response: " + errorThrown);
+		}
+	});
+}
+//
+// Check here if there is any stale date
+//
+var updateTimes = function() {
+	n=parseInt((Date.now()-RefreshRate));
+	s=findSensor("{{ sensor.Codifier }}", mySensors);
+
+	if (s.Active) {
+		if ((n - (s.TimeoutWarning * 1000)) < s.LastDTimestamp) {
+			newStatus=STATUS.OKAY;
+		} else {
+			if ((n-(s.KeepAliveInterval * 1000)) < s.LastITimestamp) {
+				newStatus=STATUS.TIMEOUT;
+			} else {
+				newStatus=STATUS.ERROR;
+			}
+		}
+	} else {
+		if (s.Type == "Proxy") {
+			p=findSensor(s.Sensor.Codifier, mySensors);
+			if (p==null) {
+				console.log("Strange? Proxy sensors not found ", s.Sensor.Codifier );
+			}
+			newStatus=STATUS.PROXY;
+			if (p.Active) {
+				if ((n - (p.TimeoutWarning * 1000)) < s.LastDTimestamp) {
+					newStatus=STATUS.OKAY;
+				} else {
+					if ( p.LastStatus == STATUS.ERROR ) {
+						newStatus=STATUS.ERROR;
+					} else {
+						newStatus=STATUS.TIMEOUT;
+					}
+				}
+			}
+		} else {
+			if ((n-(s.KeepAliveInterval * 1000)) < s.LastITimestamp) {
+				newStatus=STATUS.READY;
+			} else {
+				newStatus=STATUS.INFO;
+			}
+		}
+	}
+
+	if (s.Type=="Flask") {
+		if ( newStatus != STATUS.OKAY )
+			newStatus=STATUS.READY;
+	}
+
+	if (s.Type=="ControlProgram") {
+		if ( newStatus != STATUS.OKAY )
+			newStatus=STATUS.INFO;
+	}
+
+	if ( newStatus != s.LastStatus) {
+		switch(newStatus) {
+			case STATUS.TIMEOUT:
+				$("#"+s.Codifier+"h").addClass("jph-timeout");
+				$("#"+s.Codifier+"h").removeClass("jph-proxy");
+				$("#"+s.Codifier+"h").removeClass("jph-ready");
+				$("#"+s.Codifier+"h").removeClass("jph-error");
+				$("#"+s.Codifier+"h").removeClass("jph-info");
+				$("#"+s.Codifier+"h").removeClass("jph-okay");
+				break;
+			case STATUS.OKAY:
+				$("#"+s.Codifier+"h").addClass("jph-okay");
+				$("#"+s.Codifier+"h").removeClass("jph-proxy");
+				$("#"+s.Codifier+"h").removeClass("jph-ready");
+				$("#"+s.Codifier+"h").removeClass("jph-error");
+				$("#"+s.Codifier+"h").removeClass("jph-info");
+				$("#"+s.Codifier+"h").removeClass("jph-timeout");
+				break;
+			case STATUS.ERROR:
+				$("#"+s.Codifier+"h").addClass("jph-error");
+				$("#"+s.Codifier+"h").removeClass("jph-proxy");
+				$("#"+s.Codifier+"h").removeClass("jph-okay");
+				$("#"+s.Codifier+"h").removeClass("jph-ready");
+				$("#"+s.Codifier+"h").removeClass("jph-info");
+				$("#"+s.Codifier+"h").removeClass("jph-timeout");
+				break;
+			case STATUS.PROXY:
+				$("#"+s.Codifier+"h").addClass("jph-proxy");
+				$("#"+s.Codifier+"h").removeClass("jph-okay");
+				$("#"+s.Codifier+"h").removeClass("jph-error");
+				$("#"+s.Codifier+"h").removeClass("jph-ready");
+				$("#"+s.Codifier+"h").removeClass("jph-info");
+				$("#"+s.Codifier+"h").removeClass("jph-timeout");
+				break;
+			case STATUS.READY:
+				$("#"+s.Codifier+"h").addClass("jph-ready");
+				$("#"+s.Codifier+"h").removeClass("jph-proxy");
+				$("#"+s.Codifier+"h").removeClass("jph-okay");
+				$("#"+s.Codifier+"h").removeClass("jph-error");
+				$("#"+s.Codifier+"h").removeClass("jph-info");
+				$("#"+s.Codifier+"h").removeClass("jph-timeout");
+				break;
+			case STATUS.INFO:
+				$("#"+s.Codifier+"h").addClass("jph-info");
+				$("#"+s.Codifier+"h").removeClass("jph-proxy");
+				$("#"+s.Codifier+"h").removeClass("jph-okay");
+				$("#"+s.Codifier+"h").removeClass("jph-error");
+				$("#"+s.Codifier+"h").removeClass("jph-ready");
+				$("#"+s.Codifier+"h").removeClass("jph-timeout");
+				break;
+		}
+		s.LastStatus=newStatus;
+	}
+	if (s.LastDTimestamp != 0) {
+		d = parseInt(s.LastDTimestamp);
+		if (RefreshRate==1)
+			$("#"+s.Codifier+"t").html( time_ago(d) );
+		else
+			$("#"+s.Codifier+"t").html( dateFormat(d, "yy-mm-dd HH:MM:ss") );
+	}
+}
+
+var updateValues = function() {
+	jQuery.getJSON("/sensor/").done(function(response) {
+		if ( response.length > 0) {
+			for (var key in response) {
+				s=findSensor(response[key].Codifier, mySensors);
+				if (s==null) {
+					console.log("a new sensor:", reponse[key].Codifier);
+					alert("A new sensor was found please refresh the page");
+					// (Test this???)   ---> window.location.reload(true);
+					continue
+				}
+				t=parseInt(response[key].ITimestamp);
+				if (t>s.LastITimestamp) { 
+					s.Active = toBoolean(response[key].IsActive);
+					s.LastITimestamp=t;
+					// m= new Date(t).toISOString().slice(0,19).replace('T', ' ');
+				}
+				t=parseInt(response[key].DTimestamp);
+				if (t>s.LastDTimestamp) {
+					s.LastDTimestamp=t;
+					if (response[key].Codifier == "{{ sensor.Codifier }}") {
+						$("#"+s.Codifier+'v').html( afronden(parseFloat(response[key].Value).toFixed(1)) + "" + s.Symbol);
+					}
+				}
+			}
+		}
+		updateTimes();
+		RefreshInProgress=false;
+	});
+};
+
+updateLog();
+
+refreshData = function() {
+	if (RefreshInProgress) return;
+	RefreshInProgress=true;
+	updateValues();
+}
+
+myInterval = setInterval(function () {
+	refreshData()
+}, RefreshRate * 1000);
+
+</script>
+{% endblock %}

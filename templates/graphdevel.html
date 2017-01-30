@@ -1,104 +1,567 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<title>JPH Monitor</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
-	  integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jphStyle.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css') }}">
+{% extends "layout.html" %}
+{% block body %}
 
-</head>
-<body style="background:white;">
-{% include "menubar.html" %}
-<div style="width:100%;height:400px">
-   <div id="myGraph" class="jphGraph" style="float:left;width:80%;height:400px">
-   </div>
-   <div style="float:left;">
-   Fields here
-   </div>
-</div>
-<div style="clear:both"></div>
-
+<body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
-
 <script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script>
-<script src="http://d3js.org/d3.v2.js"></script>
+<script src="http://d3js.org/d3.v3.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='jqwidgets/styles/jqx.base.css') }}" type="text/css" />
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxcore.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdata.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdata.export.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxbuttons.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxscrollbar.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxlistbox.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdropdownlist.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxmenu.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxnumberinput.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.selection.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.columnsresize.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.export.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.edit.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdocking.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxwindow.js') }}"></script>
 
+<div class="container-fluid">
+  <div id="myGraph" class="jph-graph-box" style="height:300px;background:yellow"></div>
+</div>
+
+<div id="graphList" style="float:left;position:relative;font-size:13px;margin-left:.5em;margin-top:.4em;border: .11em solid navy;"></div>
+
+<div id="graphResult" class="container" style="float:left;position:relative;font-size:12px;margin-left:.5em;margin-top:.4em;width:200px;height:480px;border-radius: .5em;border:.11em solid navy;display:none">
+  <div class="row" style="margin-top:6px">
+    <div class="col-xs-1"></div>
+    <div class="col-xs-11">
+      <input readonly id="graphDBname" type="text">
+    </div>
+    <div class="col-xs-1"></div>
+  </div>
+  <form>
+    <div class="row" style="margin-top:6px">
+      <div class="col-xs-1"></div>
+      <div class="col-xs-11">
+        <textarea readonly id="graphDBsettings" style="border:1px solid grey;height:350px;">
+        </textarea>
+      </div>
+      <div class="col-xs-1"></div>
+    </div>
+  </form>
+</div>
+
+<div id="graphDetails" class="container" style="float:left;position:relative;font-size:13px;margin-left:.5em;margin-top:.4em;width:400px;height:480px;border-radius: .5em;border:.11em solid navy">
+  <div class="row" style="margin-top:6px">
+    <div class="col-xs-3" style="text-align:right;padding:0">Name:</div>
+    <div class="col-xs-9">
+      <input type="text" style="width:120px" id="graphName">
+    </div>
+  </div>
+
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Title:</div>
+        <div class="col-xs-9">
+            <input type="text" style="width:260px" id="graphTitle">
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Seconds:</div>
+        <div class="col-xs-3">
+            <input type="number" style="width:80px" id="graphSecondsToShow">
+        </div>
+        <div class="col-xs-3" style="text-align:right;padding:0">Legend:</div>
+        <div class="col-xs-3">
+            <select type="text" id="graphHideLegend">
+                <option value="1">Hide</option>
+                <option value="0">Show</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Auto:</div>
+        <div class="col-xs-3">
+            <select type="text" id="graphAutoUpdate">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+        <div class="col-xs-3" style="text-align:right;padding:0">Buttons:</div>
+        <div class="col-xs-3">
+            <select type="text" id="graphHideButtons">
+                <option value="1">Hide</option>
+                <option value="0">Show</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Interval:</div>
+        <div class="col-xs-3">
+            <input type="number" style="width:80px" id="graphUpdateInterval">
+        </div>
+        <div class="col-xs-3" style="text-align:right;padding:0">X-Axis:</div>
+        <div class="col-xs-3">
+            <select type="text" id="graphHideXAxis">
+                <option value="1">Hide</option>
+                <option value="0">Show</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Line Tics:</div>
+        <div class="col-xs-3">
+            <input type="number" style="width:80px" id="graphTickLine">
+        </div>
+        <div class="col-xs-3" style="text-align:right;padding:0">Date-Label:</div>
+        <div class="col-xs-3">
+            <select type="text" id="graphHideDateLabel">
+                <option value="1">Hide</option>
+                <option value="0">Show</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Interpolation:</div>
+        <div class="col-xs-6">
+            <select id="graphInterpolation" name="graphInterpolation">
+                <option value="linear">linear</option>
+                <option value="step-before">step-before</option>
+                <option value="step-after">step-after</option>
+                <option value="basis">basis</option>
+                <option value="basis-open">basis-open</option>
+                <option value="basis-closed">basis-closed</option>
+                <option value="cardinal">cardinal</option>
+                <option value="cardinal-open">cardinal-open</option>
+                <option value="cardinal-closed">cardinal-closed</option>
+                <option value="monotone">monotone</option>
+                <option value="custom">custom</option>
+            </select>
+        </div>
+        <div class="col-xs-3">
+            <select type="text" id="graphDateLabel">
+                <option value="top">Top</option>
+                <option value="bottom">Bottom</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-12" style="text-decoration:underline;text-align:center;padding:0">Left Legend</div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Minimum:</div>
+        <div class="col-xs-3">
+            <input type="number" style="width:80px" id="graphLeftMin">
+        </div>
+        <div class="col-xs-3" style="text-align:right;padding:0">Left Axis:</div>
+        <div class="col-xs-3">
+            <select type="text" id="graphHideAxisLeft">
+                <option value="1">Hide</option>
+                <option value="0">Show</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Maximum:</div>
+        <div class="col-xs-3">
+            <input type="number" style="width:80px" id="graphLeftMax">
+        </div>
+        <div class="col-xs-3" style="text-align:right;padding:0">Controls:</div>
+        <div class="col-xs-3">
+            <select type="text" id="graphHideLeftControls">
+                <option value="1">Hide</option>
+                <option value="0">Show</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Legend:</div>
+        <div class="col-xs-9">
+            <input type="text" style="width:180px" id="graphLeftLegend">
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-12" style="text-decoration:underline;text-align:center;padding:0">Right Legend</div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Minimum:</div>
+        <div class="col-xs-3">
+            <input type="number" style="width:80px" id="graphRightMin">
+        </div>
+        <div class="col-xs-3" style="text-align:right;padding:0">Right Axis:</div>
+        <div class="col-xs-3">
+            <select type="text" id="graphHideAxisRight">
+                <option value="1">Hide</option>
+                <option value="0">Show</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Maximum:</div>
+        <div class="col-xs-3">
+            <input type="number" style="width:80px" id="graphRightMax">
+        </div>
+        <div class="col-xs-3" style="text-align:right;padding:0">Controls:</div>
+        <div class="col-xs-3">
+            <select type="text" id="graphHideRightControls">
+                <option value="1">Hide</option>
+                <option value="0">Show</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <div class="col-xs-3" style="text-align:right;padding:0">Legend:</div>
+        <div class="col-xs-9">
+            <input type="text" style="width:180px" id="graphRightLegend">
+        </div>
+    </div>
+</div>
+
+<div id="sensorsGrid" style="float:left;position:relative;margin-left:5px;margin-top:10px;width:100px">
+</div>
+
+<div style='float:left;position:relative;margin-left:10px;margin-top:10px'>
+    <input class="btn btn-primary" type="button" value="JSON" id='jsonExport' />
+</div>
+<div style='float:left;position:relative;margin-left:10px;margin-top:10px'>
+    <input class="btn btn-primary" type="button" value="plot" id='graphWindow' />
+</div>
+<div style='float:left;position:relative;margin-left:10px;margin-top:10px'>
+  <input class="btn btn-primary" type="button" data-btn="db" value="save" id='jphSave' />
+</div>
+<div style='float:left;position:relative;margin-left:10px;margin-top:10px'>
+  <input class="btn btn-danger" type="button" data-btn="db" value="delete" id='jphDelete' />
+</div>
 
 <script>
 var source1 = {
-        "Name": "Graph1",
-        "Settings": {
-            "AutoUpdate": 1,
-            "UpdateInterval": 10,
-            "SecondsToShow": 7200,
-            "LeftLegend": "",
-            "LeftMax": 0,
-            "LeftMin": 0,
-            "RightLegend": "Degrees (C)",
-            "RightMax": 0,
-            "RightMin": 0,
-            "Title": "Manifold Temp - Last 2 hours",
-            "Interpolation": "linear",
-            "TickLine": 0,
-            "HideDateLabel": 0,
-            "HideLegend": 0,
-            "HideXAxis": 0,
-            "HideAxisLeft": 0,
-            "HideAxisRight": 0,
-            "HideButtons": 0,
-            "HideLeftControls": 1,
-            "HideRightControls": 1,
-            "graphSensors": [
-                {
-                    "Name": "tempmad",
-                    "Codifier": "C3",
-                    "Axis": "Right",
-                    "Interpolation": "linear",
-                    "Frequency": "10.00",
-                    "Filter": "0.10",
-                    "Smoothing": "15.00"
-                },
-                {
-                    "Name": "tempkast",
-                    "Codifier": "C1",
-                    "Axis": "Right",
-                    "Interpolation": "linear",
-                    "Frequency": "10.00",
-                    "Filter": "0.10",
-                    "Smoothing": "15.00"
-                },
-                {
-                    "Name": "Redis",
-                    "Codifier": "R1",
-                    "Axis": "Right",
-                    "Interpolation": "linear",
-                    "Frequency": "10.00",
-                    "Filter": "0.10",
-                    "Smoothing": "15.00"
-                },
-                {
-                    "Name": "Postgress",
-                    "Codifier": "Q1",
-                    "Axis": "Right",
-                    "Interpolation": "linear",
-                    "Frequency": "10.00",
-                    "Filter": "0.10",
-                    "Smoothing": "15.00"
-                }
-            ]
-        }
+  "Name": "default",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 300,
+    "LeftLegend": "LeftLegend",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "RightLegend",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 1,
+    "HideAxisLeft": 1,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+    {
+      "Name": "Loop2",
+      "Codifier": "C4",
+      "Axis": "Right",
+      "Interpolation": "linear",
+      "Hidden": "0",
+      "Frequency": "0.00",
+      "Filter": "-1.00",
+      "Smoothing": "1"
+    }
+    ]
+  }
+};
+var g1 = new LineGraph({containerId: 'myGraph', data: source1});
+
+$('#graphWindow').click(function (userselect) {
+  g1.destroy();
+  var div = $('#myGraph')[0];
+  while (div.firstChild) {
+    div.removeChild(div.firstChild);
+  }
+  var answer = generatejson("me");
+  g1 = new LineGraph({containerId: 'myGraph', data: answer});
+})
+
+$("#jsonExport").click(function (event) {
+    if (event.handled !== true) {
+        answer = generatejson($('#graphName').val());
+        console.log("answer: ", answer);
+        var newWindow = window.open('', '', 'scrollbars=1, location=0, status=0, titlebar=0, toolbar=0, width=800, height=700, resizable=1'),
+        document = newWindow.document.open(),
+        pageContent =
+                 '<!DOCTYPE html>' +
+                 '<html>' +
+                 '<head>' +
+                 '<meta http-equiv="content-type" content="application/json; charset=utf-8" />' +
+                 '<title>Save your Graph</title>' +
+                 '</head>' +
+                 '<body><pre>' +
+                 JSON.stringify(answer, null, '\t'); +
+                 '</pre></body></html>';
+        document.write(pageContent);
+        document.close();
+        event.handled = true;
+    }
+    return false;
+});
+
+
+$('#graphName').change(function(xyz){
+  $('#graphDBname').val($('#graphName').val());
+});
+
+var sourceGraph = {{ graphs|tojson }}
+if (sourceGraph.length == 0){
+  var row = {};
+  row["name"] = "default";
+  row["settings"] = JSON.stringify(source1);
+  sourceGraph.push(row)
+}
+var codifiers = {{ codifiers|safe }}
+var axes=["Left","Right"];
+var customInterpolations=["linear","step"];
+var validUnits=[];            
+var generaterow = function () {
+  var row = {};
+  row["Name"] = "-blank-";
+  row["Codifier"] = "";
+  row["Axis"] = "Left";
+  row["Interpolation"] = "linear";
+  row["Frequency"] = 0;
+  row["Filter"] = -1;
+  row["Smoothing"] = 1;
+  return row;
+}
+var generatejson = function(naam) {
+  var answer = {
+    Name: naam,
+    Settings: {
+      AutoUpdate: +$("#graphAutoUpdate").val(),
+      UpdateInterval: +$("#graphUpdateInterval").val(),
+      SecondsToShow: +$("#graphSecondsToShow").val(),
+      LeftLegend: $("#graphLeftLegend").val(),
+      LeftMax: +$("#graphLeftMax").val(),
+      LeftMin: +$("#graphLeftMin").val(),
+      RightLegend: $("#graphRightLegend").val(),
+      RightMax: +$("#graphRightMax").val(),
+      RightMin: +$("#graphRightMin").val(),
+      Title: $("#graphTitle").val(),
+      Interpolation: $("#graphInterpolation").val(),
+      TickLine: +$("#graphTickLine").val(),
+      DateLabel: $("#graphDateLabel").val(),
+      HideDateLabel: +$("#graphHideDateLabel").val(),
+      HideLegend: +$("#graphHideLegend").val(),
+      HideXAxis: +$("#graphHideXAxis").val(),
+      HideAxisLeft: +$("#graphHideAxisLeft").val(),
+      HideAxisRight: +$("#graphHideAxisRight").val(),
+      HideButtons: +$("#graphHideButtons").val(),
+      HideLeftControls: +$("#graphHideLeftControls").val(),
+      HideRightControls: +$("#graphHideRightControls").val(),
+      graphSensors: JSON.parse($("#sensorsGrid").jqxGrid('exportdata', 'json'))
+    }
+  }
+  return answer;
+}
+
+$("#graphList").jqxListBox({
+    source: sourceGraph,
+    displayMember: "name",
+    valueMember: "settings",
+    width: 120,
+    height: 470});
+
+$("#graphList").on('select', function (event) {
+  if (event.args) {
+    $("#graphName").val(event.args.item.label);
+    $("#graphDBname").val(event.args.item.label);
+    $("#graphDBsettings").val(event.args.item.value);
+    var x=eval("(" + event.args.item.value + ")");
+    var s=x.Settings;
+    $("#graphAutoUpdate").val(s.AutoUpdate);
+    $("#graphUpdateInterval").val(s.UpdateInterval);
+    $("#graphSecondsToShow").val(s.SecondsToShow);
+    $("#graphLeftLegend").val(s.LeftLegend);
+    $("#graphLeftMax").val(s.LeftMax);
+    $("#graphLeftMin").val(s.LeftMin);
+    $("#graphRightLegend").val(s.RightLegend);
+    $("#graphRightMax").val(s.RightMax);
+    $("#graphRightMin").val(s.RightMin);
+    $("#graphTitle").val(s.Title);
+    $("#graphInterpolation").val(s.Interpolation);
+    $("#graphTickLine").val(s.TickLine);
+    $("#graphDateLabel").val(s.DateLabel);
+    $("#graphHideDateLabel").val(s.HideDateLabel);
+    $("#graphHideLegend").val(s.HideLegend);
+    $("#graphHideXAxis").val(s.HideXAxis);
+    $("#graphHideAxisLeft").val(s.HideAxisLeft);
+    $("#graphHideAxisRight").val(s.HideAxisRight);
+    $("#graphHideButtons").val(s.HideButtons);
+    $("#graphHideLeftControls").val(s.HideLeftControls);
+    $("#graphHideRightControls").val(s.HideRightControls);
+    var sourceSensors = {
+        localdata: s.graphSensors,
+        datatype: "array",
+        datafields: [
+            { name: 'Name', type: 'string' },
+            { name: 'Codifier', type: 'string' },
+            { name: 'Axis', type: 'string' },
+            { name: 'Interpolation', type: 'string' },
+            { name: 'Frequency', type: 'number' },
+            { name: 'Filter', type: 'number' },
+            { name: 'Smoothing', type: 'number' }
+        ]
     };
-    var l1 = new LineGraph({containerId: 'myGraph', data: source1});
+    var dataAdapterSensors = new $.jqx.dataAdapter(sourceSensors, {
+        loadError: function (xhr, status, error) {
+            alert('Error loading "' + sourceSensors.url + '" : ' + error);
+        },
+        loadComplete: function (response) {
+            //console.log(response);
+        }
+    });
+    $("#sensorsGrid").jqxGrid( {
+        width: 567,
+        height: 225,
+        source: dataAdapterSensors,
+        columnsresize: true,
+        editable: true,
+        showtoolbar: true,
+        rendertoolbar: function (toolbar) {
+            var me = this;
+            var container = $("<div style='margin: 5px;'></div>");
+            toolbar.append(container);
+            container.append('<input id="addrowbutton" type="button" value="Add New Sensor" />');
+            container.append('<input style="margin-left: 5px;" id="deleterowbutton" type="button" value="Delete Selected Sensor" />');
+            $("#addrowbutton").jqxButton();
+            $("#addrowbutton").on('click', function (event) {
+                if (event.handled !== true) {
+                        //put your code here
+                var datarow = generaterow();
+                var commit = $("#sensorsGrid").jqxGrid('addrow', null, datarow);
+                    event.handled = true;
+                }
+                return false;
+            });
+            $("#deleterowbutton").jqxButton();
+            $("#deleterowbutton").on('click', function () {
+                var selectedrowindex = $("#sensorsGrid").jqxGrid('getselectedrowindex');
+                var rowscount = $("#sensorsGrid").jqxGrid('getdatainformation').rowscount;
+                if (selectedrowindex >= 0 && selectedrowindex < rowscount) {
+                    var id = $("#sensorsGrid").jqxGrid('getrowid', selectedrowindex);
+                    var commit = $("#sensorsGrid").jqxGrid('deleterow', id);
+                }
+            });
+        },
+        columns: [
+            { text: 'Name', datafield: 'Name', width: 120,
+                validation: function (cell, value) {
+                    if (value.length < 1) {
+                        return { result: false, message: "Can not be empty" };
+                    }
+                    return true;
+                }
+            },
+            { text: 'Codifier', columntype: 'dropdownlist', datafield: 'Codifier', width: 60,
+                createeditor: function (row, value, editor) {
+                    editor.jqxDropDownList({ source: codifiers });
+                }
+            },
+            { text: 'Axis', columntype: 'dropdownlist', datafield: 'Axis', width: 57,
+                createeditor: function (row, value, editor) {
+                    editor.jqxDropDownList({ source: axes });
+                }
+            },
+            { name: 'Interpolation', columntype: 'dropdownlist', datafield: 'Interpolation', width: 98,
+                createeditor: function (row, value, editor) {
+                    editor.jqxDropDownList({ source: customInterpolations });
+                }
+            },
+            { text: 'Frequency', datafield: 'Frequency', width: 80,
+                align: 'right', cellsalign: 'right', columntype: 'numberinput',
+                validation: function (cell, value) {
+                    if (value < 0) {
+                        return { result: false, message: "Can not be negative" };
+                    }
+                    return true;
+                }
+            },
+            { text: 'Filter', datafield: 'Filter', width: 60,
+                align: 'right', cellsalign: 'right', columntype: 'numberinput',
+                createeditor: function (row, cellvalue, editor) {
+                    editor.jqxNumberInput({ decimalDigits: 1, digits: 2 });
+                }
+            },
+            { text: 'Smoothing', datafield: 'Smoothing', width: 90,
+                align: 'right', cellsalign: 'right', columntype: 'numberinput',
+                createeditor: function (row, cellvalue, editor) {
+                    editor.jqxNumberInput({ decimalDigits: 2, digits: 3 });
+                },
+                validation: function (cell, value) {
+                    if (value < 1) {
+                        return { result: false, message: "Must be 1 or greater" };
+                    }
+                    return true;
+                }
+            }
+        ]
+    });
+  }
+});
 
-
-
-			
+$(function () {
+  $('[data-btn="db"]').click(function (userselect) {
+    var thisaction=(this).value;
+    var thisitem=$("#graphDBname").val();
+    var answer = generatejson(thisitem);
+    var DBanswer = JSON.stringify(answer);
+    console.log("what is this:", DBanswer);
+    $("#graphDBsettings").val(DBanswer);
+    $.ajax({
+      type: "POST",
+      dataType : "json",
+      url: "{{ url_for('graph_db') }}",
+      data: {
+        action : thisaction,
+        name : thisitem,
+        settings: $("#graphDBsettings").val()
+      },
+      success: function(response, textStatus, request){
+        console.log("Request:", request);
+        console.log("Text   :", textStatus);
+        console.log("Response :", response);
+        if (response.status == "error") {
+          $('#jph-notice').html(response.message);
+          $("#jph-notice-bar").removeClass("jph-warning");
+          $("#jph-notice-bar").addClass("jph-error");
+          $('#jph-notice-bar').slideDown('slow');
+        } else {
+          $('#jph-notice').html(response.message);
+          $("#jph-notice-bar").removeClass("jph-error");
+          $("#jph-notice-bar").addClass("jph-warning");
+          $('#jph-notice-bar').slideDown('slow');
+          var items = $("#graphList").jqxListBox('getItems');
+          var found=false;
+          for (var i = 0; i < items.length; i++) {
+            if (items[i].label == thisitem) {
+              found=true;
+              break;
+            }
+          }
+          if (thisaction == "delete" & found==true) {
+            var what = $("#graphList").jqxListBox('removeAt', i);
+          }
+          if (thisaction == "save" & found==false) {
+            $("#graphList").jqxListBox('addItem', {
+              label: thisitem,
+              value: $("#graphDBsettings").val()
+            })
+          }
+        }
+      }
+    });
+  });
+});
 </script>
 
-</body>
-</html>
+{% endblock %}

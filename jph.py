@@ -50,6 +50,14 @@ class STATE(object):
     FAILED = 3       # Sensor was not read and no data send in logfile
     NOREADING = 4    # Sensor was read but data is still from previous reading
 
+class CodifierFilter(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+    def filter(self, record):
+        record.Codifier = MYVAR
+        return True
+
 def openSocket(address, port, enable_local_loop=1, bind_to_interface="", do_not_load_multicast=False):
     tAddr = socket.getaddrinfo(address, None)[0]
     tsocket = socket.socket(tAddr[0], socket.SOCK_DGRAM)
@@ -158,7 +166,8 @@ class jph(object):
         if f == "":
             self.logger.warn("(Re)Starting. No logger found")
         else:
-            self.logger=logging.getLogger(f)
+            logger2=logging.getLogger(f)
+            self.logger=logging.LoggerAdapter(logger2, {'codifier': self.Codifier})
             self.logger.info("(Re)Starting %s on logger: %s", __name__ + '-' + self.Codifier, f)
 
     def getConfig(self):

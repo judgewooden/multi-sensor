@@ -16,12 +16,12 @@
             "brief":{
                 "class":"logging.Formatter",
                 "datefmt":"%I:%M:%S",
-                "format":"%(name)s[%(process)d]: %(levelname)s %(message)s"
+                "format":"%(name)s[%(process)d]: (%(codifier)s) %(levelname)s %(message)s"
             },
             "verbose":{
                 "class":"logging.Formatter",
                 "datefmt":"%I:%M:%S",
-                "format":"%(name)s %(levelname)s (%(lineno)d) %(message)s"
+                "format":"%(codifier)s %(name)s %(levelname)s (%(lineno)d) %(message)s"
             }
         },
         "handlers":{
@@ -184,7 +184,7 @@
             "Symbol":"C",
             "KeepAliveInterval":30,
             "TimeoutWarning":60,
-            "SensorInterval":5,
+            "SensorInterval":15,
             "Active":true,
             "DataType":"float",
             "Type":"TempLinux",

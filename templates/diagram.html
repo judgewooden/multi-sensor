@@ -1,11 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
 <br>
-<!--
-<div style="margin:auto;position:absolute; width:50%;height:50%;vertical-align:middle;text-align:center;background:blue;">
-<div style="margin:auto;position:relative;top:0;left:0;bottom:0;right:0;background:blue;">
-  <div style="margin:auto;background:red;">
--->
 <div style="position:relative;display:table-cell">
   <img style="border:5;padding:5:width:1200px;height:700px" src={{ url_for('static', filename='diagram.png') }}>
   <div style="font-size:14px;position:absolute;top:1.4em;left:7.3em">
@@ -33,6 +28,8 @@
   <div id="N6" Class="jph-auto" style="position:absolute;top:48.5em;left:19.5em">N/A</div>
 </div>
 <script>
+var visibleScrollbars = window.scrollbars.visible;
+
 //
 // Global Variables
 //
@@ -88,7 +85,7 @@ var updateValues = function() {
             // console.log(t, Sensors[i].id, response[key].Codifier)
             if (Sensors[i].id == response[key].Codifier) {
               if (t>Sensors[i].lv) {
-                $("#"+Sensors[i].id).html( afronden(parseFloat(response[key].Value).toFixed(1)) + "" + Sensors[i].sy);
+                $("#"+Sensors[i].id).html('<a href="/sensorboard/' + Sensors[i].id + '">' + afronden(parseFloat(response[key].Value).toFixed(1)) + "" + Sensors[i].sy + '</a>');
                 Sensors[i].lv = t;
               }
               break;

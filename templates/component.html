@@ -86,7 +86,7 @@ var updateValues = function() {
             // console.log(t, Sensors[i].id, response[key].Codifier)
             if (Sensors[i].id == response[key].Codifier) {
               if (t>Sensors[i].lv) {
-                $("#"+Sensors[i].id).html( afronden(parseFloat(response[key].Value).toFixed(1)) + "" + Sensors[i].sy);
+                $("#"+Sensors[i].id).html('<a href="/sensorboard/' + Sensors[i].id + '">' + afronden(parseFloat(response[key].Value).toFixed(1)) + "" + Sensors[i].sy + '</a>');
                 Sensors[i].lv = t;
               }
               break;

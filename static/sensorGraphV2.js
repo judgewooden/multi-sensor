@@ -1,10 +1,11 @@
 /*
  * Graph
  *
- * Arguments:
- *	containerId => id of Containter to insert SVG
+ * This D3 based graphing allows for real-time updates,
+ * will filter data based on LPF or tollerance
+ * and show data gaps if no data is available
  *
- *  data => (See )
+ * by: Douwe de Jong
  *
  */
 "use strict";
@@ -14,7 +15,7 @@ function LineGraph(argsMap) {
 	/* public methods */
 	/* *************************************************************** */
 	var self = this;
-	var debug=false;
+	var debug= false;
 
 	/* *************************************************************** */
 	/* private variables */
@@ -33,21 +34,23 @@ function LineGraph(argsMap) {
 	var meta = {};      // meta data describing data for each line
 
 	// D3 functions
-	// var parseDate = d3.timeFormat("%Y-%m-%d %H:%M:%S").parse;
-	var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse; // V4 CHANGE
 	var bisectDate = d3.bisector(function(d) { return d.timestamp; }).right;
 
 	// define dimensions
-	var margin = [ 20, 40, 30, 40]; // margins (top, right, bottom, left)
-	var w, h; // Width & height
+	// var margin = [ 20, 40, 30, 40]; // margins (top, right, bottom, left)
+	var marginTop = 20;
+	var marginRight = 40;
+	var marginBottom = 30;
+	var marginLeft = 40;
+	var myWidth, myHeight; // Width & height
 
 	// D3 structures
 	var graph;
-	var x, xAxis;
+	var xScale, xAxis;
 	var yLeft, yAxisLeft, yRight, yAxisRight, hasYAxisLeft, hasYAxisRight;
 	var leftYaxis, leftYaxislegend, rightYaxis, rightYaxislegend;
-	// var color = d3.schemeCategory20;
-	var color = d3.scale.category20(); // V4 CHANGE
+
+	var color = d3.scale.category20();
 	var drawline, theline, linesGroup, lines, linesGroupText;
 	var tipLegend, tipGraph;
 	var hoverContainer, hoverLine, hoverLineXOffset, hoverLineYOffset,
@@ -64,9 +67,11 @@ function LineGraph(argsMap) {
 	var currentUserPositionX = -1;
 
 	// scrolling graph fields
-	var myInterval;
+	var myInterval = false;
+	var myResizeListener = false;
 	var minTime = new Date();
 	var maxTime = new Date();
+
 	var lastTimeValue;
 	var inProgress = false;
 
@@ -92,8 +97,29 @@ function LineGraph(argsMap) {
 	var rightYaxisOverideMin=0;   // 0 means disabled
 	var rightYaxisControlMinUp, rightYaxisControlMinDown, rightYaxisControlMinReset;
 	/* *************************************************************** */
-	/* Initiationzation and Validation 
+	/* Initiationzation and Validation */
 	/* *************************************************************** */
+	this.destroy = function() {
+		if(myResizeListener != false)
+			clearTimeout(myResizeListener);
+		if(myInterval != false )
+			clearInterval( myInterval );
+		var looper = $('#' + containerId)[0];
+		while (looper.firstChild) {
+			looper.removeChild(looper.firstChild);
+		}
+	}
+
+	this.setRefreshRate = function(value) {
+		if (myInterval != false)
+			clearInterval( myInterval );
+		myBehavior.interval = value;
+		myInterval = setInterval(function () {
+				self.refreshData();
+		}, myBehavior.interval * 1000);
+		self.refreshData();
+	}
+
 	var _init = function() {
 		containerId = getRequiredVar(argsMap, 'containerId');
 		container = document.querySelector('#' + containerId);
@@ -114,11 +140,11 @@ function LineGraph(argsMap) {
 		self.refreshData();
 
 		// window resize listener
-		var TO = false;
+		
 		$(window).resize(function(){
-			if(TO !== false)
-				clearTimeout(TO);
-				TO = setTimeout(handleWindowResizeEvent, 200);
+			if(myResizeListener !== false)
+				clearTimeout(myResizeListener);
+				myResizeListener = setTimeout(handleWindowResizeEvent, 200);
 		});
 
 		// Auto update the data if needed
@@ -135,15 +161,13 @@ function LineGraph(argsMap) {
 	 */
 	this.refreshData = function() {
 		maxTime = new Date();
-		minTime = new Date(maxTime .getTime()
-								- 1000 * myBehavior.secondsToShow);
+		minTime = new Date(maxTime.getTime() - (1000 * myBehavior.secondsToShow));
 
 		if ( inProgress ){
 			redrawAxes(false);
 			redrawLines(false);
 			return;
 		}
-
 		inProgress = true;
 
 		// build a single query
@@ -156,8 +180,8 @@ function LineGraph(argsMap) {
 			if (lastelem < 1) {
 				queryTime=minTime; //.toMysqlFormat();
 			} else {
-				queryTime=data[key].values[lastelem].timestamp; //.toMysqlFormat();
-			};
+				queryTime=new Date(data[key].values[lastelem].timestamp); //.toMysqlFormat();
+			}
 			var temp = {
 				codifier: meta.codifier[key],
 				key: key,
@@ -176,7 +200,6 @@ function LineGraph(argsMap) {
 			skipped[i] = false;
 		}
 
-		//d3.json(u, function(answer) {
 		$.ajax({
             type : "GET",
             dataType : "json",
@@ -186,8 +209,7 @@ function LineGraph(argsMap) {
 					var key=answer[row][0];
 
 					var temp = {
-						timestamp: new Date(answer[row].t),
-						// timestamp: parseDate(answer[row].timestamp), // JPH
+						timestamp: new Date(+answer[row].t),
 						value: +answer[row].v
 					};
 
@@ -311,6 +333,7 @@ function LineGraph(argsMap) {
 		myBehavior.autoUpdate = +getOptionalVar(dataMap.Settings, 'AutoUpdate', "0");
 		myBehavior.interval = +getOptionalVar(dataMap.Settings, 'UpdateInterval', "5");
 		myBehavior.tickLine = +getOptionalVar(dataMap.Settings, 'TickLine', "");
+		myBehavior.dateLabel = getOptionalVar(dataMap.Settings, 'DateLabel', "bottom");
 		myBehavior.axisLeftMin = +getOptionalVar(dataMap.Settings, 'LeftMin', "");
 		myBehavior.axisLeftMax = +getOptionalVar(dataMap.Settings, 'LeftMax', "");
 		myBehavior.axisRightMin = +getOptionalVar(dataMap.Settings, 'RightMin', "");
@@ -323,9 +346,9 @@ function LineGraph(argsMap) {
 		myBehavior.hideXAxis = +getOptionalVar(dataMap.Settings, 'HideXAxis', "0");
 		myBehavior.hideAxisLeft = +getOptionalVar(dataMap.Settings, 'HideAxisLeft', "0");
 		myBehavior.hideAxisRight = +getOptionalVar(dataMap.Settings, 'HideAxisRight', "0");
-		myBehavior.hideButtons = +getOptionalVar(dataMap.Settings, 'HideButtons', "0");
-		myBehavior.hideLeftControls = +getOptionalVar(dataMap.Settings, 'HideLeftControls', "0");
-		myBehavior.hideRightControls = +getOptionalVar(dataMap.Settings, 'HideRightControls', "0");
+		myBehavior.hideButtons = +getOptionalVar(dataMap.Settings, 'HideButtons', "1");
+		myBehavior.hideLeftControls = +getOptionalVar(dataMap.Settings, 'HideLeftControls', "1");
+		myBehavior.hideRightControls = +getOptionalVar(dataMap.Settings, 'HideRightControls', "1");
 		if (debug) console.log(containerId, " Behavior: ", myBehavior);
 
 		// Load graph meta data
@@ -395,6 +418,62 @@ function LineGraph(argsMap) {
 	 		}
 	 	}
 
+	 	// Prepare margins
+		hasYAxisLeft=false;
+		hasYAxisRight=false;
+		for (var key in meta.yaxes) {
+			if ( meta.yaxes[key] == 'Left' ) {
+				hasYAxisLeft = true;
+			}
+			if ( meta.yaxes[key] == 'Right' ) {
+				hasYAxisRight = true;
+			}
+		}
+		if ((myBehavior.hideDateLabel==1) & (myBehavior.hideButtons==1) & (myBehavior.title=="")) 
+			marginTop=2;
+		if (myBehavior.hideLegend==1)
+			marginBottom = 17;
+		if (myBehavior.hideXAxis==1)
+			marginBottom = marginBottom-17;
+		if (myBehavior.hideAxisRight==1)
+			marginRight=0;
+		if (hasYAxisRight==false)
+			marginRight=0;
+		if (myBehavior.hideAxisLeft==1)
+			marginLeft=0;
+		if (hasYAxisLeft==false)
+			marginLeft=0;
+		if (marginTop==2) {
+			if ( (hasYAxisLeft==true) & (myBehavior.hideAxisLeft==0) ) {
+				if (myBehavior.hideLeftControls==1)
+					marginTop=5;
+				else
+					marginTop=12;
+			}
+			if ( (hasYAxisRight==true) & (myBehavior.hideAxisRight==0) ) {
+				if (myBehavior.hideRightControls==1) {
+					if (marginTop<5)
+						marginTop=5;
+				} else
+					marginTop=12;
+			}
+		}
+		if (marginBottom==0) {
+			if ( (hasYAxisLeft==true) & (myBehavior.hideAxisLeft==0) ) {
+				if (myBehavior.hideLeftControls==1)
+					marginBottom=5;
+				else
+					marginBottom=12;
+			}
+			if ( (hasYAxisRight==true) & (myBehavior.hideAxisRight==0) ) {
+				if (myBehavior.hideRightControls==1) {
+					if (marginBottom<5)
+						marginBottom=5;
+				} else
+					marginBottom=12;
+			}
+		}
+
 	 	// Prepare global variables for filters
 		lastTimeValue = new Array(data.length);
 		lastTimestamp = new Array(data.length);
@@ -421,18 +500,17 @@ function LineGraph(argsMap) {
 		// Add an SVG element with the desired dimensions and margin.
 		graph = d3.select("#" + containerId).append("svg:svg")
 			.attr("class", "line-graph")
-			.attr("width", w + margin[1] + margin[3])
-			.attr("height", h + margin[0] + margin[2])
+			.attr("width", myWidth + marginRight + marginLeft)
+			.attr("height", myHeight + marginTop + marginBottom)
 			.append("svg:g")
-			.attr("transform", "translate(" + margin[3] + "," +
-												margin[0] + ")");
+			.attr("transform", "translate(" + marginLeft + "," + marginTop + ")");
 
 		if (myBehavior.title != "" ) {
 			titleGraph = graph.append("svg:g")
 				.attr("class", "title-group")
 					.append("text")
 					.attr("class", "title")
-	        		.attr("x", (w / 2))
+	        		.attr("x", (myWidth / 2))
 	        		.attr("y", 0 - 5)
 	        		.attr("text-anchor", "middle")
 	        		.text(myBehavior.title);
@@ -449,20 +527,8 @@ function LineGraph(argsMap) {
 
 		graph.append("svg:g")
 			.attr("class", "x axis")
-			.attr("transform", "translate(0," + h + ")")
+			.attr("transform", "translate(0," + myHeight + ")")
 			.call(xAxis);
-
-	    // Y - Axis
-		hasYAxisLeft=false;
-		hasYAxisRight=false;
-		for (var key in meta.yaxes) {
-			if ( meta.yaxes[key] == 'Left' ) {
-				hasYAxisLeft = true;
-			}
-			if ( meta.yaxes[key] == 'Right' ) {
-				hasYAxisRight = true;
-			}
-		}
 
 		initY();
 
@@ -475,8 +541,7 @@ function LineGraph(argsMap) {
 
 			if (myBehavior.hideAxisLeft == 1)
 				leftYaxis.attr("class", "y-none axis left");
-
-			if (myBehavior.axisLeftLegend != "") {
+			else {
 				leftYaxislegend = leftYaxis.append("text")
 					.attr("class", "y-left-legend")
 			    	.attr("transform", "rotate(-90)")
@@ -485,90 +550,88 @@ function LineGraph(argsMap) {
 			    	.attr("dy", ".71em")
 			   		.style("text-anchor", "end")
 			    	.text(myBehavior.axisLeftLegend);
-			}
 
-			if (myBehavior.hideLeftControls != 1) {
-				leftYaxisControlMinUp = leftYaxis.append("svg:text")
-					.attr("class", "y-left-control-max-up")
-			   		.style("text-anchor", "middle")
-			    	.attr("y", h+12)
-			    	.attr("x", -25)
-			    	.on('click', function(d) {
-						leftYaxisOverideMin=yLeft.domain()[0] + ((yLeft.domain()[1] - yLeft.domain()[0])/5);
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(10750));
-				leftYaxisControlMinDown = leftYaxis.append("text")
-					.attr("class", "y-left-control-max-down")
-			   		.style("text-anchor", "middle")
-			    	.attr("y", h+12)
-			    	.attr("x", -5)
-			    	.on('click', function(d) {
-						leftYaxisOverideMin=yLeft.domain()[0] - ((yLeft.domain()[1] - yLeft.domain()[0])/5);
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(10751));
-				leftYaxisControlMinReset = leftYaxis.append("text")
-			   		.style("text-anchor", "middle")
-					.attr("class", "y-left-control-max-reset")
-			    	.attr("y", h+12)
-			    	.attr("x", -15)
-			    	.on('click', function(d) {
-						leftYaxisOverideMin=0
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(11038));
-				leftYaxisControlMaxUp = leftYaxis.append("svg:text")
-					.attr("class", "y-left-control-max-up")
-			   		.style("text-anchor", "middle")
-			    	.attr("y", -6)
-			    	.attr("x", -25)
-			    	.on('click', function(d) {
-						leftYaxisOverideMax=yLeft.domain()[1] + ((yLeft.domain()[1] - yLeft.domain()[0])/5);
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(10750));
-				leftYaxisControlMaxDown = leftYaxis.append("text")
-					.attr("class", "y-left-control-max-down")
-			   		.style("text-anchor", "middle")
-			    	.attr("y", -6)
-			    	.attr("x", -5)
-			    	.on('click', function(d) {
-						leftYaxisOverideMax=yLeft.domain()[1] - ((yLeft.domain()[1] - yLeft.domain()[0])/5);
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(10751));
-				leftYaxisControlMaxReset = leftYaxis.append("text")
-			   		.style("text-anchor", "middle")
-					.attr("class", "y-left-control-max-reset")
-			    	.attr("y", -6)
-			    	.attr("x", -15)
-			    	.on('click', function(d) {
-						leftYaxisOverideMax=0
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(11038));
+				if (myBehavior.hideLeftControls != 1) {
+					leftYaxisControlMinUp = leftYaxis.append("svg:text")
+						.attr("class", "y-left-control-max-up")
+				   		.style("text-anchor", "middle")
+				    	.attr("y", myHeight+12)
+				    	.attr("x", -25)
+				    	.on('click', function(d) {
+							leftYaxisOverideMin=yLeft.domain()[0] + ((yLeft.domain()[1] - yLeft.domain()[0])/5);
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(10750));
+					leftYaxisControlMinDown = leftYaxis.append("text")
+						.attr("class", "y-left-control-max-down")
+				   		.style("text-anchor", "middle")
+				    	.attr("y", myHeight+12)
+				    	.attr("x", -5)
+				    	.on('click', function(d) {
+							leftYaxisOverideMin=yLeft.domain()[0] - ((yLeft.domain()[1] - yLeft.domain()[0])/5);
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(10751));
+					leftYaxisControlMinReset = leftYaxis.append("text")
+				   		.style("text-anchor", "middle")
+						.attr("class", "y-left-control-max-reset")
+				    	.attr("y", myHeight+12)
+				    	.attr("x", -15)
+				    	.on('click', function(d) {
+							leftYaxisOverideMin=0
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(11038));
+					leftYaxisControlMaxUp = leftYaxis.append("svg:text")
+						.attr("class", "y-left-control-max-up")
+				   		.style("text-anchor", "middle")
+				    	.attr("y", -6)
+				    	.attr("x", -25)
+				    	.on('click', function(d) {
+							leftYaxisOverideMax=yLeft.domain()[1] + ((yLeft.domain()[1] - yLeft.domain()[0])/5);
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(10750));
+					leftYaxisControlMaxDown = leftYaxis.append("text")
+						.attr("class", "y-left-control-max-down")
+				   		.style("text-anchor", "middle")
+				    	.attr("y", -6)
+				    	.attr("x", -5)
+				    	.on('click', function(d) {
+							leftYaxisOverideMax=yLeft.domain()[1] - ((yLeft.domain()[1] - yLeft.domain()[0])/5);
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(10751));
+					leftYaxisControlMaxReset = leftYaxis.append("text")
+				   		.style("text-anchor", "middle")
+						.attr("class", "y-left-control-max-reset")
+				    	.attr("y", -6)
+				    	.attr("x", -15)
+				    	.on('click', function(d) {
+							leftYaxisOverideMax=0
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(11038));
+				}
 			}
-
 		}
 
 		// Add the y-axis to the right
 		if (hasYAxisRight) {
 			rightYaxis = graph.append("svg:g")
 				.attr("class", "y axis right")
-				.attr("transform", "translate(" + (w+10) + ",0)")
+				.attr("transform", "translate(" + (myWidth+10) + ",0)")
 				.call(yAxisRight)
 
 			if (myBehavior.hideAxisRight == 1)
 				rightYaxis.attr("class", "y-none axis right");
-
-			if (myBehavior.axisRightLegend != "") {
+			else {
 				rightYaxislegend = rightYaxis.append("text")
 					.attr("class", "y-right-legend")
 			    	.attr("transform", "rotate(-90)")
@@ -577,75 +640,75 @@ function LineGraph(argsMap) {
 			    	.attr("dy", ".71em")
 			   		.style("text-anchor", "end")
 			    	.text(myBehavior.axisRightLegend);
-			}
 
-			if (myBehavior.hideRightControls != 1) {
-				rightYaxisControlMinUp = rightYaxis.append("svg:text")
-					.attr("class", "y-right-control-max-up")
-			   		.style("text-anchor", "middle")
-			    	.attr("y", h+12)
-			    	.attr("x", 5)
-			    	.on('click', function(d) {
-						rightYaxisOverideMin=yRight.domain()[0] + ((yRight.domain()[1] - yRight.domain()[0])/5);
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(10750));
-				rightYaxisControlMinDown = rightYaxis.append("text")
-					.attr("class", "y-right-control-max-down")
-			   		.style("text-anchor", "middle")
-			    	.attr("y", h+12)
-			    	.attr("x", 25)
-			    	.on('click', function(d) {
-						rightYaxisOverideMin=yRight.domain()[0] - ((yRight.domain()[1] - yRight.domain()[0])/5);
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(10751));
-				rightYaxisControlMinReset = rightYaxis.append("text")
-			   		.style("text-anchor", "middle")
-					.attr("class", "y-right-control-max-reset")
-			    	.attr("y", h+12)
-			    	.attr("x", 15)
-			    	.on('click', function(d) {
-						rightYaxisOverideMin=0
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(11038));
-				rightYaxisControlMaxUp = rightYaxis.append("svg:text")
-					.attr("class", "y-right-control-max-up")
-			   		.style("text-anchor", "middle")
-			    	.attr("y", -6)
-			    	.attr("x", 5)
-			    	.on('click', function(d) {
-						rightYaxisOverideMax=yRight.domain()[1] + ((yRight.domain()[1] - yRight.domain()[0])/5);
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(10750));
-				rightYaxisControlMaxDown = rightYaxis.append("text")
-					.attr("class", "y-right-control-max-down")
-			   		.style("text-anchor", "middle")
-			    	.attr("y", -6)
-			    	.attr("x", 25)
-			    	.on('click', function(d) {
-						rightYaxisOverideMax=yRight.domain()[1] - ((yRight.domain()[1] - yRight.domain()[0])/5);
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(10751));
-				rightYaxisControlMaxReset = rightYaxis.append("text")
-			   		.style("text-anchor", "middle")
-					.attr("class", "y-right-control-max-reset")
-			    	.attr("y", -6)
-			    	.attr("x", 15)
-			    	.on('click', function(d) {
-						rightYaxisOverideMax=0
-						redrawAxes(true);
-						redrawLines(true);
-			    	})
-			    	.text(String.fromCharCode(11038));
+				if (myBehavior.hideRightControls != 1) {
+					rightYaxisControlMinUp = rightYaxis.append("svg:text")
+						.attr("class", "y-right-control-max-up")
+				   		.style("text-anchor", "middle")
+				    	.attr("y", myHeight+12)
+				    	.attr("x", 5)
+				    	.on('click', function(d) {
+							rightYaxisOverideMin=yRight.domain()[0] + ((yRight.domain()[1] - yRight.domain()[0])/5);
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(10750));
+					rightYaxisControlMinDown = rightYaxis.append("text")
+						.attr("class", "y-right-control-max-down")
+				   		.style("text-anchor", "middle")
+				    	.attr("y", myHeight+12)
+				    	.attr("x", 25)
+				    	.on('click', function(d) {
+							rightYaxisOverideMin=yRight.domain()[0] - ((yRight.domain()[1] - yRight.domain()[0])/5);
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(10751));
+					rightYaxisControlMinReset = rightYaxis.append("text")
+				   		.style("text-anchor", "middle")
+						.attr("class", "y-right-control-max-reset")
+				    	.attr("y", myHeight+12)
+				    	.attr("x", 15)
+				    	.on('click', function(d) {
+							rightYaxisOverideMin=0
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(11038));
+					rightYaxisControlMaxUp = rightYaxis.append("svg:text")
+						.attr("class", "y-right-control-max-up")
+				   		.style("text-anchor", "middle")
+				    	.attr("y", -6)
+				    	.attr("x", 5)
+				    	.on('click', function(d) {
+							rightYaxisOverideMax=yRight.domain()[1] + ((yRight.domain()[1] - yRight.domain()[0])/5);
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(10750));
+					rightYaxisControlMaxDown = rightYaxis.append("text")
+						.attr("class", "y-right-control-max-down")
+				   		.style("text-anchor", "middle")
+				    	.attr("y", -6)
+				    	.attr("x", 25)
+				    	.on('click', function(d) {
+							rightYaxisOverideMax=yRight.domain()[1] - ((yRight.domain()[1] - yRight.domain()[0])/5);
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(10751));
+					rightYaxisControlMaxReset = rightYaxis.append("text")
+				   		.style("text-anchor", "middle")
+						.attr("class", "y-right-control-max-reset")
+				    	.attr("y", -6)
+				    	.attr("x", 15)
+				    	.on('click', function(d) {
+							rightYaxisOverideMax=0
+							redrawAxes(true);
+							redrawLines(true);
+				    	})
+				    	.text(String.fromCharCode(11038));
+				}
 			}
 		}
 
@@ -681,8 +744,9 @@ function LineGraph(argsMap) {
              		return true;
              	}
             })
-			.x( function(d, i) { return x(d.timestamp); })
+			.x( function(d, i) { return xScale(d.timestamp); })
 			.y( function(d, i) {
+				// DOUWE (x?)
 				//trace( "y-axis: " + lineFunctionSeriesIndex );
 				if ( i == 0 ) {
 					lineFunctionSeriesIndex++;
@@ -716,7 +780,7 @@ function LineGraph(argsMap) {
 	            }
 	        })
 	    } else {
-           	//trace(container + ": " + lineFunctionSeriesIndex + " - " + myBehavior.interpolation);
+           	// trace(container + ": " + lineFunctionSeriesIndex + " - " + myBehavior.interpolation);
 			drawline = theline
 				.interpolate(myBehavior.interpolation);
 		}
@@ -780,13 +844,16 @@ function LineGraph(argsMap) {
 		hoverLine = hoverLineGroup
 			.append("svg:line")
 			.attr("x1", 10).attr("x2", 10)
-			.attr("y1", 0).attr("y2", h);
+			.attr("y1", 0).attr("y2", myHeight);
 
 		hoverLine.classed("hide", true);
 
 		// Call functions to do additional data
-		createDateLabel();
-		createLegend();
+		if (myBehavior.hideDateLabel==0) 
+			createDateLabel();
+
+		if (myBehavior.hideLegend==0)
+			createLegend();
 		// only show menu if we are updating
 		if ( myBehavior.autoUpdate == 1 ) {
 			if (myBehavior.hideButtons != 1) {
@@ -809,16 +876,16 @@ function LineGraph(argsMap) {
 
 		// reset width/height of SVG
 		d3.select("#" + containerId + " svg")
-			.attr("width", w + margin[1] + margin[3])
-			.attr("height", h + margin[0] + margin[2]);
+			.attr("width", myWidth + marginRight + marginLeft)
+			.attr("height", myHeight + marginTop + marginBottom);
 
 		// OOO reset transform of x axis
 		graph.selectAll("g .x.axis")
-			.attr("transform", "translate(0," + h + ")");
+			.attr("transform", "translate(0," + myHeight + ")");
 
 		if (hasYAxisRight) {
 			graph.selectAll("g .y.axis.right")
-				.attr("transform", "translate(" + (w+10) + ",0)");
+				.attr("transform", "translate(" + (myWidth+10) + ",0)");
 		}
 
 		legendFontSize = 12;
@@ -827,18 +894,26 @@ function LineGraph(argsMap) {
 		graph.selectAll("text.legend.value")
 			.attr("font-size", legendFontSize);
 
+		if (myBehavior.dateLabel=="bottom") {
+			var yDate=myHeight+marginBottom-2;
+			var xDate=120;
+		} else {
+			var yDate=-4;
+			var xDate=myWidth-5;
+		}
 		graph.select('text.date-label')
 			.transition()
 			.duration(transitionDuration)
 			.ease("linear")
-			.attr("x", w);
+			.attr("x", xDate)
+			.attr("y", yDate);
 
 		if (myBehavior.title != "" ) {
 			graph.select('text.title')
 				.transition()
 				.duration(transitionDuration)
 				.ease("linear")
-	        	.attr("x", (w / 2));
+	        	.attr("x", (myWidth / 2));
 	    }
 
 		redrawAxes(true);
@@ -855,7 +930,7 @@ function LineGraph(argsMap) {
 			graph.selectAll("g .lines path")
 				.transition()
 					.duration(transitionDuration)
-					.ease("linear")
+					.ease("cubic")
 					.attr("d", function(d, i) {
 						return drawline(d.values)
 					})
@@ -925,6 +1000,7 @@ function LineGraph(argsMap) {
 			updatePaused='pause';
 			// pause update
 			clearInterval( myInterval );
+			myInterval=false;
 		}
 
 		graph.selectAll('.menu-button')
@@ -1023,7 +1099,6 @@ function LineGraph(argsMap) {
 			.enter().append("g")
 			.attr("class", "legend-labels")
 
-
 		legendLabelGroup.append("svg:text")
 			.attr("class", "legend name")
 			.text(function(d, i) {
@@ -1034,7 +1109,7 @@ function LineGraph(argsMap) {
 				return color(meta.names[i]);
 			})
 			.attr("y", function(d, i) {
-				return h+28;
+				return myHeight+marginBottom-2; // 28;
 			})
 			.style("opacity", function() {
 				if ( myBehavior.hideLegend == 1 ) return "0";
@@ -1073,9 +1148,8 @@ function LineGraph(argsMap) {
 				return color(meta.names[i]);
 				})
 			.attr("y", function(d, i) {
-				return h+28;
+				return myHeight+marginBottom-2; // 28;
 			})
-
 	}
 
 	var redrawLegendPosition = function(animate) {
@@ -1085,11 +1159,11 @@ function LineGraph(argsMap) {
 					.duration(transitionDuration)
 					.ease("linear")
 					.attr("y", function(d, i) {
-						return h+28;
+						return myHeight+marginBottom-2; // 28;
 					});
 			} else {
 				legendText.attr("y", function(d, i) {
-					return h+28;
+					return myHeight+marginBottom-2; // 28;
 				});
 			}
 	}
@@ -1129,18 +1203,26 @@ function LineGraph(argsMap) {
 		graph.call(tipGraph);
 
 		var date = new Date();
+
+		if (myBehavior.dateLabel=="bottom") {
+			var yDate=myHeight+marginBottom-2;
+			var xDate=120;
+		} else {
+			var yDate=-4;
+			var xDate=myWidth-5;
+		}
 		var buttonGroup = graph.append("svg:g")
 			.attr("class", "date-label-group")
 			.append("svg:text")
 			.attr("class", "date-label")
 			.attr("text-anchor", "end")
 			.attr("font-size", "10")
-			.attr("y", -4)
-			.attr("x", w)
-			.style("opacity", function() {
-				if ( myBehavior.hideDateLabel == 1 ) return "0";
-				return "1";
-			})
+			.attr("y", yDate)
+			.attr("x", xDate)
+			// .style("opacity", function() {
+			// 	if ( myBehavior.hideDateLabel == 1 ) return "0";
+			// 	return "1";
+			// })
 			.text(date.toDateString() + " " + date.toLocaleTimeString())
 			.on('mouseover', tipGraph.show)
       		.on('mouseout', tipGraph.hide)
@@ -1176,7 +1258,7 @@ function LineGraph(argsMap) {
 			event.clientY + " offsetY: " + event.offsetY + " pageY: " +
 			event.pageY + " hoverLineYOffset: " + hoverLineYOffset);
 */
-		if(mouseX >= 0 && mouseX <= w && mouseY >= 0 && mouseY <= h) {
+		if(mouseX >= 0 && mouseX <= myWidth && mouseY >= 0 && mouseY <= myHeight) {
 			hoverLine.classed("hide", false);
 
 			// set position of hoverLine
@@ -1206,7 +1288,7 @@ function LineGraph(argsMap) {
 	 * Set the value labels to whatever the latest data point is.
 	 */
 	var setValueLabelsToLatest = function(withTransition) {
-		displayValueLabelsForPositionX(w, withTransition);
+		displayValueLabelsForPositionX(myWidth, withTransition);
 	}
 
 	/**
@@ -1215,7 +1297,7 @@ function LineGraph(argsMap) {
 	 * Return {value: value, date, date}
 	 */
 	var getValueForPositionXFromData = function(xPosition, index) {
-		var xValue = x.invert(xPosition);
+		var xValue = xScale.invert(xPosition);
 //		trace("Start get Value. Position: " + xPosition + " Index: " + index);
 		var i = bisectDate(data[index].values, xValue, 1);
 		var v;
@@ -1231,6 +1313,7 @@ function LineGraph(argsMap) {
 	 * Display the data values at position X in the legend value labels.
 	 */
 	var displayValueLabelsForPositionX = function(xPosition, withTransition) {
+		if (myBehavior.hideLegend == 1) return;
 		var animate = false;
 		if(withTransition != undefined) {
 			if(withTransition) {
@@ -1275,7 +1358,7 @@ function LineGraph(argsMap) {
 			})
 
 		cumulativeWidth = cumulativeWidth - 8;
-		if(cumulativeWidth > w) {
+		if(cumulativeWidth > myWidth) {
 			legendFontSize = legendFontSize-1;
 
 			graph.selectAll("text.legend.name")
@@ -1302,10 +1385,10 @@ function LineGraph(argsMap) {
 				.transition()
 				.duration(transitionDuration)
 				.ease("linear")
-				.attr("transform", "translate(" + (w-cumulativeWidth) +",0)")
+				.attr("transform", "translate(" + (myWidth-5-cumulativeWidth) +",0)")
 		} else {
 			graph.selectAll("g.legend-group g")
-				.attr("transform", "translate(" + (w-cumulativeWidth) +",0)")
+				.attr("transform", "translate(" + (myWidth-5-cumulativeWidth) +",0)")
 		}
 	}
 
@@ -1347,7 +1430,7 @@ function LineGraph(argsMap) {
 						    return leftYaxisOverideMax;
 					})
 				])
-				.range([h, 0])
+				.range([myHeight, 0])
 				.nice();
 
 			yAxisLeft = d3.svg.axis().scale(yLeft).orient("left");
@@ -1391,7 +1474,7 @@ function LineGraph(argsMap) {
 							return rightYaxisOverideMax;
 					})
 				])
-				.range([h, 0])
+				.range([myHeight, 0])
 				.nice();
 
 			yAxisRight = d3.svg.axis().scale(yRight).orient("right");
@@ -1410,11 +1493,11 @@ function LineGraph(argsMap) {
 
 		if ( myBehavior.secondsToShow != 0 ) {
 //			trace("Start:" + minTime + " End:" + maxTime);
-			x = d3.time.scale()
+			xScale = d3.time.scale()
 				.domain([minTime,maxTime])
-				.range([0, w]);
+				.range([0, myWidth]);
 		} else {
-			x = d3.time.scale()
+			xScale = d3.time.scale()
 				.domain([
 					d3.min(data, function(m) {
 						return d3.min(m.values, function(v) {
@@ -1427,17 +1510,17 @@ function LineGraph(argsMap) {
 						});
 					})
 				])
-				.range([0, w]);
+				.range([0, myWidth]);
 		}
 
 		if ( myBehavior.tickLine != 0 ) {
 			xAxis = d3.svg.axis()
-				.scale(x)
-				.tickSize(-h)
+				.scale(xScale)
+				.tickSize(-myHeight)
 				.tickSubdivide(myBehavior.tickLine);
 		} else {
 			xAxis = d3.svg.axis()
-				.scale(x);
+				.scale(xScale);
 		}
 		//TODO GET THIS RIGHT
 		if ( myBehavior.hideXAxis == 1) {
@@ -1491,13 +1574,13 @@ function LineGraph(argsMap) {
 	 */
 	var initDimensions = function() {
 		// automatically size to the container using JQuery to get width/height
-		w = $("#" + containerId).width() - margin[1] - margin[3]; // width
-		h = $("#" + containerId).height() - margin[0] - margin[2]; // height
+		myWidth = $("#" + containerId).width() - marginLeft - marginRight; // width
+		myHeight = $("#" + containerId).height() - marginTop - marginBottom; // height
 
 		// make sure to use offset() and not position() as we want it relative
 		//	to the document, not its parent
-		hoverLineXOffset = margin[3]+$(container).offset().left;
-		hoverLineYOffset = margin[0]+$(container).offset().top;
+		hoverLineXOffset = marginBottom+$(container).offset().left;
+		hoverLineYOffset = marginTop+$(container).offset().top;
 	}
 
 	/*
@@ -1561,11 +1644,6 @@ function LineGraph(argsMap) {
 		if(-10 < d && d < 0) return "-0" + (-1*d).toString();
 		return d.toString();
 	}
-
-	Date.prototype.toMysqlFormat = function() {
-    	return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
-	};
-
 
 /* *************************************************************** */
 /* execute init now that everything is defined */

@@ -2,6 +2,7 @@ from flask import Flask, url_for, render_template, Response, jsonify, request, r
 from flask_redis import FlaskRedis
 import flask_login as login
 from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy.exc
 import urllib2
 import json
 import sys
@@ -74,6 +75,11 @@ if (os.getenv("JPH_DEBUG", "0")=="1"):
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
+# Initialize flask-login
+login_manager = login.LoginManager()
+login_manager.init_app(app)
+
+# Users login protection
 class User(db.Model):
     __tablename__ = 'users'
     email = db.Column(db.String(120), primary_key=True)
@@ -94,11 +100,20 @@ class User(db.Model):
 
     # Required for administrative interface
     def __unicode__(self):
-        return self.username
+        return self.email
 
-# Initialize flask-login
-login_manager = login.LoginManager()
-login_manager.init_app(app)
+# users has graphs
+class Graphs(db.Model):
+    __tablename__ = 'graphs'
+    name = db.Column(db.String(120), primary_key=True)
+    email = db.Column(db.String(120), primary_key=True)
+    settings = db.Column(db.Text)
+
+    def __init__(self, name, settings):
+        user = login.current_user
+        self.name = name
+        self.email = user.get_id()
+        self.settings = settings
 
 # Create user loader function
 @login_manager.user_loader
@@ -121,6 +136,55 @@ def userauthentication():
     flash("Invalid login")
     return redirect(url_for('userauthentication'))
 
+@app.route("/graphdb", methods=['POST'])
+@login.login_required
+def graph_db():
+    p={}
+    p["status"]="error"         # assume error unless 
+    try:
+        a=request.form["action"]
+        n=request.form["name"]
+        v=request.form["settings"]
+    except:
+        p["message"]="Not proper structured message"
+    else:
+        if (n==""):
+            p["message"]="a Blank name is not allowed"
+        else:
+            if (a=='save' or a=='delete'):
+                user = login.current_user
+                email = user.get_id()
+                graph=Graphs.query.filter_by(email=email, name=n).first()
+                if graph is None:
+                    p["message"]="Can not find " + n + " record."
+                else:
+                    try:
+                        db.session.delete(graph)
+                        db.session.commit()
+                    except sqlalchemy.exc.IntegrityError as e:
+                        p["message"]="Error: " + e.message
+                    else:
+                        p["message"]=n + " deleted"
+                        p["status"]="success"
+
+            if (a=='add' or a=='save'):
+                graph=Graphs(name=n,settings=v)
+                try:
+                    db.session.add(graph)
+                    db.session.commit()
+                except sqlalchemy.exc.IntegrityError as e:
+                    if e.message.find("already exists") > 0:
+                        p["message"]="Record already exists, use update"
+                    else:
+                        p["message"]="Error: " + e.message
+                    db.session.rollback()
+                else:
+                    p["message"]=n + " saved"
+                    p["status"]="success"
+
+    return (Response(response=json.dumps(p),
+            status=200, mimetype="application/json"))
+
 @app.route("/logout", methods=['GET'])
 @login.login_required
 def logout():
@@ -142,34 +206,62 @@ def component():
     return render_template('component.html', sensors = channel.getAllSensors())
 
 @app.route('/devel')
+@login.login_required
 def sensors():
-    return render_template('graphdevel.html', sensors = channel.getAllSensors())
+    user = login.current_user
+    email = user.get_id()
+    allgraphs = Graphs.query.with_entities(Graphs.name, Graphs.settings).filter_by(email=email).all()
+
+    r=[]
+    for row in allgraphs:
+        x={}
+        (x["name"], x["settings"])=row
+        r.append(x)
+    
+    s=[]
+    for sensor in channel.getAllSensors():
+        x = sensor["Codifier"]
+        s.append(str(x))
+
+    return render_template('graphdevel.html', graphs=r, sensors = channel.getAllSensors(), codifiers=s)
 
 @app.route('/')
 def index():
     return render_template('index.html', sensors = channel.getAllSensors())
 
-@app.route('/logview')
-def logview(): 
+def getlog(logfilter=None):
     loghist=[]
     with open('/var/log/jph.log') as f:
         f.seek (0, 2)                           # Seek @ EOF
         fsize = f.tell()                        # Get Size
-        f.seek (max (fsize-(120*1000), 0), 0)   # Set pos @ last n chars
+        f.seek (max (fsize-(120*1000), 0), 0)   # Set position to last 1000 lines (estimated)
         for line in f:
-            loghist.append(line)
+            if logfilter==None:
+                loghist.append(line)
+            elif logfilter in line:
+                loghist.append(line)
+    return loghist
+
+@app.route('/logview')
+@app.route('/logview/<logfilter>')
+def logview(logfilter=None): 
+    loghist=getlog(logfilter)
     return render_template('logview.html', loghist=loghist[1:])
 
-@app.route('/logstream')
-def logstream():
-    # def generate():
-    #     with open('/var/log/daemon.log') as f:
-    #         while True:
-    #             yield f.read()
-    #             time.sleep(1)
+@app.route('/sensorlog/')
+@app.route('/sensorlog/<logfilter>')
+def sensorlog(logfilter=None):
+    loghist=getlog(logfilter)
+    return (Response(response=json.dumps(loghist[1:]),
+            status=200, mimetype="application/json"))
 
-    # return app.response_class(generate(), mimetype='text/plain')
-    return send_file('/var/log/jph.log', mimetype='text/plain')
+@app.route('/sensorboard/<codifier>')
+def sensorboard(codifier=None):
+    codifier=codifier[:2]
+    if (channel.getSensor(codifier) == None):
+        return "Please provide a valid Codifier"
+    return render_template('sensorboard.html',
+            sensor=channel.getSensor(codifier), sensors = channel.getAllSensors())
 
 @app.route('/sensor/')
 @app.route('/sensor/<codifier>')
@@ -222,7 +314,6 @@ def sensormsg(codifier, flag):
     if (login.current_user.is_authenticated == False):
         p["message"]="Only available for logged in users"
         p["status"]="error"
-        print(p)
     else:
         codifier=codifier[:2]
         flag=flag[:1]
@@ -243,9 +334,6 @@ def sensormsg(codifier, flag):
 
 @app.route('/sensorts/<query>')
 def sensorts(query):
-    if not sqlokay:
-        return "SQL not initialized"
-
     try:
         jquery=json.loads(query)
     except:
@@ -255,8 +343,8 @@ def sensorts(query):
     for r in jquery:
         try:
             c=str((r["codifier"]))[0:2]
-            if (channel.getSensor(c) == None):
-                return "Please provide a valid codifier"
+            if channel.getSensor(c) == None:
+                return "Not a valid codifier"
             k=int((r["key"]))
             t=int((r["time"]))
         except:
@@ -278,17 +366,7 @@ def sensorts(query):
         results = db.engine.execute(query)
     except:
         return "Unknown Error with DB engine"
-    # answer=results.fetchall()
-    # print(answer)
-    # return (Response(response=answer,
-    #          status=200, mimetype="binary/octet-stream"))
-    # return Flask.make_response(answer, 200, {
-    #                                    'Content-type': 'binary/octet-stream',
-    #                                    'Content-length': len(answer),
-    #                                    'Content-transfer-encoding': 'binary'
-    #                                    })
-    # return (Response(response=results,
-    #         status=200, mimetype="binary/octet-stream"))
+
     for r in results:
         row = {
             '0' : r[0],

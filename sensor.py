@@ -148,11 +148,13 @@ class DwarfpoolReader(object):
     def run(self, Timestamp):
         u=channel.getMySensorElement("URL")
         s=channel.getMySensorElement("Server")
-        response=requests.get(u, timeout=(2.0, 10.0))
-        if response.headers["content-type"] != "application/json":
-            channel.logger.error("Unexpected response from Dwarfpool")
-            raise WrongContent(response=response)
-        else:
+        try:
+            response=requests.get(u, timeout=(2.0, 10.0))
+        except: 
+            channel.logger.error("Unexpected Dwarfpool error: %s", sys.exc_info()[0])
+        else: 
+            if response.headers["content-type"] != "application/json":
+                channel.logger.error("Unexpected content.type from Dwarfpool")
             if (len(response.text) > 1):
                 j=json.loads(response.text)
                 try:

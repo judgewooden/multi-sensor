@@ -22,7 +22,7 @@
 		<div class="jph-box-buttons" id="{{ sensor.Codifier }}c"> 
 			<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Start the Sensor{% endif %}" id="{{ sensor.Codifier }}S"><i class="fa fa-play fa-inverse"></i></button>
 			<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Pause the Sensor{% endif %}" id="{{ sensor.Codifier }}H"><i class="fa fa-pause fa-inverse"></i></button>
-			<button type="button" class="btn jph-btn jph-okay" data-trigger="focus" rel="popover" data-placement="bottom" data-html="true" data-content='<iframe frameborder="0" scrolling="yes" height="220" width="240" src="/sensorinfo/{{ sensor.Codifier }}"></iframe>' title="{{ sensor.Name }}" id="{{ sensor.Codifier }}i"><i class="fa fa-info fa-inverse"></i></button>
+			<button type="button" class="btn jph-btn jph-okay" data-trigger="focus" rel="jph-popover" data-placement="bottom" data-html="true" data-content='<iframe scrolling="yes" class="jph-iframe-popover" src="/sensorinfo/{{ sensor.Codifier }}"></iframe>' title="{{ sensor.Name }}" id="{{ sensor.Codifier }}i"><i class="fa fa-info fa-inverse"></i></button>
 			<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Ping the Sensor{% endif %}" id="{{ sensor.Codifier }}P"><i class="fa fa-heartbeat fa-inverse"></i></button>
 			<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Reload Configuration{% endif %}" id="{{ sensor.Codifier }}C"><i class="fa fa-refresh fa-inverse"></i></button>
 		</div>
@@ -35,6 +35,13 @@
 //
 // Some AJAX navigation functions
 //
+$(function() {
+	$('[data-click="controls"]').dblclick(function (event) {
+	  var code=$(this).attr("id").substring(0,2); 
+		window.location = "/sensorboard/" + code;
+	});
+})
+
 var ocard=""
 $(function() {
 	$('[data-click="controls"]').click(function (event) {
@@ -77,7 +84,7 @@ $(function () {
   });
 })
 
-$('[rel="popover"]').popover({
+$('[rel="jph-popover"]').popover({
 	offset: '-15em 0em'
 });
 
@@ -263,7 +270,7 @@ var updateValues = function() {
 				if (t>s.LastITimestamp) { 
 					s.Active = toBoolean(response[key].IsActive);
 					s.LastITimestamp=t;
-					m= new Date(t).toISOString().slice(0,19).replace('T', ' ');
+					// m= new Date(t).toISOString().slice(0,19).replace('T', ' ');
 				}
 				t=parseInt(response[key].DTimestamp);
 				if (t>s.LastDTimestamp) {
