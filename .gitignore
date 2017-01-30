@@ -1,3 +1,7 @@
 *.pyc
 *.sh
+.gitignore
+static/font-awesome-4.7.0
+static/jqwidgets
+venv
 
