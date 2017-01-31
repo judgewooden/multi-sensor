@@ -145,7 +145,7 @@ class ADAfruitReader(object):
 class DwarfpoolReader(object):
     def __init__(self):
         self.tl=0
-    def run(self, Timestamp):
+    def run(self, Timestamp, command="", number=None):
         u=channel.getMySensorElement("URL")
         s=channel.getMySensorElement("Server")
         try:
