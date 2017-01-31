@@ -324,10 +324,10 @@ def sensormsg(codifier, flag, number=None):
         try:
             codifier=codifier[:2]
             flag=flag[:1]
-            if (number==None):
-                t=jph.timeNow()
-            else:
+            if flag in "AE":
                 t=float(number)
+            else:
+                t=jph.timeNow()
         except:
             p["message"]="Unexpected error interpreting request"
         else:

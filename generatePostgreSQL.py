@@ -17,6 +17,8 @@ Codifier="Q1"
 comTarget=""
 comDB=False
 comUser=False
+comStatsAll=False
+comStats=""
 comDrop=False
 
 # -------------
@@ -29,9 +31,11 @@ def usage():
     print("\t-l <code>: Create only table this Codifier")
     print("\t-d       : Add the database & user table creation ")
     print("\t-f       : Force the database DROP")
+    print("\t-s <code>: Rebuild table for Time Series Statistics")
+    print("\t-S       : Rebuild All Time Series Statistics")
     print("\t-p <u:p> : Add a user:password to the database")
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hu:c:l:p:df", ["help", "url=", "code=", "sqlto=", "database", "user=", "force"])
+    opts, args = getopt.getopt(sys.argv[1:], "hSu:c:l:p:s:df", ["help", "allStats=", "url=", "code=", "sqlto=", "database", "user=", "stats=", "force"])
     for opt, arg in opts:
         if opt in ("-h", "help"):
             raise
@@ -39,6 +43,10 @@ try:
             configURL=arg
         elif opt in ("-c", "--code"):
             Codifier=arg
+        elif opt in ("-S", "--allStats"):
+            comStatsAll=True
+        elif opt in ("-s", "--stats"):
+            comStats=arg[:2]
         elif opt in ("-l", "--sqlto"):
             comTarget=arg[:2]
         elif opt in ("-d", "--database"):
@@ -67,6 +75,20 @@ def sqltable(s):
         print("Value float NOT NULL")
     print(");")
     print("GRANT ALL PRIVILEGES ON TABLE Sensor_%s to %s;" % (s["Codifier"], dbuser))
+
+def sqlstats(s):
+    print("\c %s;" % dbname)
+    print("DROP TABLE IF EXISTS Sensor_%s_hour;" % (s["Codifier"]) )
+    print("CREATE TABLE Sensor_%s_hour (" % (s["Codifier"]) )
+    print("Timestamp bigint PRIMARY KEY,")
+    print("Mean float,")
+    print("Mode float,")
+    print("Median float,")
+    print("Max float,")
+    print("Min float,")
+    print("Stddev float")
+    print(");")
+    print("GRANT ALL PRIVILEGES ON TABLE Sensor_%s_hour to %s;" % (s["Codifier"], dbuser))
 
 def createDB():
     if comDrop:
@@ -105,9 +127,18 @@ if comDB:
     createDB()
     for sensor in channel.getAllSensors():
        sqltable(sensor)
+       sqlstats(sensor)
 
 if comTarget!="":
     sqltable(channel.getSensor(comTarget))
+    sqlstats(channel.getSensor(comTarget))
+
+if comStatsAll:
+    for sensor in channel.getAllSensors():
+        sqlstats(sensor)
+
+if comStats!="":
+    sqlstats(channel.getSensor(comStats))
 
 if comUser:
     p_encode=p.encode('utf-8')

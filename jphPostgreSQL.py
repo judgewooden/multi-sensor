@@ -36,13 +36,6 @@ except Exception as e:
     usage()
     sys.exit()
 
-#
-# by making a Sensor a class you can store local variables
-# and make a function to check the sensor every x seconds but only update the 
-# data if the sensor changed within a specific tollerance
-# 
-# Also allow for enhanced inequiry capabilities using a peer-to-peer future prototcol
-#
 class postgreSQLHandler(object):
 
     def __init__(self):
@@ -70,12 +63,6 @@ class postgreSQLHandler(object):
         # try:
         qs=("dbname=%s user=%s password=%s host=%s " % (dbname, dbuser, sqlpassword, dbhost))
         self.q=psycopg2.connect(qs)
-        # except psycopg2.OperationalError as e:
-        #     logging.critical("Unable to connect: %s", format(e))
-        #     sys.exit()
-        # except Exception as e:
-        #     logging.critical("Unexepected error: %s", e)
-        #     sys.exit()
 
     def updateData(self, chnl, flag, source, to, timestamp, sequence, length, sender, data, isActive):
         if self.q==None:

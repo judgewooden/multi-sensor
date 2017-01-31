@@ -298,7 +298,7 @@ class jph(object):
             else:
                 raise
 
-    def sendCtrl(self, flag, timestamp=0, to="", timeComponent=0):
+    def sendCtrl(self, flag, timestamp=0, to="", timeComponent=None):
         if (self.CtrlSocket==0):
             self.startCtrl(do_not_load_multicast=True)
             # self.startCtrl()
@@ -310,7 +310,7 @@ class jph(object):
         flag=str(flag[:1])
         if timestamp==0:
             timestamp=timeNow()
-        if timeComponent==0:
+        if timeComponent==None:
             timeComponent=self.ConfigTimestamp
         # timeComponent=int(timeComponent)
         logging.debug("Ctrl-%s : send %s-%s %d %d %d %s", flag, self.Codifier, to, timestamp, self.CtrlSequence, timeComponent, self.IsActive)

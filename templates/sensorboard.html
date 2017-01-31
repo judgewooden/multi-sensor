@@ -45,7 +45,7 @@
             </div>
             <div class="jph-box-value"> 
                 <input type="number" style="width:90px;font-size:14px" id="stepValue">
-                <button type="button" {% if sensor.Control != "enabled" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Control == "enabled" %}Send Step Value{% else %}Not enabled{% endif %}" " id="{{ sensor.Codifier }}E"><i class="fa fa-plus fa-inverse"></i></button>
+                <button type="button" {% if sensor.Control != "enabled" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Control == "enabled" %}Send Step Value{% else %}Not enabled{% endif %}" " id="{{ sensor.Codifier }}E"><i class="fa fa-exchange fa-inverse"></i></button>
             </div>
             <div class="card-footer jph-box-footer"><br></div>
         </div>
@@ -168,10 +168,10 @@ $(function () {
 		var type=$(this).attr("id").substring(2,3); 
         var url="/sensormsg/" + code + "/" + type;
         if (type=='E') {
-            var url=url + '/' + +$("#stepValue").val()
+            var url=url + '/' + $("#stepValue").val()
         }
         if (type=='A') {
-            var url=url + '/' + +$("#targetValue").val()
+            var url=url + '/' + $("#targetValue").val()
         }
 		$(this).tooltip('hide');
 		$("#"+code+"t").html( "" );

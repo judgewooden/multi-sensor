@@ -66,8 +66,8 @@
     },
     "Sensors":[{
             "Codifier":"CF",
-            "ShortName":"Flask Control",
-            "Name":"Web Interface",
+            "ShortName":"Web Server",
+            "Name":"Flask based Webserver",
             "Symbol":"",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -86,7 +86,7 @@
         }, {
             "Codifier":"CC",
             "ShortName":"Control",
-            "Name":"Control Console Program",
+            "Name":"Primary Console Program",
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -97,7 +97,7 @@
         }, {
             "Codifier":"CK",
             "ShortName":"Kast Control",
-            "Name":"Control, Used for multicast debugging",
+            "Name":"Secondary Console Program",
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -107,8 +107,8 @@
             "Type":"ControlProgram"
         }, {
             "Codifier":"Q1",
-            "ShortName":"SQL-jphpi",
-            "Name":"Postgress SQL adaptor on jphpi",
+            "ShortName":"SQL store",
+            "Name":"Postgress SQL adaptor for storing data",
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -125,9 +125,28 @@
                 }
             }
         }, {
+            "Codifier":"Q2",
+            "ShortName":"SQL calc",
+            "Name":"Module for calculating the Timeseries",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"postgresCalcHandler",
+            "Sensor":{
+                "SQL":{
+                    "Database":"sensors",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
+        }, {
             "Codifier":"R1",
-            "ShortName":"Redis-mad",
-            "Name":"Redis-Cache on mad",
+            "ShortName":"Redis Cache",
+            "Name":"Redis cache used by the Web server",
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -138,7 +157,7 @@
         }, {
             "Codifier":"C1",
             "ShortName":"kastpi Temp",
-            "Name":"kastpi CPU Temparature",
+            "Name":"kastpi Raspberry Pi CPU Temparature",
             "Symbol":"C",
             "KeepAliveInterval":10,
             "SensorInterval":5,
@@ -152,7 +171,7 @@
         }, {
             "Codifier":"C2",
             "ShortName":"pihost Temp",
-            "Name":"pihost CPU Temparature",
+            "Name":"pihost Raspberry Pi CPU Temparature",
             "Symbol":"C",
             "KeepAliveInterval":30,
             "TimeoutWarning":60,
@@ -166,7 +185,7 @@
         }, {
             "Codifier":"C3",
             "ShortName":"mad Temp",
-            "Name":"pihost CPU Temparature",
+            "Name":"mad Intel Linux CPU Temparature",
             "Symbol":"C",
             "KeepAliveInterval":60,
             "TimeoutWarning":5,
@@ -179,8 +198,8 @@
             }
         }, {
             "Codifier":"C4",
-            "ShortName":"pimonitor Temp",
-            "Name":"pimonitor CPU Temparature",
+            "ShortName":"pimon Temp",
+            "Name":"pimonitor Raspberry Pi CPU Temparature",
             "Symbol":"C",
             "KeepAliveInterval":30,
             "TimeoutWarning":60,
@@ -193,8 +212,8 @@
             }
         }, {
             "Codifier":"X1",
-            "ShortName":"MAD Flow",
-            "Name":"Water sensors Rotations",
+            "ShortName":"Mad Flow",
+            "Name":"MAD Water sensors Rotations",
             "Symbol":"rpm",
             "KeepAliveInterval":60,
             "SensorInterval":10,
@@ -215,8 +234,8 @@
             }
         }, {
             "Codifier":"X2",
-            "ShortName":"MAD Liters",
-            "Name":"Liters Per Minute",
+            "ShortName":"Mad Liters",
+            "Name":"MAD Liters Per Minute",
             "Symbol":"lpm",
             "Type":"Proxy",
             "Sensor":{
@@ -224,8 +243,8 @@
             }
         }, {
             "Codifier":"X3",
-            "ShortName":"Flow Sensor Power",
-            "Name":"Indicator if the Power is ON/OFF",
+            "ShortName":"Water State",
+            "Name":"Power is ON/OFF",
             "Symbol":" ",
             "DataType":"bool",
             "Type":"Proxy",
@@ -234,8 +253,8 @@
             }
         }, {
             "Codifier":"Y1",
-            "ShortName":"AQUA Flow",
-            "Name":"Water sensors Rotations",
+            "ShortName":"Aqua Flow",
+            "Name":"AQUA Water sensors Rotations",
             "Symbol":"rpm",
             "KeepAliveInterval":60,
             "SensorInterval":10,
@@ -253,8 +272,8 @@
             }
         }, {
             "Codifier":"Y2",
-            "ShortName":"AQUA Liters",
-            "Name":"Liters Per Minute",
+            "ShortName":"Aqua Liters",
+            "Name":"AQUA Liters Per Minute",
             "Symbol":"lpm",
             "Type":"Proxy",
             "Sensor":{
@@ -289,7 +308,7 @@
             }
         }, {
             "Codifier":"A3",
-            "ShortName":"Man-in Temp",
+            "ShortName":"Manifold-in",
             "Name":"Mainifold Temp IN",
             "Symbol":"C",
             "KeepAliveInterval":60,
@@ -309,8 +328,8 @@
             }
         }, {
             "Codifier":"A4",
-            "ShortName":"Man-out MAD",
-            "Name":"Manifold Temp OUT MAD",
+            "ShortName":"Mad Man-out",
+            "Name":"Mad Manifold Temp OUT",
             "Symbol":"C",
             "DataType":"float",
             "Type":"Proxy",
@@ -319,8 +338,8 @@
             }
         }, {
             "Codifier":"A5",
-            "ShortName":"Man-out Aqua",
-            "Name":"Manifold Temp OUT Aqua",
+            "ShortName":"Aqua Man-out",
+            "Name":"Aqua Manifold Temp OUT",
             "Symbol":"C",
             "DataType":"float",
             "Type":"Proxy",
@@ -636,6 +655,25 @@
             "Active":true,
             "DataType":"integer",
             "Type":"jphRedis"
+        }, {
+            "Codifier":"ZH",
+            "ShortName":"Hist-devel",
+            "Name":"Postgress Calculate History",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"jphCalcHistory",
+            "Sensor":{
+                "SQL":{
+                    "Database":"sensors",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
         }, {
             "Codifier":"ZQ",
             "ShortName":"SQL-devel",
