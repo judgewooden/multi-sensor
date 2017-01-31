@@ -103,7 +103,8 @@ $(function () {
 				$("#jph-notice-bar").addClass("jph-error");
 				$('#jph-notice-bar').slideDown('slow');
 			} else {
-				msg = "Send: " + response.Flag + " to " + response.Codifier;
+				msg = "Send: " + response.Flag + " to " + response.Codifier
+					+ " value(" + response.Value + ")";
 				$('#jph-notice').html(msg);
 				$("#jph-notice-bar").removeClass("jph-error");
 				$("#jph-notice-bar").addClass("jph-warning");

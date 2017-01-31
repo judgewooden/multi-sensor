@@ -74,7 +74,7 @@ def jphninja(var):
 # 
 # Also allow for enhanced inequiry capabilities using a peer-to-peer future prototcol
 class PythonNinja(object):
-    def run(self, Timestamp):
+    def run(self, Timestamp, command="", number=None):
         t1=time.time() * 1000
         filename=channel.getMySensorElement("Filename")
         with open(filename, 'r') as fd:
@@ -85,7 +85,7 @@ class PythonNinja(object):
         return jph.STATE.GOOD
 
 class TempLinux(object):
-    def run(self, Timestamp):
+    def run(self, Timestamp, command="", number=None):
         try:
             channel.sendData(float(os.popen(self.cmd).read())/1000)
         except AttributeError:
@@ -94,7 +94,7 @@ class TempLinux(object):
         return jph.STATE.GOOD
 
 class failsafeReader(object):
-    def run(self, Timestamp):
+    def run(self, Timestamp, command="", number=None):
         # try:
         s=channel.getMySensorElement("URL")
         response=requests.get(s, timeout=(2.0, 10.0))
@@ -122,7 +122,7 @@ class ADCpiReader(object):
         temp=(0.0755*math.pow(ohm,2))-4.2327*ohm+60.589
         return temp
 
-    def run(self, Timestamp):
+    def run(self, Timestamp, command="", number=None):
         v = adc.read_voltage(int(channel.getMySensorElement("Pin")))
         channel.sendData(data=self.phobya2temp(v))
         for proxy in channel.getMySensorElement("Proxy"):
@@ -131,7 +131,7 @@ class ADCpiReader(object):
         return jph.STATE.GOOD
 
 class ADAfruitReader(object):
-    def run(self, Timestamp):
+    def run(self, Timestamp, command="", number=None):
         h, v = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, int(channel.getMySensorElement("Pin")))
         if h is None and v is None:
             channel.logger.error("Adafruit_DHT sensor reading returned no data")
@@ -188,7 +188,7 @@ class NestReader(object):
             sys.exit()
         self.loadnest=False
 
-    def run(self, Timestamp):
+    def run(self, Timestamp, command="", number=None):
         if not self.loadnest:
             try:
                 self.napi = nest.Nest(self.nuser, self.npass)
@@ -262,7 +262,7 @@ class ZwavePower(object):
                 self.mynode.set_field(str("name"), str("JPH"))
                 self.xnode=node
                 break
-    def run(self, Timestamp):
+    def run(self, Timestamp, command="", number=None):
         self.mynode.refresh_info()
         Power1=-1;
         Power2=-1;
@@ -294,6 +294,23 @@ class ZwavePower(object):
         if withErrors:
             return jph.STATE.WITHERRORS
         return jph.STATE.GOOD
+
+class controlSensor(object):
+    def __init__(self):
+        self.value = 0
+
+    def run(self, Timestamp, command="", number=None):
+        if command=="A":
+            if number==None:
+                channel.logger.error("Command A expects target value")
+            else:
+                self.value=number
+        if command=="E":
+            if number==None:
+                channel.logger.error("Command E expects step value")
+            else:
+                self.value=self.value+number
+        channel.sendData(data=self.value)
 
 if __name__ == '__main__':
 
@@ -328,8 +345,6 @@ if __name__ == '__main__':
         from openzwave.node import ZWaveNode
         from openzwave.network import ZWaveNetwork
         from openzwave.option import ZWaveOption
-
-
 
     c=eval(type + '()')
     channel.run(timeCallback=c.run )

@@ -61,7 +61,7 @@ class RedisHandler(object):
         self.LostMessageEnabled[source]=True
         self.LostMessageRepeat[source]=0
 
-    def publish(self, Timestamp):
+    def publish(self, Timestamp, command="", number=None):
         if self.LastTime!=0:   # Skip the first time to build up an average
             t=jph.timeNow()
             a=self.Counter*(60/((t-self.LastTime)/1000))

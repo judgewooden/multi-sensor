@@ -655,6 +655,18 @@
                     "Host":"127.0.0.1"
                 }
             }
+        }, {
+            "Codifier":"ZZ",
+            "ShortName":"Target Indicator",
+            "Name":"Example of how values could be controlled",
+            "Symbol":"",
+            "Active":true,
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "DataType":"float",
+            "Control":"enabled",
+            "Type":"controlSensor"
         }
     ]
 }

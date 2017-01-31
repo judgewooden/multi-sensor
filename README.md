@@ -140,6 +140,13 @@ export JPH_DEBUG=0
 python generatePostgreSQL -c q1 -p user_name:password > /tmp/x
 sudo -u postgres psql < /tmp/x
 ```
+####Get Third party libraries
+```
+download: http://fontawesome.io/
+download: http://jqwidgets.com/
+Extract archives into ./static
+```
+
 ####Startup test instance
 
 

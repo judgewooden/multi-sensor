@@ -12,47 +12,42 @@ body {
   clear:both;
   background:white;
 }
-.jph-entry-list{
-  float: left;
-  font-size: 13px;
-  border: .11em solid navy;
-  border-radius: .5em;
-  min-width: 9.75em;
-  box-shadow: none;
-  background-color: #fff;
-  padding: 0;
-  margin-top: .7em;
-  margin-left: .5em;
-  margin-bottom: .5em;
-}
-.jph-graph-box{
+.jph-left-box{
   float: left;
   font-size: 16px;
   border: .11em solid navy;
   border-radius: .5em;
   min-width: 9.75em;
   box-shadow: none;
-  background-color: #fff;
+  background-color: #dddddd;
   padding: 0;
   overflow: hidden;
-  margin-top: .7em;
+  margin-left: .5em;
   margin-bottom: .5em;
   width:100%;
 }
-.jph-log-box{
-  overflow: auto;
+.jph-right-box{
+  float: left;
   font-size: 16px;
   border: .11em solid navy;
   border-radius: .5em;
-  height: 14.75em; 
   min-width: 9.75em;
   box-shadow: none;
-  background-color: white;
+  background-color: yellow;
   padding: 0;
-  margin-bottom: .5em;
+  overflow: hidden;
   margin-left: .5em;
-  margin-right: .5em;
-  width: 100%;
+  margin-bottom: .5em;
+  width:100%;
+}
+@media (min-width: 480px) {
+  .jph-right-box {
+    float: right;
+    width: 48%;
+  }
+  .jph-left-box {
+    width: 48%;
+  }
 }
 .jph-sens-box{
   float: left;
@@ -92,6 +87,50 @@ body {
   .jph-sens-box {
     width: 48%;
   }
+}
+.jph-log-box{
+  overflow: auto;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  height: 14.75em; 
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: white;
+  padding: 0;
+  margin-top: .7em;
+  margin-bottom: .5em;
+  margin-left: .5em;
+  margin-right: .5em;
+  width: 100%;
+}
+.jph-entry-list{
+  float: left;
+  font-size: 13px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #fff;
+  padding: 0;
+  margin-top: .7em;
+  margin-left: .5em;
+  margin-bottom: .5em;
+}
+.jph-graph-box{
+  float: left;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #fff;
+  padding: 0;
+  overflow: hidden;
+  margin-top: .7em;
+  margin-left: .5em;
+  margin-bottom: .5em;
+  width:100%;
 }
 .jph-notify-show {
   display: block;

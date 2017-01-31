@@ -312,11 +312,10 @@ class jph(object):
             timestamp=timeNow()
         if timeComponent==0:
             timeComponent=self.ConfigTimestamp
-        timeComponent=int(timeComponent)
+        # timeComponent=int(timeComponent)
         logging.debug("Ctrl-%s : send %s-%s %d %d %d %s", flag, self.Codifier, to, timestamp, self.CtrlSequence, timeComponent, self.IsActive)
 
-        data = struct.pack('Q?', timeComponent, self.IsActive)
-
+        data = struct.pack('d?', timeComponent, self.IsActive)
         packed_data = struct.pack("IQ1s2s2sI%ds" % (len(data),), self.CtrlSequence, timestamp, flag, self.Codifier, to, len(data), data)
 
         self.CtrlSocket.sendto(packed_data, (self.CtrlAddress, self.CtrlPort))
@@ -348,13 +347,17 @@ class jph(object):
             else:
                 makeNextSensorReading = 32503680000000
 
+            command=""
+            number=None
             forever=True
             while forever:
                 t=timeNow()
 
                 if t >= makeNextSensorReading:
                     if self.IsActive:
-                        state=timeCallback(t)
+                        state=timeCallback(t, command, number)
+                        command=""
+                        number=None
                         if state==STATE.GOOD:
                             ctrlNextKeepAlive = t + (self.KeepAliveInterval) 
                     makeNextSensorReading = t + self.SensorInterval
@@ -403,9 +406,8 @@ class jph(object):
                     if s == self.CtrlSocket:
                         data, sender = self.CtrlSocket.recvfrom(1500)
                         (sequence, timestamp, flag, source, to, length,), value = struct.unpack('IQ1s2s2sI', data[:28]), data[28:]
+                        dataTime, isActive2 = struct.unpack('d?', value)
                         self.logger.debug("Ctrl-%s : recv %s-%s %d %d (len=%d)", flag, source, to, timestamp, sequence, length)
-
-                        dataTime, isActive2 = struct.unpack('Q?', value)
 
                         if ctrlCallback and self.IsActive:
                             ctrlCallback("Ctrl=", flag, source, to, timestamp, sequence, length, sender, dataTime, isActive2)
@@ -417,6 +419,19 @@ class jph(object):
                                 self.endCtrl()
                                 forever = False;
                                 break
+                            if flag == 'A' or flag == 'E':
+                                self.logger.debug("Ctrl-%s - recv Number info %s (ignore)", flag, dataTime)
+                                try:
+                                    supportControl=self.Sensor["Control"]
+                                except:
+                                    supportControl="disabled"
+                                if supportControl=="enabled":
+                                    self.logger.info("Ctrl-%s - recv sensor command (from=%s) (number=%s)", flag, source, dataTime)
+                                    command=flag
+                                    number=dataTime
+                                    makeNextSensorReading=0
+                                else:
+                                    self.logger.info("Ctrl-%s - recv sensor command IGNORING (from=%s) (number=%s)", flag, source, dataTime)
                             if flag == 'T':
                                 self.logger.debug("Ctrl-T - recv Time info %s (ignore)", dataTime)
                             if flag == 'P':

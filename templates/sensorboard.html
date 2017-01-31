@@ -36,6 +36,21 @@
 		</div>
 		<div id="{{ sensor.Codifier }}Graph" class="jph-sgraph-box"></div>
 	</div>
+    <div style="width:100%">
+        <div id="{{ sensor.Codifier }}commands" class="jph-left-box" style="height:108px" >
+            <div class="jph-box-header jph-info">Control</div>
+            <div class="jph-box-value"> 
+                <input type="number" style="width:90px;font-size:14px" id="targetValue">
+                <button type="button" {% if sensor.Control != "enabled" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Control == "enabled" %}Send Target Value{% else %}Not enabled{% endif %}" " id="{{ sensor.Codifier }}A"><i class="fa fa-thermometer fa-inverse"></i></button>
+            </div>
+            <div class="jph-box-value"> 
+                <input type="number" style="width:90px;font-size:14px" id="stepValue">
+                <button type="button" {% if sensor.Control != "enabled" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Control == "enabled" %}Send Step Value{% else %}Not enabled{% endif %}" " id="{{ sensor.Codifier }}E"><i class="fa fa-plus fa-inverse"></i></button>
+            </div>
+            <div class="card-footer jph-box-footer"><br></div>
+        </div>
+        <div id="{{ sensor.Codifier }}SocketIO" class="jph-right-box" style="height:108px"></div>
+    </div>
 	<div id="{{ sensor.Codifier }}Log" class="jph-log-box" style="clear:left;width:100%">
 		<table id="{{ sensor.Codifier }}Table"></table>
 	</div>
@@ -92,18 +107,15 @@ $(function() {
 	$('[data-click="controls"]').click(function (event) {
 	  var code=$(this).attr("id").substring(0,2); 
 		if ((ocard != "") && (ocard!=code)) {
-			console.log("I am here");
 			$('#'+ocard+'c').slideUp()
 			$('#'+ocard+'v').slideDown('slow')
 			ocard=""
 		}
 		if ($('#'+code+'c').css('display') != 'none') {
-			console.log("I am her2");
 			$('#'+code+'c').slideUp();
 			$('#'+code+'v').slideDown('slow');
 			// ocard=""
 		} else {
-			console.log("I am her3");
 			$('#'+code+'v').slideUp();
 			$('#'+code+'c').slideDown('slow');
 			ocard=code;
@@ -154,7 +166,13 @@ $(function () {
 	$('[data-btn="jphbtn"]').click(function (event) {
 		var code=$(this).attr("id").substring(0,2); 
 		var type=$(this).attr("id").substring(2,3); 
-		var url="/sensormsg/" + code + "/" + type;
+        var url="/sensormsg/" + code + "/" + type;
+        if (type=='E') {
+            var url=url + '/' + +$("#stepValue").val()
+        }
+        if (type=='A') {
+            var url=url + '/' + +$("#targetValue").val()
+        }
 		$(this).tooltip('hide');
 		$("#"+code+"t").html( "" );
 		jQuery.getJSON(url).done(function(response) {
@@ -164,7 +182,8 @@ $(function () {
 				$("#jph-notice-bar").addClass("jph-error");
 				$('#jph-notice-bar').slideDown('slow');
 			} else {
-				msg = "Send: " + response.Flag + " to " + response.Codifier;
+                msg = "Send: " + response.Flag + " to " + response.Codifier
+                    + " value(" + response.Value + ")";
 				$('#jph-notice').html(msg);
 				$("#jph-notice-bar").removeClass("jph-error");
 				$("#jph-notice-bar").addClass("jph-warning");
@@ -198,10 +217,10 @@ for (var key in mySensors) {
 }
 
 var updateLog = function() {
-	var tr, td, tbody, text;
+    var tr, td, tbody, text;
     var table = $('#{{ sensor.Codifier }}Table')[0]
 
-	while (table.firstChild) {
+    while (table.firstChild) {
 		table.removeChild(table.firstChild);
 	}
     tbody = document.createElement('tbody');
@@ -212,14 +231,19 @@ var updateLog = function() {
         dataType : "json",
         url: '/sensorlog/{{ sensor.Codifier }}',
         success: function(answer, textStatus, request){
-        	console.log(textStatus, request);
         	for (var row = 0; row < answer.length; row++) {
         		tr = document.createElement('tr');
         		td = document.createElement('td');	
         		text = document.createTextNode(answer[row]);
         		td.appendChild(text);
         		tr.appendChild(td);
-        		tbody.appendChild(tr);
+                if (row==0) {
+                    tbody.appendChild(tr);
+                    var lasttr=tr
+                } else {
+                    tbody.insertBefore(tr, lasttr);
+                    lasttr=tr
+                }
         	}
         },
 		error: function(request, textStatus, errorThrown) {

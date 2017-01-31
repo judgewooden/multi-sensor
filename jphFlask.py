@@ -314,26 +314,33 @@ def sensorinfo(codifier):
             sensordetail=json.dumps(channel.getSensor(codifier)))
 
 @app.route('/sensormsg/<codifier>/<flag>')
-def sensormsg(codifier, flag):
+@app.route('/sensormsg/<codifier>/<flag>/<number>')
+def sensormsg(codifier, flag, number=None):
     p={}
+    p["status"]="error"                 # assume error
     if (login.current_user.is_authenticated == False):
         p["message"]="Only available for logged in users"
-        p["status"]="error"
     else:
-        codifier=codifier[:2]
-        flag=flag[:1]
-        if (channel.getSensor(codifier) == None):
-            p["message"]="Please provide a valid Codifier"
-            p["status"]="warning"
+        try:
+            codifier=codifier[:2]
+            flag=flag[:1]
+            if (number==None):
+                t=jph.timeNow()
+            else:
+                t=float(number)
+        except:
+            p["message"]="Unexpected error interpreting request"
         else:
-            t=jph.timeNow()
-            if ( codifier == MyCodifier ):
-                codifier = "@@"
-            p["Codifier"]=codifier
-            p["Flag"]=flag
-            p["Timestamp"]=t
-            p["status"]="success"
-            channel.sendCtrl(to=codifier, flag=flag, timeComponent=t)
+            if (channel.getSensor(codifier) == None):
+                p["message"]="Please provide a valid Codifier"
+            else:
+                if ( codifier == MyCodifier ):
+                    codifier = "@@"
+                p["Codifier"]=codifier
+                p["Flag"]=flag
+                p["Value"]=t
+                p["status"]="success"
+                channel.sendCtrl(to=codifier, flag=flag, timeComponent=t)
     return (Response(response=json.dumps(p),
             status=200, mimetype="application/json"))
 

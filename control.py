@@ -81,7 +81,7 @@ class ControlHandler(object):
     def __init__(self):
         self.Counter=0
 
-    def publish(self, Timestamp):
+    def publish(self, Timestamp, command="", number=None):
         channel.sendData(self.Counter)
         self.Counter=0
 
