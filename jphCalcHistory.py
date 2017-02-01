@@ -135,7 +135,7 @@ class postgresCalcHandler(object):
                                 (x,)=(r[0],)
                             #-- Wrap time back to the begining of the hour
                             y1=(time.gmtime(x/1000))
-                            print(y1)
+                            # print(y1)
                             y_w=list(y1)
                             if (tgap=="hour"):
                                 y_w[4]=0
@@ -145,11 +145,11 @@ class postgresCalcHandler(object):
                             y_w[6]=0
                             y_w[7]=0
                             y_w[8]=-1
-                            print(y_w)
+                            # print(y_w)
                             y=time.struct_time(tuple(y_w))
-                            print(y)
+                            # print(y)
                             l=int(calendar.timegm(y)*1000)
-                            print(time.gmtime(l/1000))
+                            # print(time.gmtime(l/1000))
                         else:
                             break
         return jph.STATE.GOOD

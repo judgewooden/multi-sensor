@@ -78,7 +78,6 @@ def sqltable(s):
 
 def sqlstats(s):
     print("\c %s;" % dbname)
-    print("DROP TABLE IF EXISTS Sensor_%s_min;" % (s["Codifier"]) )
     print("DROP TABLE IF EXISTS Sensor_%s_10min;" % (s["Codifier"]) )
     print("CREATE TABLE Sensor_%s_10min (" % (s["Codifier"]) )
     print("Timestamp bigint PRIMARY KEY,")
