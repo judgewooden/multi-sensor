@@ -238,7 +238,7 @@ var source1 = {
   "Settings": {
     "AutoUpdate": 1,
     "UpdateInterval": 10,
-    "SecondsToShow": 300,
+    "SecondsToShow": 86400,
     "LeftLegend": "LeftLegend",
     "LeftMax": 0,
     "LeftMin": 0,
@@ -251,7 +251,7 @@ var source1 = {
     "DateLabel": "top",
     "HideDateLabel": 0,
     "HideLegend": 0,
-    "HideXAxis": 1,
+    "HideXAxis": 0,
     "HideAxisLeft": 1,
     "HideAxisRight": 0,
     "HideButtons": 1,
@@ -261,6 +261,7 @@ var source1 = {
     {
       "Name": "Loop2",
       "Codifier": "C4",
+      "Field":"median-hour",
       "Axis": "Right",
       "Interpolation": "linear",
       "Hidden": "0",
@@ -319,13 +320,15 @@ if (sourceGraph.length == 0){
   sourceGraph.push(row)
 }
 var codifiers = {{ codifiers|safe }}
+var fields=["value", "mean-10min", "median-10min", "mode-10min", "max-10min", "min-10min", "stdev-10min", "mean-hour", "median-hour", "mode-hour", "max-hour", "min-hour", "stdev-hour"];
 var axes=["Left","Right"];
 var customInterpolations=["linear","step"];
 var validUnits=[];            
 var generaterow = function () {
   var row = {};
   row["Name"] = "-blank-";
-  row["Codifier"] = "";
+  row["Codifier"] = "CF";
+  row["Field"] = "Value";
   row["Axis"] = "Left";
   row["Interpolation"] = "linear";
   row["Frequency"] = 0;
@@ -405,6 +408,7 @@ $("#graphList").on('select', function (event) {
         datafields: [
             { name: 'Name', type: 'string' },
             { name: 'Codifier', type: 'string' },
+            { name: 'Field', type: 'string' },
             { name: 'Axis', type: 'string' },
             { name: 'Interpolation', type: 'string' },
             { name: 'Frequency', type: 'number' },
@@ -421,7 +425,7 @@ $("#graphList").on('select', function (event) {
         }
     });
     $("#sensorsGrid").jqxGrid( {
-        width: 567,
+        width: 500,
         height: 225,
         source: dataAdapterSensors,
         columnsresize: true,
@@ -454,7 +458,7 @@ $("#graphList").on('select', function (event) {
             });
         },
         columns: [
-            { text: 'Name', datafield: 'Name', width: 120,
+            { text: 'Name', datafield: 'Name', width: 100,
                 validation: function (cell, value) {
                     if (value.length < 1) {
                         return { result: false, message: "Can not be empty" };
@@ -467,17 +471,22 @@ $("#graphList").on('select', function (event) {
                     editor.jqxDropDownList({ source: codifiers });
                 }
             },
-            { text: 'Axis', columntype: 'dropdownlist', datafield: 'Axis', width: 57,
+            { text: 'Field', columntype: 'dropdownlist', datafield: 'Field', width: 80,
+                createeditor: function (row, value, editor) {
+                    editor.jqxDropDownList({ source: fields });
+                }
+            },
+            { text: 'Axis', columntype: 'dropdownlist', datafield: 'Axis', width: 50,
                 createeditor: function (row, value, editor) {
                     editor.jqxDropDownList({ source: axes });
                 }
             },
-            { name: 'Interpolation', columntype: 'dropdownlist', datafield: 'Interpolation', width: 98,
+            { name: 'Interpolation', columntype: 'dropdownlist', datafield: 'Interpolation', width: 60,
                 createeditor: function (row, value, editor) {
                     editor.jqxDropDownList({ source: customInterpolations });
                 }
             },
-            { text: 'Frequency', datafield: 'Frequency', width: 80,
+            { text: 'Frequency', datafield: 'Frequency', width: 50,
                 align: 'right', cellsalign: 'right', columntype: 'numberinput',
                 validation: function (cell, value) {
                     if (value < 0) {
@@ -486,13 +495,13 @@ $("#graphList").on('select', function (event) {
                     return true;
                 }
             },
-            { text: 'Filter', datafield: 'Filter', width: 60,
+            { text: 'Filter', datafield: 'Filter', width: 50,
                 align: 'right', cellsalign: 'right', columntype: 'numberinput',
                 createeditor: function (row, cellvalue, editor) {
                     editor.jqxNumberInput({ decimalDigits: 1, digits: 2 });
                 }
             },
-            { text: 'Smoothing', datafield: 'Smoothing', width: 90,
+            { text: 'Smoothing', datafield: 'Smoothing', width: 50,
                 align: 'right', cellsalign: 'right', columntype: 'numberinput',
                 createeditor: function (row, cellvalue, editor) {
                     editor.jqxNumberInput({ decimalDigits: 2, digits: 3 });

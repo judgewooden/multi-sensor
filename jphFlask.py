@@ -347,45 +347,61 @@ def sensormsg(codifier, flag, number=None):
 @app.route('/sensorts/<query>')
 def sensorts(query):
     try:
-        jquery=json.loads(query)
+        j=json.loads(query)
     except:
         return "Invalid JSON"
 
-    query=""
-    for r in jquery:
+    q=""
+    for r in j:
         try:
             c=str((r["codifier"]))[0:2]
             if channel.getSensor(c) == None:
                 return "Not a valid codifier"
             k=int((r["key"]))
+            y=r["field"]
             t=int((r["time"]))
+            s=y.find("-")
+            if(s<1):
+                a=y
+                b=""
+            else:
+                a=y[:s]
+                b=y[s+1:]
+            if a not in ["value", "mean", "median", "mode", "max", "min", "stdev"]:
+                raise
+            if b not in ["hour", "10min", ""]:
+                raise
         except:
             return "Invalid JSON"
 
         if k > 0:
-            query= query + " UNION "
-        query = query + "SELECT " + str(k) + ","
-        query = query + " Timestamp AS timestamp, Value as value"
-        query = query + " FROM sensor_" + c
-        query = query + " WHERE Timestamp > " + str(t)
-    if query=="":
+            q= q + " UNION "
+        q = q + "SELECT " + str(k) + ","
+        q = q + " Timestamp AS timestamp, "
+        q = q + a + " AS value"
+        q = q + " FROM sensor_" + c
+        if b!="":
+            q = q + "_" + b
+        q = q + " WHERE Timestamp > " + str(t)
+        q = q + " AND " + a + " IS NOT NULL"
+    if q=="":
         return "No rows in request"
 
-    query=query + " ORDER BY Timestamp"
+    q=q + " ORDER BY Timestamp"
 
     p=[]
     try:
-        results = db.engine.execute(query)
+        u = db.engine.execute(q)
     except:
         return "Unknown Error with DB engine"
 
-    for r in results:
-        row = {
+    for r in u:
+        w = {
             '0' : r[0],
             't' : r[1],
             'v' : r[2]
         }
-        p.append(row)
+        p.append(w)
     return (Response(response=json.dumps(p), status=200, mimetype="application/json"))
 
 if __name__ == '__main__':

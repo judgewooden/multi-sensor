@@ -184,6 +184,7 @@ function LineGraph(argsMap) {
 			}
 			var temp = {
 				codifier: meta.codifier[key],
+				field: meta.field[key],
 				key: key,
 				time: Date.parse(queryTime)
 			};
@@ -354,6 +355,7 @@ function LineGraph(argsMap) {
 		// Load graph meta data
 		meta.names = new Array();
 		meta.codifier = new Array();
+		meta.field = new Array();
 		meta.yaxes = new Array();
 		meta.datagap = new Array();
 		meta.filter = new Array();
@@ -363,6 +365,7 @@ function LineGraph(argsMap) {
 		for (var key in dataMap.Settings.graphSensors) {
 			meta.names.push(getRequiredVar(dataMap.Settings.graphSensors[key], 'Name', "Need to plot something"));
 			meta.codifier.push(getRequiredVar(dataMap.Settings.graphSensors[key], 'Codifier', "Need to get data from somewhere"));
+			meta.field.push(getRequiredVar(dataMap.Settings.graphSensors[key], 'Field', "value"));			
 			meta.yaxes.push(getRequiredVar(dataMap.Settings.graphSensors[key], 'Axis', "Must specify Axis"));
 			meta.datagap.push(getRequiredVar(dataMap.Settings.graphSensors[key], 'Frequency', "Must specify [0=valid]"));
 			meta.filter.push(getRequiredVar(dataMap.Settings.graphSensors[key], 'Filter', "Must specify [-1=none]"));
@@ -396,6 +399,7 @@ function LineGraph(argsMap) {
 			var temp = {
 				name: meta.names[key],
 				codifier: meta.codifier[key],
+				field: meta.field[key],
 				yaxis: meta.yaxes[key],
 				interpolation: meta.interpolation[key],
 				datagap: +meta.datagap[key],

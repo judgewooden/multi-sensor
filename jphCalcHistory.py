@@ -58,92 +58,100 @@ class postgresCalcHandler(object):
             self.initdb()
 
         cur=self.db.cursor()
-        for s in channel.getAllSensors():
-            if "DataType" in s:
-                if s["DataType"] == 'bool':
-                    continue
-            l=self.MaxTimeProcessed[s["Codifier"]]
-            while True:
-                n=l+3600000
-                t=jph.timeNow()
-                if n>t:
-                    break
+        for tgap in ["10min", "hour"]:
+            for s in channel.getAllSensors():
+                if "DataType" in s:
+                    if s["DataType"] == 'bool':
+                        continue
 
-                q=("SELECT Value FROM sensor_%s WHERE Timestamp>%s and Timestamp<=%s" % (s["Codifier"], l, n))
-                channel.logger.debug(q)
-                channel.logger.debug("Timestamp > %s", time.gmtime(l/1000))
-                channel.logger.debug("Timestamp <= %s", time.gmtime(n/1000))
-                cur.execute(q)
-                a=cur.fetchall()
+                l=self.MaxTimeProcessed[s["Codifier"]+tgap]
+                while True:
+                    if tgap=="hour":
+                        n=l+3600000
+                    else:
+                        n=l+600000
 
-                channel.logger.debug("return len: %s", len(a))
-                if len(a)>0:
-                    d=[]
-                    for r in a:
-                        (v,)=(r[0],)
-                        d.append(v)
-                    # try:
-                    try:
-                        mean=statistics.mean(d)
-                    except:
-                        mean="NULL"
-                    try:
-                        mode=statistics.mode(d)
-                    except:
-                        mode="NULL"
-                    try:
-                        median=statistics.median(d)
-                    except:
-                        median="NULL"
-                    try:
-                        maxi=max(d)
-                    except:
-                        maxi="NULL"
-                    try:
-                        mini=min(d)
-                    except:
-                        mini="NULL"
-                    try:
-                        stddev=statistics.pstdev(d)
-                    except:
-                        stddev="NULL"
+                    t=jph.timeNow()
+                    if n>t:
+                        break
 
-                    q=("INSERT INTO sensor_%s_hour VALUES (%d, %s, %s, %s, %s, %s, %s)" % (s["Codifier"], n, mean, mode, median, maxi, mini, stddev))
-                    print(q)
-                    channel.logger.debug(q)
-                    cur.execute(q)
-                    self.db.commit()
-
-                    self.MaxTimeProcessed[s["Codifier"]]=n
-                    self.Counter+=1
-                    l=n
-                else:
-                    # get the first available value and calculate from there
-                    q=("SELECT Timestamp FROM sensor_%s WHERE Timestamp>%s ORDER BY Timestamp ASC LIMIT 1" % (s["Codifier"], l))
+                    q=("SELECT Value FROM sensor_%s WHERE Timestamp>%s and Timestamp<=%s" % (s["Codifier"], l, n))
                     channel.logger.debug(q)
                     channel.logger.debug("Timestamp > %s", time.gmtime(l/1000))
+                    channel.logger.debug("Timestamp <= %s", time.gmtime(n/1000))
                     cur.execute(q)
                     a=cur.fetchall()
+
                     channel.logger.debug("return len: %s", len(a))
-                    if len(a)==1:
+                    if len(a)>0:
+                        d=[]
                         for r in a:
-                            (x,)=(r[0],)
-                        #-- Wrap time back to the begining of the hour
-                        y1=(time.gmtime(x/1000))
-                        # print(y1)
-                        y_w=list(y1)
-                        y_w[4]=0
-                        y_w[5]=0
-                        y_w[6]=0
-                        y_w[7]=0
-                        y_w[8]=-1
-                        # print(y_w)
-                        y=time.struct_time(tuple(y_w))
-                        # print(y)
-                        l=int(calendar.timegm(y)*1000)
-                        # print(time.gmtime(l/1000))
+                            (v,)=(r[0],)
+                            d.append(v)
+                        # try:
+                        try:
+                            mean=statistics.mean(d)
+                        except:
+                            mean="NULL"
+                        try:
+                            mode=statistics.mode(d)
+                        except:
+                            mode="NULL"
+                        try:
+                            median=statistics.median(d)
+                        except:
+                            median="NULL"
+                        try:
+                            maxi=max(d)
+                        except:
+                            maxi="NULL"
+                        try:
+                            mini=min(d)
+                        except:
+                            mini="NULL"
+                        try:
+                            stddev=statistics.pstdev(d)
+                        except:
+                            stddev="NULL"
+
+                        q=("INSERT INTO sensor_%s_%s VALUES (%d, %s, %s, %s, %s, %s, %s)" % (s["Codifier"], tgap, n, mean, mode, median, maxi, mini, stddev))
+                        channel.logger.debug(q)
+                        cur.execute(q)
+                        self.db.commit()
+
+                        self.MaxTimeProcessed[s["Codifier"]+tgap]=n
+                        self.Counter+=1
+                        l=n
                     else:
-                        break
+                        # get the first available value and calculate from there
+                        q=("SELECT Timestamp FROM sensor_%s WHERE Timestamp>%s ORDER BY Timestamp ASC LIMIT 1" % (s["Codifier"], l))
+                        channel.logger.debug(q)
+                        # channel.logger.debug("Timestamp > %s", time.gmtime(l/1000))
+                        cur.execute(q)
+                        a=cur.fetchall()
+                        channel.logger.debug("return len: %s", len(a))
+                        if len(a)==1:
+                            for r in a:
+                                (x,)=(r[0],)
+                            #-- Wrap time back to the begining of the hour
+                            y1=(time.gmtime(x/1000))
+                            print(y1)
+                            y_w=list(y1)
+                            if (tgap=="hour"):
+                                y_w[4]=0
+                            if (tgap=="10min"):
+                                y_w[4]=y_w[4]-(y_w[4]%10)
+                            y_w[5]=0
+                            y_w[6]=0
+                            y_w[7]=0
+                            y_w[8]=-1
+                            print(y_w)
+                            y=time.struct_time(tuple(y_w))
+                            print(y)
+                            l=int(calendar.timegm(y)*1000)
+                            print(time.gmtime(l/1000))
+                        else:
+                            break
         return jph.STATE.GOOD
 
     def initdb(self):
@@ -154,15 +162,17 @@ class postgresCalcHandler(object):
         cur=self.db.cursor()
 
         channel.logger.debug("Loading Last calculated values")
-        for s in channel.getAllSensors():
-            q=("SELECT Timestamp FROM sensor_%s_hour ORDER BY Timestamp DESC LIMIT 1" % s["Codifier"]) 
-            cur.execute(q)
-            a=cur.fetchall()
+        for tgap in ["10min", "hour"]:
+            for s in channel.getAllSensors():
+                q=("SELECT Timestamp FROM sensor_%s_%s ORDER BY Timestamp DESC LIMIT 1" % (s["Codifier"], tgap)) 
+                channel.logger.debug(q)
+                cur.execute(q)
+                a=cur.fetchall()
 
-            self.MaxTimeProcessed[s["Codifier"]]=0
-            if len(a)==1:
-                for r in a:
-                    (self.MaxTimeProcessed[s["Codifier"]],)=(r[0],)
+                self.MaxTimeProcessed[s["Codifier"]+tgap]=0
+                if len(a)==1:
+                    for r in a:
+                        (self.MaxTimeProcessed[s["Codifier"]+tgap],)=(r[0],)
 
 if __name__ == '__main__':
  

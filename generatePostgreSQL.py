@@ -78,6 +78,18 @@ def sqltable(s):
 
 def sqlstats(s):
     print("\c %s;" % dbname)
+    print("DROP TABLE IF EXISTS Sensor_%s_min;" % (s["Codifier"]) )
+    print("DROP TABLE IF EXISTS Sensor_%s_10min;" % (s["Codifier"]) )
+    print("CREATE TABLE Sensor_%s_10min (" % (s["Codifier"]) )
+    print("Timestamp bigint PRIMARY KEY,")
+    print("Mean float,")
+    print("Mode float,")
+    print("Median float,")
+    print("Max float,")
+    print("Min float,")
+    print("Stdev float")
+    print(");")
+    print("GRANT ALL PRIVILEGES ON TABLE Sensor_%s_10min to %s;" % (s["Codifier"], dbuser))
     print("DROP TABLE IF EXISTS Sensor_%s_hour;" % (s["Codifier"]) )
     print("CREATE TABLE Sensor_%s_hour (" % (s["Codifier"]) )
     print("Timestamp bigint PRIMARY KEY,")
@@ -86,7 +98,7 @@ def sqlstats(s):
     print("Median float,")
     print("Max float,")
     print("Min float,")
-    print("Stddev float")
+    print("Stdev float")
     print(");")
     print("GRANT ALL PRIVILEGES ON TABLE Sensor_%s_hour to %s;" % (s["Codifier"], dbuser))
 
