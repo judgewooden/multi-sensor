@@ -231,7 +231,7 @@ class NestReader(object):
 class ZwavePower(object):
     def __init__(self):
         self.nodes=[]
-        self.sensor=[]
+        self.sensors=[]
 
         n=channel.getMySensorElement("node")
         i=channel.getMySensorElement("index")
