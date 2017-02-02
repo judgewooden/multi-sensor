@@ -325,14 +325,14 @@ class ZwavePower(object):
 
                     z=looper
                     while n==node:
-                        if self.network.nodes[node].values[val].index == i:
+                        if self.network.nodes[node].values[val].index == a:
                             ans=self.network.nodes[node].get_sensor_value(val)
                             print(c, ans)
-                            print(" ")
                             break
                         z+=1
                         (n, i, a, c)=self.sensors[z]
                         print("val", node, n, i, a, c)
+                print(" ")
 
             looper+=1
         return jph.STATE.GOOD
