@@ -246,8 +246,7 @@ class ZwavePower(object):
             c=proxy["Codifier"]
             self.sensors.append((n,i,a,c))
         self.sensors.sort(key=lambda tup: tup[0])
-        print("Zwave components:", self.sensors)
-
+        # print("Zwave components:", self.sensors)
 
         os.chdir(os.path.expanduser("~/zwave"))
         path=os.getcwd()
@@ -256,160 +255,53 @@ class ZwavePower(object):
         options = ZWaveOption(device, config_path=str(c_path),  user_path=str("."), cmd_line=str(""))
         options.lock()
        
-        print("------------------------------------------------------------")
-        print("Waiting for network awaked : ")
-        print("------------------------------------------------------------")
+        # print("------------------------------------------------------------")
+        # print("Waiting for network awaked : ")
+        # print("------------------------------------------------------------")
         self.network = ZWaveNetwork(options, log=None, autostart=True)
         for i in range(0,300):
             if self.network.state>=self.network.STATE_AWAKED:
                 break
             else:
-                sys.stdout.write('.')
-                sys.stdout.flush()
+                # sys.stdout.write('.')
+                # sys.stdout.flush()
                 time.sleep(1.0)
 
         if self.network.state<self.network.STATE_AWAKED:
             channel.logger.error("Zwave Network is not awake but continue anyway")
 
         for node in self.network.nodes:
-            print("%s - Product name / id / type : %s / %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].product_name, self.network.nodes[node].product_id, self.network.nodes[node].product_type))
-            print("%s - Name : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].name))
-            print("%s - Manufacturer name / id : %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].manufacturer_name, self.network.nodes[node].manufacturer_id))
-            print("%s - Version : %s" % (self.network.nodes[node].node_id, self.network.nodes[node].version))
-            # print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
-            print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
-
-            # print("manu:", self.network.nodes[node].manufacturer_name[:6])
-            # if self.network.nodes[node].manufacturer_name[:6]=="FIBARO":
-            #     mynodeid=self.network.nodes[node].node_id
-            #     print("node_id:", mynodeid)
-            #     print("node:", node)
-            #     print("network:", ZWaveNode(mynodeid, self.network))
-
-            # if "FGWPE Wall Plug"==self.network.nodes[node].product_name:
-            #     mynodeid=self.network.nodes[node].node_id
-            #     self.xnode=node
-            #     # break
+            # print("%s - Product name / id / type : %s / %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].product_name, self.network.nodes[node].product_id, self.network.nodes[node].product_type))
+            # print("%s - Name : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].name))
+            # print("%s - Manufacturer name / id : %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].manufacturer_name, self.network.nodes[node].manufacturer_id))
+            # print("%s - Version : %s" % (self.network.nodes[node].node_id, self.network.nodes[node].version))
+            # # print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
+            # print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
 
             self.nodes.append(self.network.nodes[node].node_id)
-
-        # self.mynode=ZWaveNode(mynodeid, self.network)
-        # self.mynode.set_field(str("name"), str("JPH"))
-        print("nodes found:", self.nodes)
+        # print("nodes found:", self.nodes)
                 
     def run(self, Timestamp, command="", number=None):
-        print("----------------------------------------")
+        # print("----------------------------------------")
         for node in self.nodes:
             for val in self.network.nodes[node].get_sensors():
-                print("node/name/index/instance : %s/%s/%s/%s" % (node,
-                    self.network.nodes[node].name,
-                    self.network.nodes[node].values[val].index,
-                    self.network.nodes[node].values[val].instance))
-                print("%s/%s %s %s" % (self.network.nodes[node].values[val].label,
-                    self.network.nodes[node].values[val].help,
-                    self.network.nodes[node].get_sensor_value(val),
-                    self.network.nodes[node].values[val].units))
+                # print("node/name/index/instance : %s/%s/%s/%s" % (node,
+                #     self.network.nodes[node].name,
+                #     self.network.nodes[node].values[val].index,
+                #     self.network.nodes[node].values[val].instance))
+                # print("%s/%s %s %s" % (self.network.nodes[node].values[val].label,
+                #     self.network.nodes[node].values[val].help,
+                #     self.network.nodes[node].get_sensor_value(val),
+                #     self.network.nodes[node].values[val].units))
 
                 for looper in self.sensors:
                     (n, i, a, c)=looper
                     if n==node and i==self.network.nodes[node].values[val].index:
                         ans=self.network.nodes[node].get_sensor_value(val)
-                        print("found", c, ans)
+                        # print("found", c, ans)
                         channel.sendData(data=ans, Codifier=str(c))
                         break
         return jph.STATE.GOOD
-
-
-            # if looper>len(self.sensors):
-            #     print(looper, len(self.sensors), "end of array")
-            #     break
-            # print("cur=", node, "n=", n, "i=", i, "a=", a, c)
-
-            # if n==node:
-            #     for val in self.network.nodes[node].get_sensors():
-            #         print("node/name/index/instance : %s/%s/%s/%s" % (node,
-            #             self.network.nodes[node].name,
-            #             self.network.nodes[node].values[val].index,
-            #             self.network.nodes[node].values[val].instance))
-            #         print("%s/%s %s %s" % (self.network.nodes[node].values[val].label,
-            #             self.network.nodes[node].values[val].help,
-            #             self.network.nodes[node].get_sensor_value(val),
-            #             self.network.nodes[node].values[val].units))
-
-            #         z=looper
-            #         while n==node:
-            #             if self.network.nodes[node].values[val].index == i:
-            #                 ans=self.network.nodes[node].get_sensor_value(val)
-            #                 print("found", c, ans)
-            #                 break
-            #             z+=1
-            #             (n, i, a, c)=self.sensors[z]
-            #             print("val=", node, "n=", n, "i=", i, "a=", a, c)
-
-            #         looper+=1
-            #         if looper>len(self.sensors):
-            #             print(looper, len(self.sensors), "past end of array")
-            #             return jph.STATE.GOOD
-            #         (n, i, a, c)=self.sensors[looper]
-            #         print("loo=", node, "n=", n, "i=", i, "a=", a, c)
-            #     print(" ")
-
-
-
-
-
-
-
-
-        #             for l=i;n==node
-
-        #             print("look for")
-        #         if n>node:
-        #             break
-        #         if n==node:
-        #             if i==self.network.nodes[node].values[val].index:
-        #         i+=1
-
-        #         if node==self.sensors[i]:
-        #             if self.network.nodes[node].values[val].index==self:
-
-        #     i+=1
-        #     while 
-        #     if node == i
-
-
-
-        # self.mynode.refresh_info()
-        # Power1=-1;
-        # Power2=-1;
-        # Energy=-1
-        # withErrors=False
-        # for val in self.network.nodes[self.xnode].get_sensors() :
-        #     print("node/name/index/instance : %s/%s/%s/%s" % (self.xnode,
-        #      self.network.nodes[self.xnode].name,
-        #      self.network.nodes[self.xnode].values[val].index,
-        #      self.network.nodes[self.xnode].values[val].instance))
-        #     print("%s/%s %s %s" % (self.network.nodes[self.xnode].values[val].label,
-        #      self.network.nodes[self.xnode].values[val].help,
-        #      self.network.nodes[self.xnode].get_sensor_value(val),
-        #      self.network.nodes[self.xnode].values[val].units))
-        #     if self.network.nodes[self.xnode].values[val].index==4:
-        #         Power1=self.network.nodes[self.xnode].get_sensor_value(val)
-        #     if self.network.nodes[self.xnode].values[val].index==8:
-        #         Power2=self.network.nodes[self.xnode].get_sensor_value(val)
-        #     if self.network.nodes[self.xnode].values[val].index==0:
-        #         Energy=self.network.nodes[self.xnode].get_sensor_value(val)
-
-        # if (Power1==-1 or Power2==-1 or Energy==-1):
-        #     channel.logger.error("Failed to obtain Zwave values")
-        #     withErrors=True
-        # channel.logger.debug("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (Power1, Power2, Energy))
-        # channel.sendData(data=eval(channel.getMySensorElement("Field")))
-        # for proxy in channel.getMySensorElement("Proxy"):
-        #     channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
-        # if withErrors:
-        #     return jph.STATE.WITHERRORS
-        # return jph.STATE.GOOD
 
 class controlSensor(object):
     def __init__(self):
