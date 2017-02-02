@@ -237,14 +237,15 @@ class ZwavePower(object):
         options = ZWaveOption(device, config_path=str(c_path),  user_path=str("."), cmd_line=str(""))
         options.lock()
        
-        # print("------------------------------------------------------------")
-        # print("Waiting for network awaked : ")
-        # print("------------------------------------------------------------")
+        print("------------------------------------------------------------")
+        print("Waiting for network awaked : ")
+        print("------------------------------------------------------------")
         self.network = ZWaveNetwork(options, log=None, autostart=True)
         for i in range(0,300):
             if self.network.state>=self.network.STATE_AWAKED:
                 break
             else:
+                print(".", end="")
                 time.sleep(1.0)
         if self.network.state<self.network.STATE_AWAKED:
             channel.logger.error("Zwave Network is not awake but continue anyway")
@@ -254,7 +255,7 @@ class ZwavePower(object):
             print("%s - Name : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].name))
             print("%s - Manufacturer name / id : %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].manufacturer_name, self.network.nodes[node].manufacturer_id))
             print("%s - Version : %s" % (self.network.nodes[node].node_id, self.network.nodes[node].version))
-            print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
+            # print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
             print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
 
             print("manu:", self.network.nodes[node].manufacturer_name[:5])
