@@ -310,7 +310,7 @@ class ZwavePower(object):
                 print(looper, len(self.sensors), "end of array")
                 return jph.STATE.GOOD
             (n, i, a, c)=self.sensors[looper]
-            print(node, n, i, a, c)
+            print("cur", node, n, i, a, c)
 
             if n==node:
                 for val in self.network.nodes[node].get_sensors():
