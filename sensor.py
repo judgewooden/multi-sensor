@@ -311,6 +311,7 @@ class ZwavePower(object):
                     self.network.nodes[node].values[val].units))
 
                 for looper in self.sensors:
+                    print(looper)
                     (n, i, a, c)=looper
                     if n==node and i==self.network.nodes[node].values[val].index:
                         ans=self.network.nodes[node].get_sensor_value(val)
