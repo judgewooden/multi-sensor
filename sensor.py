@@ -292,7 +292,7 @@ class ZwavePower(object):
         print("nodes found:", self.nodes)
                 
     def run(self, Timestamp, command="", number=None):
-        for node in self.nodes:
+        # for node in self.nodes:
 
 
 
