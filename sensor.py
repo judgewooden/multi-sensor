@@ -241,7 +241,7 @@ class ZwavePower(object):
         print ("My sensors:", self.sensors)
 
         channel.sendData(data=eval(channel.getMySensorElement("Field")))
-        for proxy in channel.getMySensorElement("Proxy"):
+        # for proxy in channel.getMySensorElement("Proxy"):
 
         os.chdir(os.path.expanduser("~/zwave"))
         path=os.getcwd()
