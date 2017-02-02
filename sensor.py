@@ -236,12 +236,18 @@ class ZwavePower(object):
         n=channel.getMySensorElement("node")
         i=channel.getMySensorElement("index")
         a=channel.getMySensorElement("instance")
-        c=channel.getSensor["Codifier"]
+        c=Codifier
         self.sensors.append((n,i,a,c))
-        print ("My sensors:", self.sensors)
-
+        for proxy in channel.getMySensorElement("Proxy"):
+            n=channel.getMySensorElement("node")
+            i=channel.getMySensorElement("index")
+            a=channel.getMySensorElement("instance")
+            c=channel.getMySensorElement("Codifier")
+            self.sensors.append((n,i,a,c))
+        print("Zwave components:", self.sensors)
         # channel.sendData(data=eval(channel.getMySensorElement("Field")))
-        # for proxy in channel.getMySensorElement("Proxy"):
+        # print ("My sensors:", self.sensors)
+
 
         os.chdir(os.path.expanduser("~/zwave"))
         path=os.getcwd()
@@ -285,7 +291,7 @@ class ZwavePower(object):
             #     self.xnode=node
             #     # break
 
-            self.nodes.append(node)
+            self.nodes.append(self.network.nodes[node].node_id)
 
         # self.mynode=ZWaveNode(mynodeid, self.network)
         # self.mynode.set_field(str("name"), str("JPH"))
