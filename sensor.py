@@ -299,40 +299,59 @@ class ZwavePower(object):
                 
     def run(self, Timestamp, command="", number=None):
         print("----------------------------------------")
-        looper=0
         for node in self.nodes:
+            for val in self.network.nodes[node].get_sensors():
+                print("node/name/index/instance : %s/%s/%s/%s" % (node,
+                    self.network.nodes[node].name,
+                    self.network.nodes[node].values[val].index,
+                    self.network.nodes[node].values[val].instance))
+                print("%s/%s %s %s" % (self.network.nodes[node].values[val].label,
+                    self.network.nodes[node].values[val].help,
+                    self.network.nodes[node].get_sensor_value(val),
+                    self.network.nodes[node].values[val].units))
 
-            if looper>len(self.sensors):
-                print(looper, len(self.sensors), "end of array")
-                break
-            (n, i, a, c)=self.sensors[looper]
-            print("cur=", node, "n=", n, "i=", i, "a=", a, c)
-
-            if n==node:
-                for val in self.network.nodes[node].get_sensors():
-                    print("node/name/index/instance : %s/%s/%s/%s" % (node,
-                        self.network.nodes[node].name,
-                        self.network.nodes[node].values[val].index,
-                        self.network.nodes[node].values[val].instance))
-                    print("%s/%s %s %s" % (self.network.nodes[node].values[val].label,
-                        self.network.nodes[node].values[val].help,
-                        self.network.nodes[node].get_sensor_value(val),
-                        self.network.nodes[node].values[val].units))
-
-                    z=looper
-                    while n==node:
-                        if self.network.nodes[node].values[val].index == i:
-                            ans=self.network.nodes[node].get_sensor_value(val)
-                            print("found", c, ans)
-                            break
-                        z+=1
-                        (n, i, a, c)=self.sensors[z]
-                        print("val=", node, "n=", n, "i=", i, "a=", a, c)
+                for looper in self.sensors
                     (n, i, a, c)=self.sensors[looper]
-                    print("loo=", node, "n=", n, "i=", i, "a=", a, c)
-                print(" ")
-                looper+=1
+                    if n==node and i==self.network.nodes[node].values[val].index:
+                        ans=self.network.nodes[node].get_sensor_value(val)
+                        print("found", c, ans)
+                        break
         return jph.STATE.GOOD
+
+
+            # if looper>len(self.sensors):
+            #     print(looper, len(self.sensors), "end of array")
+            #     break
+            # print("cur=", node, "n=", n, "i=", i, "a=", a, c)
+
+            # if n==node:
+            #     for val in self.network.nodes[node].get_sensors():
+            #         print("node/name/index/instance : %s/%s/%s/%s" % (node,
+            #             self.network.nodes[node].name,
+            #             self.network.nodes[node].values[val].index,
+            #             self.network.nodes[node].values[val].instance))
+            #         print("%s/%s %s %s" % (self.network.nodes[node].values[val].label,
+            #             self.network.nodes[node].values[val].help,
+            #             self.network.nodes[node].get_sensor_value(val),
+            #             self.network.nodes[node].values[val].units))
+
+            #         z=looper
+            #         while n==node:
+            #             if self.network.nodes[node].values[val].index == i:
+            #                 ans=self.network.nodes[node].get_sensor_value(val)
+            #                 print("found", c, ans)
+            #                 break
+            #             z+=1
+            #             (n, i, a, c)=self.sensors[z]
+            #             print("val=", node, "n=", n, "i=", i, "a=", a, c)
+
+            #         looper+=1
+            #         if looper>len(self.sensors):
+            #             print(looper, len(self.sensors), "past end of array")
+            #             return jph.STATE.GOOD
+            #         (n, i, a, c)=self.sensors[looper]
+            #         print("loo=", node, "n=", n, "i=", i, "a=", a, c)
+            #     print(" ")
 
 
 
