@@ -233,6 +233,7 @@ class ZwavePower(object):
         self.nodes=[]
         self.sensors=[]
 
+        # build an array of the requested zwave items
         n=channel.getMySensorElement("node")
         i=channel.getMySensorElement("index")
         a=channel.getMySensorElement("instance")
@@ -246,9 +247,6 @@ class ZwavePower(object):
             self.sensors.append((n,i,a,c))
         self.sensors.sort(key=lambda tup: tup[0])
         print("Zwave components:", self.sensors)
-        # self.sensors.sort(key=lambda tup: tup[2])
-        # channel.sendData(data=eval(channel.getMySensorElement("Field")))
-        # print ("My sensors:", self.sensors)
 
 
         os.chdir(os.path.expanduser("~/zwave"))
