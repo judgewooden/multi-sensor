@@ -239,10 +239,10 @@ class ZwavePower(object):
         c=Codifier
         self.sensors.append((n,i,a,c))
         for proxy in channel.getMySensorElement("Proxy"):
-            n=channel.getMySensorElement("node")
-            i=channel.getMySensorElement("index")
-            a=channel.getMySensorElement("instance")
-            c=channel.getMySensorElement("Codifier")
+            n=proxy["node"]
+            i=proxy["index"]
+            a=proxy["instance"]
+            c=proxy["Codifier"]
             self.sensors.append((n,i,a,c))
         print("Zwave components:", self.sensors)
         # channel.sendData(data=eval(channel.getMySensorElement("Field")))
