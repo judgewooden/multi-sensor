@@ -49,7 +49,7 @@
             </div>
             <div class="card-footer jph-box-footer"><br></div>
         </div>
-        <div id="{{ sensor.Codifier }}SocketIO" class="jph-right-box" style="height:108px"></div>
+        <div id="{{ sensor.Codifier }}Week" class="jph-right-box" style="height:108px"></div>
     </div>
 	<div id="{{ sensor.Codifier }}Log" class="jph-log-box" style="clear:left;width:100%">
 		<table id="{{ sensor.Codifier }}Table"></table>
@@ -65,11 +65,11 @@ var source1 = {
   "Settings": {
     "AutoUpdate": 1,
     "UpdateInterval": 10,
-    "SecondsToShow": 300,
-    "LeftLegend": "LeftLegend",
+    "SecondsToShow": 600,
+    "LeftLegend": "",
     "LeftMax": 0,
     "LeftMin": 0,
-    "RightLegend": "RightLegend",
+    "RightLegend": "",
     "RightMax": 0,
     "RightMin": 0,
     "Title": "",
@@ -100,6 +100,67 @@ var source1 = {
   }
 };
 var l1 = new LineGraph({containerId: '{{ sensor.Codifier }}Graph', data: source1});
+
+var source2 = {
+    "Name": "24 hours",
+    "Settings": {
+        "AutoUpdate": 0,
+        "UpdateInterval": 0,
+        "SecondsToShow": 86400,
+        "LeftLegend": "",
+        "LeftMax": 0,
+        "LeftMin": 0,
+        "RightLegend": "",
+        "RightMax": 0,
+        "RightMin": 0,
+        "Title": "24 hours",
+        "Interpolation": "cardinal",
+        "TickLine": 0,
+        "DateLabel": "bottom",
+        "HideDateLabel": 0,
+        "HideLegend": 0,
+        "HideXAxis": 1,
+        "HideAxisLeft": 1,
+        "HideAxisRight": 1,
+        "HideButtons": 1,
+        "HideLeftControls": 1,
+        "HideRightControls": 1,
+        "graphSensors": [
+            {
+                "Name": "Mean",
+                "Codifier": "{{ sensor.Codifier }}",
+                "Field": "mean-10min",
+                "Axis": "Right",
+                "Interpolation": "linear",
+                "Frequency": "3600.00",
+                "Filter": "-1.00",
+                "Smoothing": "1.00"
+            },
+            {
+                "Name": "Maximum",
+                "Codifier": "{{ sensor.Codifier }}",
+                "Field": "max-10min",
+                "Axis": "Right",
+                "Interpolation": "linear",
+                "Frequency": "3600.00",
+                "Filter": "-1.00",
+                "Smoothing": "1.00"
+            },
+            {
+                "Name": "Minimum",
+                "Codifier": "{{ sensor.Codifier }}",
+                "Field": "min-10min",
+                "Axis": "Right",
+                "Interpolation": "linear",
+                "Frequency": "3600.00",
+                "Filter": "-1.00",
+                "Smoothing": "1.00"
+            }
+        ]
+    }
+}
+var l2 = new LineGraph({containerId: '{{ sensor.Codifier }}Week', data: source2})
+
 //
 // Some AJAX navigation functions
 //
@@ -144,6 +205,7 @@ $(function () {
 	updateLog();
 	refreshData();
     l1.refreshData();
+    l2.refreshData();
   });
 })
 

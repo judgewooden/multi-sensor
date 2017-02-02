@@ -250,18 +250,27 @@ class ZwavePower(object):
             channel.logger.error("Zwave Network is not awake but continue anyway")
 
         for node in self.network.nodes:
-            # print("%s - Product name / id / type : %s / %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].product_name, self.network.nodes[node].product_id, self.network.nodes[node].product_type))
-            # print("%s - Name : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].name))
-            # print("%s - Manufacturer name / id : %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].manufacturer_name, self.network.nodes[node].manufacturer_id))
-            # print("%s - Version : %s" % (self.network.nodes[node].node_id, self.network.nodes[node].version))
-            #print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
-            # print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
+            print("%s - Product name / id / type : %s / %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].product_name, self.network.nodes[node].product_id, self.network.nodes[node].product_type))
+            print("%s - Name : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].name))
+            print("%s - Manufacturer name / id : %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].manufacturer_name, self.network.nodes[node].manufacturer_id))
+            print("%s - Version : %s" % (self.network.nodes[node].node_id, self.network.nodes[node].version))
+            print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
+            print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
+
+            print("manu:", self.network.nodes[node].manufacturer_name[:5])
+            if self.network.nodes[node].manufacturer_name[:5]=="FIBARO":
+                mynodeid=self.network.nodes[node].node_id
+                print("node_id:", mynodeid)
+                print("node:", node)
+                print("network:", ZWaveNode(mynodeid, self.network))
+
             if "FGWPE Wall Plug"==self.network.nodes[node].product_name:
                 mynodeid=self.network.nodes[node].node_id
                 self.mynode=ZWaveNode(mynodeid, self.network)
                 self.mynode.set_field(str("name"), str("JPH"))
                 self.xnode=node
-                break
+                # break
+                
     def run(self, Timestamp, command="", number=None):
         self.mynode.refresh_info()
         Power1=-1;
@@ -269,14 +278,14 @@ class ZwavePower(object):
         Energy=-1
         withErrors=False
         for val in self.network.nodes[self.xnode].get_sensors() :
-            #print("node/name/index/instance : %s/%s/%s/%s" % (node,
-            # network.nodes[node].name,
-            # network.nodes[node].values[val].index,
-            # network.nodes[node].values[val].instance))
-            #print("%s/%s %s %s" % (network.nodes[node].values[val].label,
-            # network.nodes[node].values[val].help,
-            # network.nodes[node].get_sensor_value(val),
-            # network.nodes[node].values[val].units))
+            print("node/name/index/instance : %s/%s/%s/%s" % (self.xnode,
+             network.nodes[self.xnode].name,
+             network.nodes[self.xnode].values[val].index,
+             network.nodes[self.xnode].values[val].instance))
+            print("%s/%s %s %s" % (network.nodes[self.xnode].values[val].label,
+             network.nodes[self.xnode].values[val].help,
+             network.nodes[self.xnode].get_sensor_value(val),
+             network.nodes[self.xnode].values[val].units))
             if self.network.nodes[self.xnode].values[val].index==4:
                 Power1=self.network.nodes[self.xnode].get_sensor_value(val)
             if self.network.nodes[self.xnode].values[val].index==8:
