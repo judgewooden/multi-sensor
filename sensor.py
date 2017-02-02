@@ -304,7 +304,7 @@ class ZwavePower(object):
 
             if looper>len(self.sensors):
                 print(looper, len(self.sensors), "end of array")
-                return jph.STATE.GOOD
+                break
             (n, i, a, c)=self.sensors[looper]
             print("cur=", node, "n=", n, "i=", i, "a=", a, c)
 
@@ -331,8 +331,7 @@ class ZwavePower(object):
                     (n, i, a, c)=self.sensors[looper]
                     print("loo=", node, "n=", n, "i=", i, "a=", a, c)
                 print(" ")
-
-            looper+=1
+                looper+=1
         return jph.STATE.GOOD
 
 
