@@ -246,7 +246,7 @@ class ZwavePower(object):
             self.sensors.append((n,i,a,c))
         print("Zwave components:", self.sensors)
         # self.sensors.sort(key=lambda tup: tup[2])
-        print("Zwave components:", sorted(self.sensors, key=lambda tup: tup[2]) )
+        print("Zwave components:", sorted(self.sensors, key=lambda tup: tup[1]) )
         # channel.sendData(data=eval(channel.getMySensorElement("Field")))
         # print ("My sensors:", self.sensors)
 
