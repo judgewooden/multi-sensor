@@ -239,13 +239,11 @@ class ZwavePower(object):
         c=Codifier
         self.sensors.append((n,i,a,c))
         for proxy in channel.getMySensorElement("Proxy"):
-            n=proxy["node"]
-            i=proxy["index"]
-            a=proxy["instance"]
+            n=int(proxy["node"])
+            i=int(proxy["index"])
+            a=int(proxy["instance"])
             c=proxy["Codifier"]
             self.sensors.append((n,i,a,c))
-        print("Zwave components:", self.sensors)
-        print("Zwave components:", sorted(self.sensors, key=lambda tup: tup[1]) )
         self.sensors.sort(key=lambda tup: tup[0])
         print("Zwave components:", self.sensors)
         # self.sensors.sort(key=lambda tup: tup[2])
