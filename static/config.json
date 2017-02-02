@@ -519,7 +519,7 @@
             }
         }, {
             "Codifier":"W1",
-            "ShortName":"Power1",
+            "ShortName":"PowerA1",
             "Name":"Power1 Consumption",
             "Symbol":"W",
             "KeepAliveInterval":60,
@@ -576,7 +576,7 @@
             }
         }, {
             "Codifier":"W2",
-            "ShortName":"power2",
+            "ShortName":"powerA2",
             "Name":"Power2 Consumption",
             "Symbol":"W",
             "DataType":"float",
@@ -586,7 +586,67 @@
             }
         }, {
             "Codifier":"W3",
-            "ShortName":"Energy",
+            "ShortName":"EnergyA",
+            "Name":"Energy Used",
+            "Symbol":"kwh",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W4",
+            "ShortName":"PowerB1",
+            "Name":"Power1 Consumption",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W5",
+            "ShortName":"PowerB2",
+            "Name":"Power2 Consumption",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W6",
+            "ShortName":"EnergyB",
+            "Name":"Energy Used",
+            "Symbol":"kwh",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W7",
+            "ShortName":"PowerC1",
+            "Name":"Power Consumption",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W8",
+            "ShortName":"PowerC2",
+            "Name":"Power2 Consumption",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W9",
+            "ShortName":"EnergyC",
             "Name":"Energy Used",
             "Symbol":"kwh",
             "DataType":"float",
