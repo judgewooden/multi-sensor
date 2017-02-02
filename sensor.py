@@ -302,7 +302,60 @@ class ZwavePower(object):
         print("nodes found:", self.nodes)
                 
     def run(self, Timestamp, command="", number=None):
-        # for node in self.nodes:
+        looper=0
+        for node in self.nodes:
+
+            if looper>len(self.sensors):
+                print(looper, len(self.sensors), "end of array")
+                return jph.STATE.GOOD
+            (n, i, a, c)=self.sensors[looper]
+            print(node, n, i, a, c)
+
+            if n==node:
+                for val in self.network.nodes[node].get_sensors():
+                    print("node/name/index/instance : %s/%s/%s/%s" % (node,
+                        self.network.nodes[node].name,
+                        self.network.nodes[node].values[val].index,
+                        self.network.nodes[node].values[val].instance))
+                    print("%s/%s %s %s" % (self.network.nodes[node].values[val].label,
+                        self.network.nodes[node].values[val].help,
+                        self.network.nodes[node].get_sensor_value(val),
+                        self.network.nodes[node].values[val].units))
+
+                    z=looper
+                    while n==node:
+                        if self.network.nodes[node].values[val].index == i:
+                            ans=self.network.nodes[node].get_sensor_value(val)
+                            print(c, ans)
+                            break
+                        z+=1
+                        (n, i, a, c)=self.sensors[z]
+                        print(node, n, i, a, c)
+
+            looper+=1
+
+
+
+
+
+
+
+
+                    for l=i;n==node
+
+                    print("look for")
+                if n>node:
+                    break
+                if n==node:
+                    if i==self.network.nodes[node].values[val].index:
+                i+=1
+
+                if node==self.sensors[i]:
+                    if self.network.nodes[node].values[val].index==self:
+
+            i+=1
+            while 
+            if node == i
 
 
 
