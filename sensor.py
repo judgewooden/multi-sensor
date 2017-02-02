@@ -302,7 +302,7 @@ class ZwavePower(object):
         print("nodes found:", self.nodes)
                 
     def run(self, Timestamp, command="", number=None):
-        print("Starting")
+        print("----------------------------------------")
         looper=0
         for node in self.nodes:
 
@@ -310,7 +310,7 @@ class ZwavePower(object):
                 print(looper, len(self.sensors), "end of array")
                 return jph.STATE.GOOD
             (n, i, a, c)=self.sensors[looper]
-            print("cur", node, n, i, a, c)
+            print("cur=", node, "n=", n, "i= ", i, "a=", a, c)
 
             if n==node:
                 for val in self.network.nodes[node].get_sensors():
@@ -325,13 +325,13 @@ class ZwavePower(object):
 
                     z=looper
                     while n==node:
-                        if self.network.nodes[node].values[val].index == a:
+                        if self.network.nodes[node].values[val].index == i:
                             ans=self.network.nodes[node].get_sensor_value(val)
                             print(c, ans)
                             break
                         z+=1
                         (n, i, a, c)=self.sensors[z]
-                        print("val", node, n, i, a, c)
+                        print("val=", node, "n=", n, "i= ", i, "a=", a, c)
                 print(" ")
 
             looper+=1
