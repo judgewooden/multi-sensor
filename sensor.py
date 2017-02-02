@@ -258,7 +258,7 @@ class ZwavePower(object):
             # print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
             print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
 
-            print("manu:", self.network.nodes[node].manufacturer_name[:5])
+            print("manu:", self.network.nodes[node].manufacturer_name[:6])
             if self.network.nodes[node].manufacturer_name[:5]=="FIBARO":
                 mynodeid=self.network.nodes[node].node_id
                 print("node_id:", mynodeid)
@@ -280,13 +280,13 @@ class ZwavePower(object):
         withErrors=False
         for val in self.network.nodes[self.xnode].get_sensors() :
             print("node/name/index/instance : %s/%s/%s/%s" % (self.xnode,
-             network.nodes[self.xnode].name,
-             network.nodes[self.xnode].values[val].index,
-             network.nodes[self.xnode].values[val].instance))
-            print("%s/%s %s %s" % (network.nodes[self.xnode].values[val].label,
-             network.nodes[self.xnode].values[val].help,
-             network.nodes[self.xnode].get_sensor_value(val),
-             network.nodes[self.xnode].values[val].units))
+             self.network.nodes[self.xnode].name,
+             self.network.nodes[self.xnode].values[val].index,
+             self.network.nodes[self.xnode].values[val].instance))
+            print("%s/%s %s %s" % (self.network.nodes[self.xnode].values[val].label,
+             self.network.nodes[self.xnode].values[val].help,
+             self.network.nodes[self.xnode].get_sensor_value(val),
+             self.network.nodes[self.xnode].values[val].units))
             if self.network.nodes[self.xnode].values[val].index==4:
                 Power1=self.network.nodes[self.xnode].get_sensor_value(val)
             if self.network.nodes[self.xnode].values[val].index==8:
