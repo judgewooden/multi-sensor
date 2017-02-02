@@ -330,66 +330,67 @@ class ZwavePower(object):
                             break
                         z+=1
                         (n, i, a, c)=self.sensors[z]
-                        print(node, n, i, a, c)
+                        print("val", node, n, i, a, c)
 
             looper+=1
-
-
-
-
-
-
-
-
-                    for l=i;n==node
-
-                    print("look for")
-                if n>node:
-                    break
-                if n==node:
-                    if i==self.network.nodes[node].values[val].index:
-                i+=1
-
-                if node==self.sensors[i]:
-                    if self.network.nodes[node].values[val].index==self:
-
-            i+=1
-            while 
-            if node == i
-
-
-
-        self.mynode.refresh_info()
-        Power1=-1;
-        Power2=-1;
-        Energy=-1
-        withErrors=False
-        for val in self.network.nodes[self.xnode].get_sensors() :
-            print("node/name/index/instance : %s/%s/%s/%s" % (self.xnode,
-             self.network.nodes[self.xnode].name,
-             self.network.nodes[self.xnode].values[val].index,
-             self.network.nodes[self.xnode].values[val].instance))
-            print("%s/%s %s %s" % (self.network.nodes[self.xnode].values[val].label,
-             self.network.nodes[self.xnode].values[val].help,
-             self.network.nodes[self.xnode].get_sensor_value(val),
-             self.network.nodes[self.xnode].values[val].units))
-            if self.network.nodes[self.xnode].values[val].index==4:
-                Power1=self.network.nodes[self.xnode].get_sensor_value(val)
-            if self.network.nodes[self.xnode].values[val].index==8:
-                Power2=self.network.nodes[self.xnode].get_sensor_value(val)
-            if self.network.nodes[self.xnode].values[val].index==0:
-                Energy=self.network.nodes[self.xnode].get_sensor_value(val)
-
-        if (Power1==-1 or Power2==-1 or Energy==-1):
-            channel.logger.error("Failed to obtain Zwave values")
-            withErrors=True
-        channel.logger.debug("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (Power1, Power2, Energy))
-        channel.sendData(data=eval(channel.getMySensorElement("Field")))
-        for proxy in channel.getMySensorElement("Proxy"):
-            channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
-        if withErrors:
-            return jph.STATE.WITHERRORS
         return jph.STATE.GOOD
+
+
+
+
+
+
+
+
+        #             for l=i;n==node
+
+        #             print("look for")
+        #         if n>node:
+        #             break
+        #         if n==node:
+        #             if i==self.network.nodes[node].values[val].index:
+        #         i+=1
+
+        #         if node==self.sensors[i]:
+        #             if self.network.nodes[node].values[val].index==self:
+
+        #     i+=1
+        #     while 
+        #     if node == i
+
+
+
+        # self.mynode.refresh_info()
+        # Power1=-1;
+        # Power2=-1;
+        # Energy=-1
+        # withErrors=False
+        # for val in self.network.nodes[self.xnode].get_sensors() :
+        #     print("node/name/index/instance : %s/%s/%s/%s" % (self.xnode,
+        #      self.network.nodes[self.xnode].name,
+        #      self.network.nodes[self.xnode].values[val].index,
+        #      self.network.nodes[self.xnode].values[val].instance))
+        #     print("%s/%s %s %s" % (self.network.nodes[self.xnode].values[val].label,
+        #      self.network.nodes[self.xnode].values[val].help,
+        #      self.network.nodes[self.xnode].get_sensor_value(val),
+        #      self.network.nodes[self.xnode].values[val].units))
+        #     if self.network.nodes[self.xnode].values[val].index==4:
+        #         Power1=self.network.nodes[self.xnode].get_sensor_value(val)
+        #     if self.network.nodes[self.xnode].values[val].index==8:
+        #         Power2=self.network.nodes[self.xnode].get_sensor_value(val)
+        #     if self.network.nodes[self.xnode].values[val].index==0:
+        #         Energy=self.network.nodes[self.xnode].get_sensor_value(val)
+
+        # if (Power1==-1 or Power2==-1 or Energy==-1):
+        #     channel.logger.error("Failed to obtain Zwave values")
+        #     withErrors=True
+        # channel.logger.debug("Values: power(%0.2f/%0.2f)W energy(%0.2f)kWh" % (Power1, Power2, Energy))
+        # channel.sendData(data=eval(channel.getMySensorElement("Field")))
+        # for proxy in channel.getMySensorElement("Proxy"):
+        #     channel.sendData(data=eval(proxy["Field"]), Codifier=str(proxy["Codifier"]))
+        # if withErrors:
+        #     return jph.STATE.WITHERRORS
+        # return jph.STATE.GOOD
 
 class controlSensor(object):
     def __init__(self):
