@@ -236,7 +236,7 @@ class ZwavePower(object):
         n=channel.getMySensorElement("node")
         i=channel.getMySensorElement("index")
         a=channel.getMySensorElement("instance")
-        c=channel.getMySensorElement("Codifier")
+        c=channel.getMySensor("Codifier")
         self.sensors.append((n,i,a,c))
         print ("My sensors:", self.sensors)
 
