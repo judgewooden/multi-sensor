@@ -326,6 +326,7 @@ class ZwavePower(object):
                             print("found", c, ans)
                             break
                         z+=1
+                        (n, i, a, c)=self.sensors[z]
                         print("val=", node, "n=", n, "i=", i, "a=", a, c)
                     (n, i, a, c)=self.sensors[looper]
                     print("loo=", node, "n=", n, "i=", i, "a=", a, c)
