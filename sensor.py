@@ -231,6 +231,17 @@ class NestReader(object):
 class ZwavePower(object):
     def __init__(self):
         self.nodes=[]
+        self.sensor=[]
+
+        n=channel.getMySensorElement("node")
+        i=channel.getMySensorElement("index")
+        a=channel.getMySensorElement("instance")
+        c=channel.getMySensorElement("Codifier")
+        self.sensors.append((n,i,a,c))
+        print ("My sensors:", self.sensors)
+
+        channel.sendData(data=eval(channel.getMySensorElement("Field")))
+        for proxy in channel.getMySensorElement("Proxy"):
 
         os.chdir(os.path.expanduser("~/zwave"))
         path=os.getcwd()
@@ -262,25 +273,29 @@ class ZwavePower(object):
             # print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
             print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
 
-            print("manu:", self.network.nodes[node].manufacturer_name[:6])
-            if self.network.nodes[node].manufacturer_name[:6]=="FIBARO":
-                mynodeid=self.network.nodes[node].node_id
-                print("node_id:", mynodeid)
-                print("node:", node)
-                print("network:", ZWaveNode(mynodeid, self.network))
+            # print("manu:", self.network.nodes[node].manufacturer_name[:6])
+            # if self.network.nodes[node].manufacturer_name[:6]=="FIBARO":
+            #     mynodeid=self.network.nodes[node].node_id
+            #     print("node_id:", mynodeid)
+            #     print("node:", node)
+            #     print("network:", ZWaveNode(mynodeid, self.network))
 
-            if "FGWPE Wall Plug"==self.network.nodes[node].product_name:
-                mynodeid=self.network.nodes[node].node_id
-                self.xnode=node
-                # break
+            # if "FGWPE Wall Plug"==self.network.nodes[node].product_name:
+            #     mynodeid=self.network.nodes[node].node_id
+            #     self.xnode=node
+            #     # break
 
             self.nodes.append(node)
 
-        self.mynode=ZWaveNode(mynodeid, self.network)
-        self.mynode.set_field(str("name"), str("JPH"))
-        print("nodes:", self.nodes)
+        # self.mynode=ZWaveNode(mynodeid, self.network)
+        # self.mynode.set_field(str("name"), str("JPH"))
+        print("nodes found:", self.nodes)
                 
     def run(self, Timestamp, command="", number=None):
+        for node in self.nodes:
+
+
+
         self.mynode.refresh_info()
         Power1=-1;
         Power2=-1;
