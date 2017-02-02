@@ -245,7 +245,8 @@ class ZwavePower(object):
             if self.network.state>=self.network.STATE_AWAKED:
                 break
             else:
-                print(".", end="")
+                sys.stdout.write('.')
+                sys.stdout.flush()
                 time.sleep(1.0)
         if self.network.state<self.network.STATE_AWAKED:
             channel.logger.error("Zwave Network is not awake but continue anyway")
@@ -259,7 +260,7 @@ class ZwavePower(object):
             print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
 
             print("manu:", self.network.nodes[node].manufacturer_name[:6])
-            if self.network.nodes[node].manufacturer_name[:5]=="FIBARO":
+            if self.network.nodes[node].manufacturer_name[:6]=="FIBARO":
                 mynodeid=self.network.nodes[node].node_id
                 print("node_id:", mynodeid)
                 print("node:", node)
