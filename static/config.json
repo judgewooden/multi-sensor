@@ -529,13 +529,49 @@
             "Active":true,
             "Type":"ZwavePower",
             "Sensor":{
-                "Field":"Power1",
+                "node":2,
+                "index":4,
+                "instance":1,
                 "Proxy":[{
-                    "Field":"Power2",
+                    "node":2,
+                    "index":8,
+                    "instance":1,
                     "Codifier":"W2"
                 }, {
-                    "Field":"Energy",
+                    "node":2,
+                    "index":0,
+                    "instance":1,
                     "Codifier":"W3"
+                }, {
+                    "node":3,
+                    "index":4,
+                    "instance":1,
+                    "Codifier":"W4"
+                }, {
+                    "node":3,
+                    "index":8,
+                    "instance":1,
+                    "Codifier":"W5"
+                }, {
+                    "node":3,
+                    "index":0,
+                    "instance":1,
+                    "Codifier":"W6"
+                }, {
+                    "node":4,
+                    "index":4,
+                    "instance":1,
+                    "Codifier":"W7"
+                }, {
+                    "node":4,
+                    "index":8,
+                    "instance":1,
+                    "Codifier":"W8"
+                }, {
+                    "node":4,
+                    "index":0,
+                    "instance":1,
+                    "Codifier":"W9"
                 }]
             }
         }, {

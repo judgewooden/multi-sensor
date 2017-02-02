@@ -230,6 +230,8 @@ class NestReader(object):
 
 class ZwavePower(object):
     def __init__(self):
+        self.nodes=[]
+
         os.chdir(os.path.expanduser("~/zwave"))
         path=os.getcwd()
         device=str("/dev/ttyACM0")
@@ -248,6 +250,7 @@ class ZwavePower(object):
                 sys.stdout.write('.')
                 sys.stdout.flush()
                 time.sleep(1.0)
+
         if self.network.state<self.network.STATE_AWAKED:
             channel.logger.error("Zwave Network is not awake but continue anyway")
 
@@ -268,10 +271,14 @@ class ZwavePower(object):
 
             if "FGWPE Wall Plug"==self.network.nodes[node].product_name:
                 mynodeid=self.network.nodes[node].node_id
-                self.mynode=ZWaveNode(mynodeid, self.network)
-                self.mynode.set_field(str("name"), str("JPH"))
                 self.xnode=node
                 # break
+
+            self.nodes.append(node)
+
+        self.mynode=ZWaveNode(mynodeid, self.network)
+        self.mynode.set_field(str("name"), str("JPH"))
+        print("nodes:", self.nodes)
                 
     def run(self, Timestamp, command="", number=None):
         self.mynode.refresh_info()
