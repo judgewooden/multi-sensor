@@ -327,7 +327,7 @@ class ZwavePower(object):
                     while n==node:
                         if self.network.nodes[node].values[val].index == i:
                             ans=self.network.nodes[node].get_sensor_value(val)
-                            print(c, ans)
+                            print("found", c, ans)
                             break
                         z+=1
                         (n, i, a, c)=self.sensors[z]
