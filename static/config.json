@@ -230,6 +230,9 @@
                     },{
                     "Codifier":"X3",
                     "Field":"Power"
+                },{
+                    "Codifier":"X4",
+                    "Field":"Mode"
                 }]
             }
         }, {
@@ -245,8 +248,18 @@
             "Codifier":"X3",
             "ShortName":"Water State",
             "Name":"Power is ON/OFF",
-            "Symbol":" ",
+            "Symbol":"",
             "DataType":"bool",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"X1"
+            }
+        }, {
+            "Codifier":"X4",
+            "ShortName":"Mad Mode",
+            "Name":"In what mode is Mad",
+            "Symbol":"",
+            "DataType":"integer",
             "Type":"Proxy",
             "Sensor":{
                 "Codifier":"X1"
@@ -268,6 +281,9 @@
                 "Proxy":[{
                     "Codifier":"Y2",
                     "Field":"LitersPerSecond"
+                },{
+                    "Codifier":"Y3",
+                    "Field":"Mode"
                 }]
             }
         }, {
@@ -275,6 +291,16 @@
             "ShortName":"Aqua Liters",
             "Name":"AQUA Liters Per Minute",
             "Symbol":"lpm",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"Y1"
+            }
+        }, {
+            "Codifier":"Y3",
+            "ShortName":"Aqua Mode",
+            "Name":"In what mode is Aqua?",
+            "Symbol":"",
+            "DataType":"integer",
             "Type":"Proxy",
             "Sensor":{
                 "Codifier":"Y1"

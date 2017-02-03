@@ -307,9 +307,18 @@ body {
  ******
  */
 
+
+svg.line-graph {
+  color: #fff;
+  fill: #fff;
+}
+
 svg.line-graph .title {
 	font-size: 14px;
 	text-decoration: underline;
+  color: white;
+  fill: #fff;
+  stroke-width: 0px;
 }
 
 svg.line-graph text {
@@ -326,11 +335,14 @@ svg.line-graph .hide {
 
 svg.line-graph .axis {
 	shape-rendering: crispEdges;
+  color: white;
+  fill: white;
+  stroke: white;
+  stroke-width: 1px;
 }
 
 svg.line-graph .x.axis line {
-	fill: none;
-	stroke: #000;
+	fill: white;
 }
 
 svg.line-graph .x.axis .minor {
@@ -343,15 +355,21 @@ svg.line-graph .x.axis path {
 
 svg.line-graph .x.axis text {
 	font-size: 10px;
+  color: white;
+  fill: #fff;
+  stroke-width: 0px;
 }
 
 svg.line-graph .y.axis line, .y.axis path {
 	fill: none;
-	stroke: #000;
+  stroke: 1px;
 }
 
 svg.line-graph .y.axis text {
 	font-size: 10px;
+  color: white;
+  fill: #fff;
+  stroke-width: 0px;
 }
 
 svg.line-graph .menu-button:not(.selected):hover {
@@ -360,11 +378,11 @@ svg.line-graph .menu-button:not(.selected):hover {
 }
 
 svg.line-graph .date-label {
-	fill: #6E7B8B;
+	fill: #D3E0F0;
 }
 
 svg.line-graph .line { 
-  stroke-width: 2;
+  stroke-width: 3px;
 }
 
 .d3-tip {
