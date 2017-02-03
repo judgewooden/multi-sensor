@@ -103,8 +103,10 @@ class failsafeReader(object):
             raise WrongContent(response=response)
         else:
             if (len(response.text) > 1):
+                print(response.text)
                 ### !!! BAD BODGE The input data is malformed, fix it with this 'replace()'' clause :(
-                json_data = json.loads(response.text.replace(",]}","]}"))
+                response2 = response.text.replace("inf", "-1")
+                json_data = json.loads(response2.replace(",]}","]}"))
                 v=json_data[channel.getMySensorElement("Field")]
                 channel.sendData(data=v, Codifier="")
                 for proxy in channel.getMySensorElement("Proxy"):
