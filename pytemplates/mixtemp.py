@@ -29,9 +29,9 @@ if (l!=None):
     n=jph.timeNow()
     if (n-l < 20000):
         temp1 = {{ A4 }}
+        flow1 = {{ X2 }}
+        flow2 = {{ Y2 }}
         temp2 = {{ A5 }}
-        flow1 = {{ Y2 }}
-        flow2 = {{ X2 }}
         try:
             a=((flow1 * temp1 + flow2 * temp2)/(flow1 + flow2))
         except Exception as e:
