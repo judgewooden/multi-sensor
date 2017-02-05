@@ -163,6 +163,30 @@ var l2 = new LineGraph({containerId: '{{ sensor.Codifier }}Week', data: source2}
 
 //
 // Some AJAX navigation functions
+function ntp(t0, t1, t2, t3) {
+    return {
+        roundtripdelay: (t3 - t0) - (t2 - t1),
+        offset: ((t1 - t0) + (t2 - t3)) / 2
+    };
+}
+var t0=(new Date()).valueOf();
+var TimeOffSet=0
+var RoundTripDelay=0
+$.ajax({
+    type : "GET",
+    dataType : "json",
+    url: '/ntp',
+    success: function(answer, textStatus, request){
+        t1=answer.time;
+        t3 = (new Date()).valueOf();
+        RoundTripDelay= (t3 - t0) - (t1 - t1);
+        TimeOffSet= ((t1 - t0) + (t1 - t3)) / 2;
+        console.log("NTP delay:", RoundTripDelay, "NTP offset:", TimeOffSet, "corrected: ", (new Date(t3 + TimeOffSet)));
+    },
+    error: function(answer, textStatus, request){
+        console.log("ntp error", answer);
+    }
+})
 //
 var ocard=""
 $(function() {
@@ -279,6 +303,8 @@ for (var key in mySensors) {
 	mySensors[key].LastStatus=STATUS.INIT;
 }
 
+
+
 var updateLog = function() {
     var tr, td, tbody, text;
     var table = $('#{{ sensor.Codifier }}Table')[0]
@@ -321,7 +347,7 @@ var updateLog = function() {
 // Check here if there is any stale date
 //
 var updateTimes = function() {
-	n=parseInt((Date.now()-RefreshRate));
+	n=parseInt((Date.now()+TimeOffSet-RefreshRate));
 	s=findSensor("{{ sensor.Codifier }}", mySensors);
 
 	if (s.Active) {

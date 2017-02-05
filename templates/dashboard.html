@@ -35,6 +35,29 @@
 //
 // Some AJAX navigation functions
 //
+
+//
+// Get the time difference between me and the server
+//
+var t0=(new Date()).valueOf();
+var TimeOffSet=0
+var RoundTripDelay=0
+$.ajax({
+    type : "GET",
+    dataType : "json",
+    url: '/ntp',
+    success: function(answer, textStatus, request){
+        t1=answer.time;
+        t3 = (new Date()).valueOf();
+        RoundTripDelay= (t3 - t0) - (t1 - t1);
+        TimeOffSet= ((t1 - t0) + (t1 - t3)) / 2;
+        console.log("NTP delay:", RoundTripDelay, "NTP offset:", TimeOffSet, "corrected: ", (new Date(t3 + TimeOffSet)));
+    },
+    error: function(answer, textStatus, request){
+        console.log("ntp error", answer);
+    }
+})
+
 $(function() {
 	$('[data-click="controls"]').dblclick(function (event) {
 	  var code=$(this).attr("id").substring(0,2); 
@@ -141,7 +164,7 @@ for (var key in mySensors) {
 // Check here if there is any stale date
 //
 var updateTimes = function() {
-	n=parseInt((Date.now()-RefreshRate));
+	n=parseInt((Date.now()+TimeOffSet-RefreshRate));
 	for ( i=mySensors.length;i--; ) {
 		s=mySensors[i];
 

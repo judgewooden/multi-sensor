@@ -438,6 +438,14 @@
                 "Filename":"pytemplates/mixtemp.py",
                 "Proxy":[{
                     "Codifier":"PB"
+                },{
+                    "Codifier":"PC"
+                },{
+                    "Codifier":"PD"
+                },{
+                    "Codifier":"PE"
+                },{
+                    "Codifier":"PF"
                 }]
             }
         }, {
@@ -453,8 +461,41 @@
             }
         }, {
             "Codifier":"PC",
-            "ShortName":"Delta-t MAD",
+            "ShortName":"Mad Delta-t",
             "Name":"Difference input output Water",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PD",
+            "ShortName":"Aqua Delta-t",
+            "Name":"Difference input output Water",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PE",
+            "ShortName":"Aqua Cooling Power",
+            "Name":"Power required to cool",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PF",
+            "ShortName":"Mad Cooling Power",
+            "Name":"Power required to cool",
             "Symbol":"C",
             "DataType":"float",
             "Type":"Proxy",

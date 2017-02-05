@@ -268,6 +268,14 @@ def sensorboard(codifier=None):
     return render_template('sensorboard.html',
             sensor=channel.getSensor(codifier), sensors = channel.getAllSensors())
 
+@app.route('/ntp')
+def ntp():
+    x={}
+    x["time"]=jph.timeNow()
+    return (Response(response=json.dumps(x),
+            status=200, mimetype="application/json"))
+
+
 @app.route('/sensor/')
 @app.route('/sensor/<codifier>')
 def show_sensor(codifier=None):
