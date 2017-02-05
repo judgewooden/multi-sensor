@@ -5,7 +5,8 @@
 // 
 // Show how old a timesensor is
 //  
-function time_ago(time) { 
+function time_ago(time, offset=0) { 
+    offset = typeof offset !== 'undefined' ? offset : 0;
     switch (typeof time) {
         case 'number': break;
         case 'string': time = +new Date(time); break;
@@ -29,7 +30,7 @@ function time_ago(time) {
         [5806080000, 'Last century', 'Next century'], // 60*60*24*7*4*12*100*2
         [58060800000, 'centuries', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
     ];
-    var seconds = (+new Date() - time) / 1000,
+    var seconds = (+new Date() + offset - time) / 1000,
         token = 'ago', list_choice = 1;
 
     if (seconds < 1 && seconds > 0) {

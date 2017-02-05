@@ -49,7 +49,7 @@ $.ajax({
     success: function(answer, textStatus, request){
         t1=answer.time;
         t3 = (new Date()).valueOf();
-        RoundTripDelay= (t3 - t0) - (t1 - t1);
+        RoundTripDelay= (t3 - t0);
         TimeOffSet= ((t1 - t0) + (t1 - t3)) / 2;
         console.log("NTP delay:", RoundTripDelay, "NTP offset:", TimeOffSet, "corrected: ", (new Date(t3 + TimeOffSet)));
     },
@@ -272,7 +272,7 @@ var updateTimes = function() {
 		if (s.LastDTimestamp != 0) {
 			d = parseInt(s.LastDTimestamp);
 			if (RefreshRate==1)
-				$("#"+s.Codifier+"t").html( time_ago(d) );
+				$("#"+s.Codifier+"t").html( time_ago(d, TimeOffSet) );
 			else
 				$("#"+s.Codifier+"t").html( dateFormat(d, "yy-mm-dd HH:MM:ss") );
 		}

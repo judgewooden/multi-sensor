@@ -163,12 +163,6 @@ var l2 = new LineGraph({containerId: '{{ sensor.Codifier }}Week', data: source2}
 
 //
 // Some AJAX navigation functions
-function ntp(t0, t1, t2, t3) {
-    return {
-        roundtripdelay: (t3 - t0) - (t2 - t1),
-        offset: ((t1 - t0) + (t2 - t3)) / 2
-    };
-}
 var t0=(new Date()).valueOf();
 var TimeOffSet=0
 var RoundTripDelay=0
@@ -179,7 +173,7 @@ $.ajax({
     success: function(answer, textStatus, request){
         t1=answer.time;
         t3 = (new Date()).valueOf();
-        RoundTripDelay= (t3 - t0) - (t1 - t1);
+        RoundTripDelay= (t3 - t0);
         TimeOffSet= ((t1 - t0) + (t1 - t3)) / 2;
         console.log("NTP delay:", RoundTripDelay, "NTP offset:", TimeOffSet, "corrected: ", (new Date(t3 + TimeOffSet)));
     },
@@ -453,7 +447,7 @@ var updateTimes = function() {
 	if (s.LastDTimestamp != 0) {
 		d = parseInt(s.LastDTimestamp);
 		if (RefreshRate==1)
-			$("#"+s.Codifier+"t").html( time_ago(d) );
+			$("#"+s.Codifier+"t").html( time_ago(d, TimeOffSet) );
 		else
 			$("#"+s.Codifier+"t").html( dateFormat(d, "yy-mm-dd HH:MM:ss") );
 	}
