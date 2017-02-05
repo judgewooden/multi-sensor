@@ -485,7 +485,7 @@
             "Codifier":"PE",
             "ShortName":"Aqua Cooling",
             "Name":"Power required to cool",
-            "Symbol":"C",
+            "Symbol":"W",
             "DataType":"float",
             "Type":"Proxy",
             "Sensor":{
@@ -496,7 +496,7 @@
             "Codifier":"PF",
             "ShortName":"Mad Cooling",
             "Name":"Power required to cool",
-            "Symbol":"C",
+            "Symbol":"W",
             "DataType":"float",
             "Type":"Proxy",
             "Sensor":{
