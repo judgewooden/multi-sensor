@@ -51,6 +51,14 @@ if (l!=None):
         dt={{ A4 }} - {{ A3 }}
         channel.sendData(data=dt, Codifier="PC")
 
+        times = [{{ X2|DTimestamp }}]
+        l=min(times)
+        if (l!=None):
+            if (n-l < 20000):
+                x=dt * 65.851 * {{ X2 }}
+                channel.sendData(data=dt, Codifier="PF")
+         
+
 times = [{{ A5|DTimestamp }}, {{ A3|DTimestamp }}]
 l=min(times)
 if (l!=None):
@@ -58,3 +66,11 @@ if (l!=None):
     if (n-l < 20000):
         dt={{ A5 }} - {{ A3 }}
         channel.sendData(data=dt, Codifier="PD")
+
+        times = [{{ Y2|DTimestamp }}]
+        l=min(times)
+        if (l!=None):
+            if (n-l < 20000):
+                x=dt * 65.851 * {{ Y2 }}
+                channel.sendData(data=dt, Codifier="PE")
+ 

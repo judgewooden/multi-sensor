@@ -483,7 +483,7 @@
             }
         }, {
             "Codifier":"PE",
-            "ShortName":"Aqua Cooling Power",
+            "ShortName":"Aqua Cooling",
             "Name":"Power required to cool",
             "Symbol":"C",
             "DataType":"float",
@@ -494,7 +494,7 @@
             }
         }, {
             "Codifier":"PF",
-            "ShortName":"Mad Cooling Power",
+            "ShortName":"Mad Cooling",
             "Name":"Power required to cool",
             "Symbol":"C",
             "DataType":"float",
