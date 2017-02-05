@@ -55,8 +55,8 @@ if (l!=None):
         l=min(times)
         if (l!=None):
             if (n-l < 20000):
-                x=dt * 65.851 * {{ X2 }}
-                channel.sendData(data=dt, Codifier="PF")
+                wm=dt * 65.851 * {{ X2 }}
+                channel.sendData(data=wm, Codifier="PF")
          
 
 times = [{{ A5|DTimestamp }}, {{ A3|DTimestamp }}]
@@ -71,6 +71,6 @@ if (l!=None):
         l=min(times)
         if (l!=None):
             if (n-l < 20000):
-                x=dt * 65.851 * {{ Y2 }}
-                channel.sendData(data=dt, Codifier="PE")
+                wa=dt * 65.851 * {{ Y2 }}
+                channel.sendData(data=wa, Codifier="PE")
  
