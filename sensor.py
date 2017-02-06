@@ -274,28 +274,27 @@ class ZwavePower(object):
             channel.logger.error("Zwave Network is not awake but continue anyway")
 
         for node in self.network.nodes:
-            # print("%s - Product name / id / type : %s / %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].product_name, self.network.nodes[node].product_id, self.network.nodes[node].product_type))
-            # print("%s - Name : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].name))
-            # print("%s - Manufacturer name / id : %s / %s" % (self.network.nodes[node].node_id,self.network.nodes[node].manufacturer_name, self.network.nodes[node].manufacturer_id))
-            # print("%s - Version : %s" % (self.network.nodes[node].node_id, self.network.nodes[node].version))
+            channel.logger.debug("%s - Product name / id / type : %s / %s / %s", self.network.nodes[node].node_id, self.network.nodes[node].product_name, self.network.nodes[node].product_id, self.network.nodes[node].product_type)
+            channel.logger.debug("%s - Name : %s", self.network.nodes[node].node_id,self.network.nodes[node].name)
+            channel.logger.debug("%s - Manufacturer name / id : %s / %s", self.network.nodes[node].node_id, self.network.nodes[node].manufacturer_name, self.network.nodes[node].manufacturer_id)
+            channel.logger.debug("%s - Version : %s", self.network.nodes[node].node_id, self.network.nodes[node].version)
             # # print("%s - Command classes : %s" % (network.nodes[node].node_id,network.nodes[node].command_classes_as_string))
-            # print("%s - Capabilities : %s" % (self.network.nodes[node].node_id,self.network.nodes[node].capabilities))
+            channel.logger.debug("%s - Capabilities : %s", self.network.nodes[node].node_id,self.network.nodes[node].capabilities)
 
             self.nodes.append(self.network.nodes[node].node_id)
-        # print("nodes found:", self.nodes)
+        channel.logger.debug("nodes found: %s", self.nodes)
                 
     def run(self, Timestamp, command="", number=None):
-        # print("----------------------------------------")
         for node in self.nodes:
             for val in self.network.nodes[node].get_sensors():
-                # print("node/name/index/instance : %s/%s/%s/%s" % (node,
-                #     self.network.nodes[node].name,
-                #     self.network.nodes[node].values[val].index,
-                #     self.network.nodes[node].values[val].instance))
-                # print("%s/%s %s %s" % (self.network.nodes[node].values[val].label,
-                #     self.network.nodes[node].values[val].help,
-                #     self.network.nodes[node].get_sensor_value(val),
-                #     self.network.nodes[node].values[val].units))
+                channel.logger.debug("node/name/index/instance : %s/%s/%s/%s", node,
+                     self.network.nodes[node].name,
+                     self.network.nodes[node].values[val].index,
+                     self.network.nodes[node].values[val].instance)
+                channel.logger.debug("%s/%s %s %s", self.network.nodes[node].values[val].label,
+                     self.network.nodes[node].values[val].help,
+                     self.network.nodes[node].get_sensor_value(val),
+                     self.network.nodes[node].values[val].units)
 
                 for looper in self.sensors:
                     (n, i, a, c)=looper
