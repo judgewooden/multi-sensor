@@ -36,10 +36,27 @@
 </div>
 <script>
 var visibleScrollbars = window.scrollbars.visible;
+ 
+var t0=(new Date()).valueOf();
+var TimeOffSet=0
+var RoundTripDelay=0
+$.ajax({
+    type : "GET",
+    dataType : "json",
+    url: '/ntp',
+    success: function(answer, textStatus, request){
+        t1=answer.time;
+        t3 = (new Date()).valueOf();
+        RoundTripDelay= (t3 - t0);
+        TimeOffSet= ((t1 - t0) + (t1 - t3)) / 2;
+        console.log("NTP delay:", RoundTripDelay, "NTP offset:", TimeOffSet, "corrected: ", (new Date(t3 + TimeOffSet)));
+    },
+    error: function(answer, textStatus, request){
+        console.log("ntp error", answer);
+    }
+})
 
-//
-// Global Variables
-//
+
 var RefreshRate=1000;           // Update Frequency for client browser (for poling version)
 var RefreshInProgress = false;
 
@@ -84,7 +101,7 @@ var initSensors = function() {
 var updateValues = function() {
   jQuery.getJSON("/sensor/").done(function(response) {
     if ( response.length > 0) {
-      n=parseInt((Date.now()-RefreshRate));
+      n=parseInt((Date.now()+TimeOffSet-RefreshRate));
       for (var i = 0; i < Sensors.length; i++) {
         for (var key in response) {
           t=parseInt(response[key].DTimestamp);
