@@ -23,10 +23,11 @@
 #   to a log file using channel.logger
 # - the result is send to the network using channel.sendData
 #
+n=jph.timeNow()
+
 times = [{{ A4|DTimestamp }}, {{ A5|DTimestamp }}, {{ Y2|DTimestamp }}, {{ X2|DTimestamp }}]
 l=min(times)
 if (l!=None):
-    n=jph.timeNow()
     if (n-l < 20000):
         temp1 = {{ A4 }}
         flow1 = {{ X2 }}
@@ -46,7 +47,6 @@ if (l!=None):
 times = [{{ A4|DTimestamp }}, {{ A3|DTimestamp }}]
 l=min(times)
 if (l!=None):
-    n=jph.timeNow()
     if (n-l < 20000):
         dt={{ A4 }} - {{ A3 }}
         channel.sendData(data=dt, Codifier="PC")
@@ -62,7 +62,6 @@ if (l!=None):
 times = [{{ A5|DTimestamp }}, {{ A3|DTimestamp }}]
 l=min(times)
 if (l!=None):
-    n=jph.timeNow()
     if (n-l < 20000):
         dt={{ A5 }} - {{ A3 }}
         channel.sendData(data=dt, Codifier="PD")
@@ -74,3 +73,18 @@ if (l!=None):
                 wa=dt * 65.851 * {{ Y2 }}
                 channel.sendData(data=wa, Codifier="PE")
  
+times = [{{ W7|DTimestamp }}, {{ W4|DTimestamp }}]
+l=min(times)
+if (l!=None):
+    if (n-l < 20000):
+        cp={{ W7 }} - {{ W4 }}
+        channel.sendData(data=cp, Codifier="PG")
+
+times = [{{ W1|DTimestamp }}, {{ W7|DTimestamp }}]
+l=min(times)
+if (l!=None):
+    if (n-l < 20000):
+        cm={{ W1 }} - {{ W7 }}
+        channel.sendData(data=cm, Codifier="PH")
+
+

@@ -157,7 +157,7 @@
         }, {
             "Codifier":"C1",
             "ShortName":"kastpi Temp",
-            "Name":"kastpi Raspberry Pi CPU Temparature",
+            "Name":"kastpi Raspberry Pi CPU Temperature",
             "Symbol":"C",
             "KeepAliveInterval":10,
             "SensorInterval":5,
@@ -185,7 +185,7 @@
         }, {
             "Codifier":"C3",
             "ShortName":"mad Temp",
-            "Name":"mad Intel Linux CPU Temparature",
+            "Name":"mad Intel Linux CPU Temperature",
             "Symbol":"C",
             "KeepAliveInterval":60,
             "TimeoutWarning":20,
@@ -446,6 +446,10 @@
                     "Codifier":"PE"
                 },{
                     "Codifier":"PF"
+                },{
+                    "Codifier":"PG"
+                },{
+                    "Codifier":"PH"
                 }]
             }
         }, {
@@ -496,6 +500,28 @@
             "Codifier":"PF",
             "ShortName":"Mad Cooling",
             "Name":"Power required to cool",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PG",
+            "ShortName":"MAD+Aqua W",
+            "Name":"Computer - coolroom",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PH",
+            "ShortName":"Monitor W",
+            "Name":"Total - computer",
             "Symbol":"W",
             "DataType":"float",
             "Type":"Proxy",
