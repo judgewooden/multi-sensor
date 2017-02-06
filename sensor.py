@@ -48,7 +48,7 @@ except Exception as e:
 class PythonNinja(object):
     # These two routines allow you to override sensor data into a text file for scripting 
 # or writing to files
-    def jphlookup(var):
+    def jphlookup(self, var):
         s=var.find("|")
         if s > 0:
             field=var[s+1:]
@@ -68,7 +68,7 @@ class PythonNinja(object):
             return str(channel.getSensor(var.strip())[field.strip()])
         return str(None)
 
-    def jphninja(var):
+    def jphninja(self, var):
         s=var.find("{{")
         if s > 0:
             e=var.find("}}", s)
@@ -287,6 +287,7 @@ class ZwavePower(object):
     def run(self, Timestamp, command="", number=None):
         for node in self.nodes:
             for val in self.network.nodes[node].get_sensors():
+                channel.logger.debug("value: %s", val)
                 channel.logger.debug("node/name/index/instance : %s/%s/%s/%s", node,
                      self.network.nodes[node].name,
                      self.network.nodes[node].values[val].index,
