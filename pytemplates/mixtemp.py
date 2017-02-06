@@ -84,7 +84,7 @@ times = [{{ W7|DTimestamp }}, {{ W1|DTimestamp }}]
 l=min(times)
 if (l!=None):
     if (n-l < 20000):
-        cm={{ W7 }} - {{ W1 }}
+        cm={{ W1 }} - {{ W7 }}
         channel.sendData(data=cm, Codifier="PH")
 
 
