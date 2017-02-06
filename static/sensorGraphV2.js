@@ -310,10 +310,8 @@ function LineGraph(argsMap) {
 			},
 			error: function(request, textStatus, errorThrown) {
 				trace("Data request failure");
-				console.log("Request:", request);
-				console.log("Text   :", textStatus);
-				console.log("Thrown :", errorThrown);
-				alert(" Server response: " + errorThrown);
+				console.log("From Server:", request.responseText);
+				console.log("Error:", request, textStatus, errorThrown);
 				if (spinnerActive) {
 					spinnerActive=false;
 					spinner.stop();

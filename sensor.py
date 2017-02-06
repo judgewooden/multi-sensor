@@ -37,35 +37,7 @@ except Exception as e:
     usage()
     sys.exit()
 
-# These two routines allow you to override sensor data into a text file for scripting 
-# or writing to files
-def jphlookup(var):
-    s=var.find("|")
-    if s > 0:
-        field=var[s+1:]
-        var=var[:s]
-        s=field.find("|")
-        if s > 0:
-            cache=field[:s].strip()
-            field=field[s+1:]
-        else:
-            cache="redis"
-    else:
-        cache="redis"
-        field="Value"
-    if cache=='redis':
-        return str(r.hget(var.strip(), field.strip()))
-    if cache=='config':
-        return str(channel.getSensor(var.strip())[field.strip()])
-    return str(None)
 
-def jphninja(var):
-    s=var.find("{{")
-    if s > 0:
-        e=var.find("}}", s)
-        if e > 0:
-            return var[:s] + jphlookup(var[s+2:e]) + jphninja(var[e+2:])
-    return var
 
 #
 # by making a Sensor a class you can store local variables
@@ -74,12 +46,42 @@ def jphninja(var):
 # 
 # Also allow for enhanced inequiry capabilities using a peer-to-peer future prototcol
 class PythonNinja(object):
+    # These two routines allow you to override sensor data into a text file for scripting 
+# or writing to files
+    def jphlookup(var):
+        s=var.find("|")
+        if s > 0:
+            field=var[s+1:]
+            var=var[:s]
+            s=field.find("|")
+            if s > 0:
+                cache=field[:s].strip()
+                field=field[s+1:]
+            else:
+                cache="redis"
+        else:
+            cache="redis"
+            field="Value"
+        if cache=='redis':
+            return str(r.hget(var.strip(), field.strip()))
+        if cache=='config':
+            return str(channel.getSensor(var.strip())[field.strip()])
+        return str(None)
+
+    def jphninja(var):
+        s=var.find("{{")
+        if s > 0:
+            e=var.find("}}", s)
+            if e > 0:
+                return var[:s] + self.jphlookup(var[s+2:e]) + self.jphninja(var[e+2:])
+        return var
+
     def run(self, Timestamp, command="", number=None):
         t1=time.time() * 1000
         filename=channel.getMySensorElement("Filename")
         with open(filename, 'r') as fd:
             code=fd.read()
-        exec(jphninja(code))
+        exec(self.jphninja(code))
         t2=time.time() * 1000
         channel.sendData(t2-t1)
         return jph.STATE.GOOD
@@ -247,7 +249,7 @@ class ZwavePower(object):
             c=proxy["Codifier"]
             self.sensors.append((n,i,a,c))
         self.sensors.sort(key=lambda tup: tup[0])
-        # print("Zwave components:", self.sensors)
+        channel.logging.debug("Zwave components: %s", self.sensors)
 
         os.chdir(os.path.expanduser("~/zwave"))
         path=os.getcwd()
