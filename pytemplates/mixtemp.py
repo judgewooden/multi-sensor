@@ -77,14 +77,14 @@ times = [{{ W1|DTimestamp }}, {{ W4|DTimestamp }}]
 l=min(times)
 if (l!=None):
     if (n-l < 20000):
-        cp={{ W1 }} - {{ W4 }}
+        cp={{ W4 }} - {{ W1 }}
         channel.sendData(data=cp, Codifier="PG")
 
 times = [{{ W7|DTimestamp }}, {{ W1|DTimestamp }}]
 l=min(times)
 if (l!=None):
     if (n-l < 20000):
-        cm={{ W1 }} - {{ W7 }}
+        cm={{ W7 }} - {{ W4 }}
         channel.sendData(data=cm, Codifier="PH")
 
 
