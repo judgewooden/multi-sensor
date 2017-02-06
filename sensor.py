@@ -249,7 +249,7 @@ class ZwavePower(object):
             c=proxy["Codifier"]
             self.sensors.append((n,i,a,c))
         self.sensors.sort(key=lambda tup: tup[0])
-        channel.logging.debug("Zwave components: %s", self.sensors)
+        channel.logger.debug("Zwave components: %s", self.sensors)
 
         os.chdir(os.path.expanduser("~/zwave"))
         path=os.getcwd()
