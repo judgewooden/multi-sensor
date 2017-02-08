@@ -1,4 +1,7 @@
 {% extends "layout.html" %}
+{% block head %}
+{{ includes.graphs() }}
+{% endblock %}
 {% block body %}
 <div class="container-fluid">
 	<div style="width:100%">
@@ -165,8 +168,6 @@ var source2 = {
 }
 var l2 = new LineGraph({containerId: '{{ sensor.Codifier }}Week', data: source2})
 
-//
-// Some AJAX navigation functions
 var t0=(new Date()).valueOf();
 var TimeOffSet=0
 var RoundTripDelay=0
