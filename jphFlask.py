@@ -12,6 +12,7 @@ import jph
 import os
 import bcrypt
 import getopt
+import random
 
 #
 # Configure Flask & Redis
@@ -198,7 +199,7 @@ def logout():
     login.logout_user()
     return redirect(url_for('userauthentication'))
 
-#""" something else DELETE this
+""" something else DELETE this
 numba=12
 @app.route('/test')
 def test():
@@ -211,7 +212,7 @@ def test():
     x["numba"]=numba
     return (Response(response=json.dumps(x),
             status=200, mimetype="application/json"))
-#"""
+"""
 
 @app.route('/dashboard')
 def dashboard():
@@ -426,6 +427,12 @@ def sensorts(query):
         }
         p.append(w)
     return (Response(response=json.dumps(p), status=200, mimetype="application/json"))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    flash("404 Error. Page not found.")
+    rand=str(random.randint(2, 32))
+    return render_template('404.html', rand=rand)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, host='0.0.0.0')
