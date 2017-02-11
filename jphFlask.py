@@ -199,21 +199,6 @@ def logout():
     login.logout_user()
     return redirect(url_for('userauthentication'))
 
-""" something else DELETE this
-numba=12
-@app.route('/test')
-def test():
-    global numba
-    numba+=1
-    res=numba % 2
-    time.sleep(2)
-    x={}
-    x["datetime"]=jph.timeNow()
-    x["numba"]=numba
-    return (Response(response=json.dumps(x),
-            status=200, mimetype="application/json"))
-"""
-
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html', sensors = channel.getAllSensors())
