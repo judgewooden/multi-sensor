@@ -139,7 +139,7 @@ class ADCpiReader(object):
             l=json.dump(y)
             print(v, d, y, l)
             channel.sendData(data=l, isJson=True)
-        else
+        else:
             channel.sendData(data=d)
         for proxy in channel.getMySensorElement("Proxy"):
             v = adc.read_voltage(int(proxy["Pin"]))
