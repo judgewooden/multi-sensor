@@ -167,7 +167,6 @@ class jph(object):
             self.logger.warn("(Re)Starting. No logger found")
         else:
             logger2=logging.getLogger(f)
-            print("Setup logger")
             self.logger=logging.LoggerAdapter(logger2, {'codifier': self.Codifier})
             self.logger.info("(Re)Starting %s on logger: %s", __name__ + '-' + self.Codifier, f)
 
