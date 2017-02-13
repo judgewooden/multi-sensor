@@ -454,5 +454,6 @@ class jph(object):
                                 print("HERE")
                                 if dataTime > self.ConfigTimestamp and source == self.Codifier:
                                     print(self.Codifier, str(dataTime))
+                                    print(type(self.Codifier))
                                     logging.critical("There is another instance of %s running (time=%s)", self.Codifier, str(dataTime))
                                     sys.exit()
