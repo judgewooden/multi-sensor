@@ -7,6 +7,7 @@ import jph
 import os
 import psycopg2
 import time
+import json
 
 # -------------
 # Globals
@@ -77,9 +78,12 @@ class postgreSQLHandler(object):
                     data="TRUE"
                 else:
                     data="FALSE"
-                ans=("INSERT INTO sensor_%s VALUES (%d, %s)" % (source, timestamp, data))
-            else:
-                ans=("INSERT INTO sensor_%s VALUES (%d, %s)" % (source, timestamp, data))
+
+            if flag=='j':
+                j=json.loads(data)
+                data=j["value"]
+            
+            ans=("INSERT INTO sensor_%s VALUES (%d, %s)" % (source, timestamp, data))
             channel.logger.debug(ans)
             cursor.execute(ans)
             self.q.commit()

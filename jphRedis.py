@@ -110,7 +110,6 @@ class RedisHandler(object):
             if flag=='j':
                 j=json.loads(data)
                 v=j["value"]
-                print("value", v)
                 r.hset(source, "Value", v)
             else:
                 r.hset(source, "Value",data)
