@@ -131,7 +131,7 @@ class ADCpiReader(object):
 
     def run(self, Timestamp, command="", number=None):
         v = adc.read_voltage(int(channel.getMySensorElement("Pin")))
-        d = self.phobya2temp(v))
+        d = self.phobya2temp(v)
         if DevelMode:
             y = {}
             y["value"]=d
