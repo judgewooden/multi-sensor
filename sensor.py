@@ -136,7 +136,7 @@ class ADCpiReader(object):
         if DevelMode:
             y = {}
             y["value"]=d
-            y["voltage"]=d
+            y["voltage"]=v
             l=json.dumps(y)
             print(v, d, y, l)
             channel.sendData(data=l, isJson=True)

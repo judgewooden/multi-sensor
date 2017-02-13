@@ -106,7 +106,14 @@ class RedisHandler(object):
                     self.Counter+=1
 
             self.LastDataSequence[source]=sequence
-            r.hset(source, "Value",data)
+            if flag=='j':
+                j=json.load(data)
+                v=k["value"]
+                print("value", v)
+                r.hset(source, "Value", v)
+            else:
+                r.hset(source, "Value",data)
+
             r.hset(source, "DTimestamp",timestamp)
             self.Counter+=3
             channel.logger.debug("%d %s%s %s Data=%d", timestamp, chnl, flag, source, data)
