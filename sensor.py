@@ -14,6 +14,7 @@ import math
 # -------------
 configURL="file:static/config.json"
 Codifier=""
+DevelMode=False
 
 # -------------
 # Read Startup Parameters
@@ -24,7 +25,7 @@ def usage():
     print("\t-c <code>: The Sensor that this program needs to manage") 
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hu:c:", ["help", "url=", "code="])
+    opts, args = getopt.getopt(sys.argv[1:], "hu:c:Z", ["help", "url=", "code="])
     for opt, arg in opts:
         if opt in ("-h", "help"):
             raise
@@ -32,6 +33,8 @@ try:
             configURL=arg
         elif opt in ("-c", "--code"):
             Codifier=arg
+        elif opt in ("-Z"):
+            DevelMode=True
 except Exception as e:
     print("Error: %s" % e)
     usage()
@@ -128,7 +131,13 @@ class ADCpiReader(object):
 
     def run(self, Timestamp, command="", number=None):
         v = adc.read_voltage(int(channel.getMySensorElement("Pin")))
-        channel.sendData(data=self.phobya2temp(v))
+        d = self.phobya2temp(v))
+        y = {}
+        y["value"]=d
+        y["voltage"]=d
+        l=json.dump(y)
+        print(v, d, y, l)
+        channel.sendData(data=l, isJson=True)
         for proxy in channel.getMySensorElement("Proxy"):
             v = adc.read_voltage(int(proxy["Pin"]))
             channel.sendData(data=self.phobya2temp(v), Codifier=str(proxy["Codifier"]))

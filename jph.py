@@ -242,7 +242,7 @@ class jph(object):
         self.DataSocket.close()
         self.DataSocket=0
 
-    def sendData(self, data, timestamp=0, Codifier="", sequence_packet=False):
+    def sendData(self, data, timestamp=0, Codifier="", sequence_packet=False, isJson=False):
         if (self.DataSocket==0):
             self.startData(do_not_load_multicast=True)
 
@@ -273,7 +273,10 @@ class jph(object):
                 flag = str('i')
                 packed = struct.pack('I', data)
             elif isinstance(data, str):
-                flag = str('s')
+                if isJson:
+                    flag = str('j')
+                else:
+                    flag = str('s')
                 packed = struct.pack('I%ds' % (len(data),), len(data), data)
             elif isinstance(data, float):
                 flag = str('f')
@@ -393,7 +396,7 @@ class jph(object):
                             value, = struct.unpack('I', value)
                         elif flag == 'n':
                             value, = struct.unpack('I', value)
-                        elif flag == 's':
+                        elif flag in ('s', 'j'):
                             (i,), x = struct.unpack("I", value[:4]), value[4:]
                             value = x
                             # can you make value the oputput for preesion command
