@@ -132,12 +132,15 @@ class ADCpiReader(object):
     def run(self, Timestamp, command="", number=None):
         v = adc.read_voltage(int(channel.getMySensorElement("Pin")))
         d = self.phobya2temp(v))
-        y = {}
-        y["value"]=d
-        y["voltage"]=d
-        l=json.dump(y)
-        print(v, d, y, l)
-        channel.sendData(data=l, isJson=True)
+        if DevelMode:
+            y = {}
+            y["value"]=d
+            y["voltage"]=d
+            l=json.dump(y)
+            print(v, d, y, l)
+            channel.sendData(data=l, isJson=True)
+        else
+            channel.sendData(data=d)
         for proxy in channel.getMySensorElement("Proxy"):
             v = adc.read_voltage(int(proxy["Pin"]))
             channel.sendData(data=self.phobya2temp(v), Codifier=str(proxy["Codifier"]))
