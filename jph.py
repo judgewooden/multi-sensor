@@ -312,6 +312,7 @@ class jph(object):
             timestamp=timeNow()
         if timeComponent==None:
             timeComponent=self.ConfigTimestamp
+            print("Config:", self.ConfigTimestamp)
         # timeComponent=int(timeComponent)
         logging.debug("Ctrl-%s : send %s-%s %d %d %d %s", flag, self.Codifier, to, timestamp, self.CtrlSequence, timeComponent, self.IsActive)
 
