@@ -452,5 +452,5 @@ class jph(object):
                             if flag in ('I', 'N'):
                                 self.logger.debug("Ctrl-I - recv Alive Message %s %s %s", source, dataTime, isActive2)
                                 if dataTime > self.ConfigTimestamp and source == self.Codifier:
-                                    logging.critical("There is another instance of %s running (time=%s)", self.Codifier, str(dataTime))
+                                    self.logger.critical("There is another instance of %s running (time=%s)", self.Codifier, str(dataTime))
                                     sys.exit()
