@@ -108,7 +108,7 @@ class RedisHandler(object):
 
             self.LastDataSequence[source]=sequence
             if flag=='j':
-                j=json.load(data)
+                j=json.loads(data)
                 v=k["value"]
                 print("value", v)
                 r.hset(source, "Value", v)
