@@ -125,7 +125,6 @@ class failsafeReader(object):
 
 class ADCpiReader(object):
     def phobya2temp(self, voltageOut):
-        print("voltageOut", voltageOut)
         ohm=(5-voltageOut)/voltageOut*16800/1000
         temp=(0.0755*math.pow(ohm,2))-4.2327*ohm+60.589
         channel.logger.debug("Sensor: Voltage: %s, Temp: %s", voltageOut, temp )
