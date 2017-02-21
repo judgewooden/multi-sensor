@@ -132,6 +132,7 @@ class ADCpiReader(object):
 
     def run(self, Timestamp, command="", number=None):
         v = adc.read_voltage(int(channel.getMySensorElement("Pin")))
+        print("ADC", v)
         d = self.phobya2temp(v)
         y = {}
         y["value"]=d
