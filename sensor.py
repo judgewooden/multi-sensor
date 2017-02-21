@@ -132,24 +132,32 @@ class ADCpiReader(object):
         return temp
 
     def run(self, Timestamp, command="", number=None):
+        allgood=True
         v = adc.read_voltage(int(channel.getMySensorElement("Pin")))
-        print("ADC", v)
-        d = self.phobya2temp(v)
-        y = {}
-        y["value"]=d
-        y["voltage"]=v
-        l=json.dumps(y)
-        channel.sendData(data=l, isJson=True)
-
-        for proxy in channel.getMySensorElement("Proxy"):
-            v = adc.read_voltage(int(proxy["Pin"]))
+        if v!=0:
             d = self.phobya2temp(v)
             y = {}
             y["value"]=d
             y["voltage"]=v
             l=json.dumps(y)
-            channel.sendData(data=l, Codifier=str(proxy["Codifier"]), isJson=True)
-        return jph.STATE.GOOD
+            channel.sendData(data=l, isJson=True)
+        else:
+            allgood=False
+
+        for proxy in channel.getMySensorElement("Proxy"):
+            v = adc.read_voltage(int(proxy["Pin"]))
+            if v!=0:
+                d = self.phobya2temp(v)
+                y = {}
+                y["value"]=d
+                y["voltage"]=v
+                l=json.dumps(y)
+                channel.sendData(data=l, Codifier=str(proxy["Codifier"]), isJson=True)
+            else:
+                allgood=False
+        if allgood:
+            return jph.STATE.GOOD
+        return jph.STATE.NOREADING
 
 class ADAfruitReader(object):
     def run(self, Timestamp, command="", number=None):
