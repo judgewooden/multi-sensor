@@ -147,6 +147,49 @@ download: http://jqwidgets.com/
 Extract archives into ./static
 ```
 
+####Create a Apache install
+
+File: JPHmonitor.wsi
+```
+from jphFlask import app as application
+```
+
+File: apache2/sites-enabled/jphmointor.conf
+```
+<VirtualHost *:80>
+    ServerName jphmonitor.nl
+    Redirect permanent / https://jphmonitor.nl/
+</VirtualHost>
+
+<IfModule mod_ssl.c>
+<VirtualHost *:443>
+    ServerName jphmonitor.nl
+    ServerAdmin admin@jphmonitor.nl
+    WSGIScriptAlias / /data/www/JPHmonitor/JPHmonitor.wsgi
+    WSGIDaemonProcess JPHmonitor threads=5 user=jphmonitor group=jphmonitor python-path=/data/www/JPHmonitor
+    <Directory /data/www/JPHmonitor/>
+        WSGIProcessGroup JPHmonitor
+        WSGIApplicationGroup %{GLOBAL}
+        Order allow,deny
+        Allow from all
+    </Directory>
+    Alias /static /data/www/JPHmonitor/static
+    <Directory /data/www/JPHmonitor/static/>
+        Order allow,deny
+        Allow from all
+    </Directory>
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    LogLevel warn
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    SSLCertificateFile /etc/letsencrypt/live/jphmonitor.nl/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/jphmonitor.nl/privkey.pem
+    Include /etc/letsencrypt/options-ssl-apache.conf
+    <IfModule mod_headers.c>
+        Header always set Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"
+    </IfModule> 
+</VirtualHost>
+```
+
 ####Startup test instance
 
 
