@@ -91,5 +91,20 @@ times = [{{ A1|DTimestamp }}, {{ A2|DTimestamp }}]
 l=min(times)
 if (l!=None):
     if (n-l < 20000):
-        cm={{ A1 }} - {{ A2 }}
-        channel.sendData(data=cm, Codifier="PI")
+        dt={{ A1 }} - {{ A2 }}
+        channel.sendData(data=dt, Codifier="PI")
+
+        times = [{{ X2|DTimestamp }}, {{ Y2|DTimestamp }}]
+        l=min(times)
+        if (l!=None):
+            if (n-l < 20000):
+                tf={{ X2 }} + {{ Y2 }}
+                wa=dt * 65.851 * tf
+                channel.sendData(data=wm, Codifier="PK")
+
+times = [{{ X2|DTimestamp }}, {{ Y2|DTimestamp }}]
+l=min(times)
+if (l!=None):
+    if (n-l < 20000):
+        tf={{ X2 }} + {{ Y2 }}
+        channel.sendData(data=wm, Codifier="PJ")

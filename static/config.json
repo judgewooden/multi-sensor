@@ -541,6 +541,28 @@
                 "Codifier":"PA"
             }
         }, {
+            "Codifier":"PJ",
+            "ShortName":"Total Flow",
+            "Name":"Flow from both loops added",
+            "Symbol":"lpm",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PK",
+            "ShortName":"Radiator Power",
+            "Name":"Radiator cooling power",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
             "Codifier":"N1",
             "ShortName":"Nest Status",
             "Name":"Away or Home from Nest",
