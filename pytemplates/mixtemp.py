@@ -87,4 +87,9 @@ if (l!=None):
         cm={{ W7 }} - {{ W4 }}
         channel.sendData(data=cm, Codifier="PH")
 
-
+times = [{{ A1|DTimestamp }}, {{ A2|DTimestamp }}]
+l=min(times)
+if (l!=None):
+    if (n-l < 20000):
+        cm={{ A1 }} - {{ A2 }}
+        channel.sendData(data=cm, Codifier="PI")

@@ -530,6 +530,17 @@
                 "Codifier":"PA"
             }
         }, {
+            "Codifier":"PI",
+            "ShortName":"Delta Radiator",
+            "Name":"Difference in Temp between in/out radiator",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
             "Codifier":"N1",
             "ShortName":"Nest Status",
             "Name":"Away or Home from Nest",
