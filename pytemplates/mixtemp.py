@@ -100,11 +100,11 @@ if (l!=None):
             if (n-l < 20000):
                 tf={{ X2 }} + {{ Y2 }}
                 wa=dt * 65.851 * tf
-                channel.sendData(data=wm, Codifier="PK")
+                channel.sendData(data=wa, Codifier="PK")
 
 times = [{{ X2|DTimestamp }}, {{ Y2|DTimestamp }}]
 l=min(times)
 if (l!=None):
     if (n-l < 20000):
         tf={{ X2 }} + {{ Y2 }}
-        channel.sendData(data=wm, Codifier="PJ")
+        channel.sendData(data=tf, Codifier="PJ")
