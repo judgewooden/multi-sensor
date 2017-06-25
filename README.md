@@ -149,12 +149,12 @@ Extract archives into ./static
 
 ####Create a Apache install
 
-File: JPHmonitor.wsi
+File: JPHmonitor.wsgi
 ```
 from jphFlask import app as application
 ```
 
-File: apache2/sites-enabled/jphmointor.conf
+File: apache2/sites-enabled/jphmonitor.conf
 ```
 <VirtualHost *:80>
     ServerName jphmonitor.nl
