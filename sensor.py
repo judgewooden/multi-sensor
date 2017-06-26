@@ -153,7 +153,7 @@ class ADCpiReader(object):
         self.allgood=True
         self.read(int(channel.getMySensorElement("Pin")), "")
         for proxy in channel.getMySensorElement("Proxy"):
-            self.read(int(proxy["Pin"]), Codifier=str(proxy["Codifier"]))
+            self.read(int(proxy["Pin"]), str(proxy["Codifier"]))
         if allgood:
             return jph.STATE.GOOD
         return jph.STATE.NOREADING
