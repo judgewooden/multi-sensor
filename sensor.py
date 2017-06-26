@@ -142,7 +142,7 @@ class ADCpiReader(object):
             y["value"]=d
             y["voltage"]=v
             l=json.dumps(y)
-            if (theCodefier=""):
+            if (theCodefier==""):
                 channel.sendData(data=l, isJson=True)
             else:
                 channel.sendData(data=l, Codifier=theCodefier, isJson=True)
