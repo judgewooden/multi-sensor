@@ -124,36 +124,36 @@ class failsafeReader(object):
         return jph.STATE.FAILED
 
 class ADCpiReader(object):
+    def __init__(self):
+        self.allfood=True
+    
     def phobya2temp(self, voltageOut):
         ohm=(5-voltageOut)/voltageOut*16800/1000
         temp=(0.0755*math.pow(ohm,2))-4.2327*ohm+60.589
-        channel.logger.debug("Sensor: Voltage: %s, Temp: %s", voltageOut, temp )
+        channel.logger.debug("Sensor: Voltage: %s, Temp: %s", voltageOut, temp)
         return temp
 
-    def run(self, Timestamp, command="", number=None):
-        allgood=True
-        v = adc.read_voltage(int(channel.getMySensorElement("Pin")))
+    def read(self, pin, theCodefier)
+        channel.logger.debug("Sensor: Reading pin: %d", pin)
+        v = adc.read_voltage(pin)
         if v!=0:
             d = self.phobya2temp(v)
             y = {}
             y["value"]=d
             y["voltage"]=v
             l=json.dumps(y)
-            channel.sendData(data=l, isJson=True)
-        else:
-            allgood=False
-
-        for proxy in channel.getMySensorElement("Proxy"):
-            v = adc.read_voltage(int(proxy["Pin"]))
-            if v!=0:
-                d = self.phobya2temp(v)
-                y = {}
-                y["value"]=d
-                y["voltage"]=v
-                l=json.dumps(y)
-                channel.sendData(data=l, Codifier=str(proxy["Codifier"]), isJson=True)
+            if (theCodefier=""):
+                channel.sendData(data=l, isJson=True)
             else:
-                allgood=False
+                channel.sendData(data=l, Codifier=theCodefier, isJson=True)
+        else:
+            self.allgood=False
+
+    def run(self, Timestamp, command="", number=None):
+        self.allgood=True
+        self.read(int(channel.getMySensorElement("Pin")), "")
+        for proxy in channel.getMySensorElement("Proxy"):
+            self.read(int(proxy["Pin"]), Codifier=str(proxy["Codifier"]))
         if allgood:
             return jph.STATE.GOOD
         return jph.STATE.NOREADING
