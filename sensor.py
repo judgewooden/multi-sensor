@@ -133,7 +133,7 @@ class ADCpiReader(object):
         channel.logger.debug("Sensor: Voltage: %s, Temp: %s", voltageOut, temp)
         return temp
 
-    def read(self, pin, theCodefier)
+    def read(self, pin, theCodefier):
         channel.logger.debug("Sensor: Reading pin: %d", pin)
         v = adc.read_voltage(pin)
         if v!=0:
