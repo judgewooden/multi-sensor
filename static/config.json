@@ -815,7 +815,7 @@
             "Symbol":"MH/s",
             "KeepAliveInterval":60,
             "SensorInterval":60,
-            "TimeoutWarning":120,
+            "TimeoutWarning":600,
             "DataType":"float",
             "Active":true,
             "Type":"DwarfpoolReader",
