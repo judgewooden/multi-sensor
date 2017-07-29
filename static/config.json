@@ -563,6 +563,17 @@
                 "Codifier":"PA"
             }
         }, {
+            "Codifier":"PL",
+            "ShortName":"Combined Calc Hash",
+            "Name":"Total Mining in Ethereum",
+            "Symbol":"MH/s",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
             "Codifier":"N1",
             "ShortName":"Nest Status",
             "Name":"Away or Home from Nest",

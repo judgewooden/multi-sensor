@@ -108,3 +108,23 @@ if (l!=None):
     if (n-l < 20000):
         tf={{ X2 }} + {{ Y2 }}
         channel.sendData(data=tf, Codifier="PJ")
+
+times = [{{ M2|DTimestamp }}, {{ M4|DTimestamp }}]
+l=min(times)
+xs=False
+if (l!=None):
+    if (n-l < 840000):
+        tf={{ M2 }} + {{ M4 }}
+        channel.sendData(data=tf, Codifier="PL")
+        xs=True
+if (xs==False):
+    m2={{ M2|DTimestamp }}
+    if (m2!=None):
+        if (n-m2 < 840000):
+            tf={{ M2 }}
+            channel.sendData(data=tf, Codifier="PL")
+    m4={{ M4|DTimestamp }}
+    if (m4!=None):
+        if (n-m4 < 840000):
+            tf={{ M4 }}
+            channel.sendData(data=tf, Codifier="PL")
