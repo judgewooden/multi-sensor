@@ -1,10 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-lg-12">
-        <p class="jumbotron text-center">This site is in development</p> 
-    </div>
-  </div>
+<div class="container">
+
+        <h1>Welcome to JPH Monitor</h1>
+        <p>I have multiple computers on one water cooling loop. The water travels through my walls to a cupboard outside where a radiator get rid of the heat. This is a monitoring tool to view the status of the system.</p>
+        <p>The component diagram shows all the components I use the monitor the system. The Arduino monitors two flow sensors and has a fail-safe feature to automatically switch of the power, and avoid the pumps from running dry when I am not home.<p>
+
+   The pi-kast monitors the temperature of the radiator and ambient temperature. 
+   The pi-host monitors the temperature on the manifold inside and reads zwave power meters.
+   The pi-monitor run this web-page, which is build on the JPH messaging.
+
 </div>
 {% endblock %}
