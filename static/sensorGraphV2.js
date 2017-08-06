@@ -78,18 +78,18 @@ function LineGraph(argsMap) {
 	// Include a spin component when loading data
 	var spinner;
 	var spinneropts = {
-		  lines: 13 // The number of lines to draw
-		, length: 28 // The length of each line
-		, width: 14 // The line thickness
-		, radius: 42 // The radius of the inner circle
+		  lines: 15 // The number of lines to draw
+		, length: 29 // The length of each line
+		, width: 6 // The line thickness
+		, radius: 20 // The radius of the inner circle
 		, scale: 1 // Scales overall size of the spinner
 		, corners: 1 // Corner roundness (0..1)
 		, color: '#666' // #rgb or #rrggbb or array of colors
 		, opacity: 0.25 // Opacity of the lines
-		, rotate: 0 // The rotation offset
+		, rotate: 35 // The rotation offset
 		, direction: 1 // 1: clockwise, -1: counterclockwise
-		, speed: 1 // Rounds per second
-		, trail: 60 // Afterglow percentage
+		, speed: 0.8 // Rounds per second
+		, trail: 56 // Afterglow percentage
 		, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
 		, zIndex: 2e9 // The z-index (defaults to 2000000000)
 		, className: 'spinner' // The CSS class to assign to the spinner
