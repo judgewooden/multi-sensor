@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block head %}
+{{ includes.graphs() }}
+{% endblock %}
+{% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script>
+<script src="https://d3js.org/d3.v3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
+
+<div class="container-fluid">
+  <div id="myGraph" class="jph-graph-box" style="height:300px;color:#f6f6f6;background:#12120a"></div>
+</div>
+
+<script>
+var source1 = {
+  "Name": "default",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 86400,
+    "LeftLegend": "LeftLegend",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "RightLegend",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 1,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+    {
+      "Name": "Loop2",
+      "Codifier": "C4",
+      "Field":"median-hour",
+      "Axis": "Right",
+      "Interpolation": "linear",
+      "Hidden": "0",
+      "Frequency": "0.00",
+      "Filter": "-1.00",
+      "Smoothing": "1"
+    }
+    ]
+  }
+};
+var g1 = new LineGraph({containerId: 'myGraph', data: source1});
+
+
+</script>
+
+{% endblock %}

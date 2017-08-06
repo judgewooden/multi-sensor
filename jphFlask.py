@@ -199,6 +199,10 @@ def logout():
     login.logout_user()
     return redirect(url_for('userauthentication'))
 
+@app.route('/flowanalysis')
+def dashboard():
+    return render_template('flowanalysis.html', sensors = channel.getAllSensors())
+
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html', sensors = channel.getAllSensors())
