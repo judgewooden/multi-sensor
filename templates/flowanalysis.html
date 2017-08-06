@@ -10,7 +10,9 @@
 <script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
 
 <div class="container-fluid">
-  <div id="myGraph" class="jph-graph-box" style="height:300px;color:#f6f6f6;background:#12120a"></div>
+  <div id="graph1" class="jph-graph-box" style="height:300px;color:#f6f6f6;background:#12120a"></div>
+  <div id="graph2" class="jph-graph-box" style="float:left;position:relative;width:49%;height:200px"></div>
+  <div id="graph3" class="jph-graph-box" style="float:left;position:relative;width:49%;height:200px"></div>
 </div>
 
 <script>
@@ -92,7 +94,107 @@ var source1 = {
     ]
   }
 };
-var g1 = new LineGraph({containerId: 'myGraph', data: source1});
+var g1 = new LineGraph({containerId: 'graph1', data: source1});
+
+var source2 = {
+  "Name": "Arduino 2days",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 172800,
+    "LeftLegend": "Temp (C)",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Liters/pm",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Arduino Flow - Last 2 days",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "MAD",
+        "Codifier": "X2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.50",
+        "Smoothing": "30.00"
+      },
+      {
+        "Name": "AQUA",
+        "Codifier": "Y2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.50",
+        "Smoothing": "30.00"
+      }
+    ]
+  }
+};
+var g2 = new LineGraph({containerId: 'graph2', data: source2});
+
+var source3 = {
+  "Name": "Arduino 10min",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 600,
+    "LeftLegend": "Temp (C)",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Liters/pm",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Arduino Flow - Last 10 minute",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "MAD",
+        "Codifier": "X2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "15.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "AQUA",
+        "Codifier": "Y2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "15.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      }
+    ]
+  }
+};
+var g3 = new LineGraph({containerId: 'graph3', data: source3});
 
 
 </script>
