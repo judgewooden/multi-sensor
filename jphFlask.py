@@ -211,6 +211,10 @@ def wateranalysis():
 def coolanalysis():
     return render_template('coolanalysis.html')
 
+@app.route('/mineanalysis')
+def mineanalysis():
+    return render_template('mineanalysis.html')
+
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html', sensors = channel.getAllSensors())

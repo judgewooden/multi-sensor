@@ -1,0 +1,222 @@
+{% extends "layout.html" %}
+{% block head %}
+{{ includes.graphs() }}
+{% endblock %}
+{% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script>
+<script src="https://d3js.org/d3.v3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
+
+<div class="container-fluid">
+  <div id="graph1" class="jph-graph-box" style="height:300px;color:#f6f6f6;background:#12120a"></div>
+  <div id="graph2" class="jph-graph-box" style="float:left;position:relative;width:49%;height:200px;color:#f6f6f6;background:#12120a"></div>
+  <div id="graph3" class="jph-graph-box" style="float:left;position:relative;width:49%;height:200px;color:#f6f6f6;background:#12120a"></div>
+</div>
+
+<script>
+var source1 = {
+  "Name": "Power v Hash/2",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 21600,
+    "LeftLegend": "Watt",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Hash",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Power v Hash Last Eight Hours",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "Power",
+        "Codifier": "W4",
+        "Field": "value",
+        "Axis": "Left",
+        "Interpolation": "linear",
+        "Frequency": "30.00",
+        "Filter": "0.20",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Mad-Hash",
+        "Codifier": "M4",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "600.00",
+        "Filter": "0.20",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Aqua-Hash",
+        "Codifier": "M2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "600.00",
+        "Filter": "0.20",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Total-Hash",
+        "Codifier": "PL",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "600.00",
+        "Filter": "0.20",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Water",
+        "Codifier": "PB",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "30.00",
+        "Filter": "0.20",
+        "Smoothing": "15.00"
+      }
+    ]
+  }
+};
+var g1 = new LineGraph({containerId: 'graph1', data: source1});
+
+var source2 = {
+  "Name": "Power v Hash",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 172800,
+    "LeftLegend": "Hash",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Watt",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Power v Hash Last two Days",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "Aqua-Hash",
+        "Codifier": "M2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "700.00",
+        "Filter": "1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Mad-Hash",
+        "Codifier": "M4",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "700.00",
+        "Filter": "1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Power",
+        "Codifier": "W7",
+        "Field": "value",
+        "Axis": "Left",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "15.00",
+        "Smoothing": "15.00"
+      }
+    ]
+  }
+};
+var g2 = new LineGraph({containerId: 'graph2', data: source2});
+
+var source3 = {
+  "Name": "Power 10min",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 604800,
+    "LeftLegend": "Watt (cool room)",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Watt",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Power 10 minutes",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "Computers",
+        "Codifier": "W4",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "700.00",
+        "Filter": "10.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "Total",
+        "Codifier": "W7",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "700.00",
+        "Filter": "10.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "Cool-Room",
+        "Codifier": "W1",
+        "Field": "value",
+        "Axis": "Left",
+        "Interpolation": "linear",
+        "Frequency": "700.00",
+        "Filter": "10.00",
+        "Smoothing": "1.00"
+      }
+    ]
+  }
+};
+var g3 = new LineGraph({containerId: 'graph3', data: source3});
+
+
+</script>
+
+{% endblock %}
