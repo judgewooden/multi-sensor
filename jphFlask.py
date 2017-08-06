@@ -201,7 +201,7 @@ def logout():
 
 @app.route('/flowanalysis')
 def flowanalysis():
-    return render_template('flowanalysis.html', sensors = channel.getAllSensors())
+    return render_template('flowanalysis.html')
 
 @app.route('/dashboard')
 def dashboard():
