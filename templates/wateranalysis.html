@@ -11,24 +11,24 @@
 
 <div class="container-fluid">
   <div id="graph1" class="jph-graph-box" style="height:300px;color:#f6f6f6;background:#12120a"></div>
-  <div id="graph2" class="jph-graph-box" style="float:left;position:relative;width:49.5%;height:200px;color:#f6f6f6;background:#12120a"></div>
-  <div id="graph3" class="jph-graph-box" style="float:left;position:relative;width:49.5%;height:200px;color:#f6f6f6;background:#12120a"></div>
+  <div id="graph2" class="jph-graph-box" style="float:left;position:relative;width:49%;height:200px;color:#f6f6f6;background:#12120a"></div>
+  <div id="graph3" class="jph-graph-box" style="float:left;position:relative;width:49%;height:200px;color:#f6f6f6;background:#12120a"></div>
 </div>
 
 <script>
 var source1 = {
-  "Name": "Arduino Flow",
+  "Name": "Water Efficiency",
   "Settings": {
     "AutoUpdate": 1,
     "UpdateInterval": 10,
     "SecondsToShow": 7200,
-    "LeftLegend": "Temp (C)",
+    "LeftLegend": "LeftLegend",
     "LeftMax": 0,
     "LeftMin": 0,
-    "RightLegend": "Liters/pm",
+    "RightLegend": "Temp (C)",
     "RightMax": 0,
     "RightMin": 0,
-    "Title": "Arduino Flow - Last Two Hours",
+    "Title": "",
     "Interpolation": "linear",
     "TickLine": 0,
     "DateLabel": "top",
@@ -42,54 +42,64 @@ var source1 = {
     "HideRightControls": 1,
     "graphSensors": [
       {
-        "Name": "MAD",
-        "Codifier": "X2",
-        "Field": "value",
-        "Axis": "Right",
-        "Interpolation": "linear",
-        "Frequency": "60.00",
-        "Filter": "0.20",
-        "Smoothing": "30.00"
-      },
-      {
-        "Name": "MAD-raw",
-        "Codifier": "X2",
-        "Field": "value",
-        "Axis": "Right",
-        "Interpolation": "linear",
-        "Frequency": "60.00",
-        "Filter": "-1.00",
-        "Smoothing": "1.00"
-      },
-      {
-        "Name": "AQUA",
-        "Codifier": "Y2",
-        "Field": "value",
-        "Axis": "Right",
-        "Interpolation": "linear",
-        "Frequency": "60.00",
-        "Filter": "0.20",
-        "Smoothing": "30.00"
-      },
-      {
-        "Name": "AQUA-raw",
-        "Codifier": "Y2",
-        "Field": "value",
-        "Axis": "Right",
-        "Interpolation": "linear",
-        "Frequency": "60.00",
-        "Filter": "-1.00",
-        "Smoothing": "1.00"
-      },
-      {
-        "Name": "Water Temp",
+        "Name": "Man-in",
         "Codifier": "A3",
         "Field": "value",
-        "Axis": "Left",
+        "Axis": "Right",
         "Interpolation": "linear",
-        "Frequency": "0.00",
-        "Filter": "0.20",
-        "Smoothing": "30.00"
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Rad-in",
+        "Codifier": "A1",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Rad-out",
+        "Codifier": "A2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Man-out (calc)",
+        "Codifier": "PB",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Man-out (aqua)",
+        "Codifier": "A5",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Man-out (mad)",
+        "Codifier": "A4",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
       }
     ]
   }
@@ -97,18 +107,18 @@ var source1 = {
 var g1 = new LineGraph({containerId: 'graph1', data: source1});
 
 var source2 = {
-  "Name": "Arduino 2days",
+  "Name": "Water 2days",
   "Settings": {
     "AutoUpdate": 1,
     "UpdateInterval": 10,
     "SecondsToShow": 172800,
-    "LeftLegend": "Temp (C)",
+    "LeftLegend": "LeftLegend",
     "LeftMax": 0,
     "LeftMin": 0,
-    "RightLegend": "Liters/pm",
+    "RightLegend": "Temp (C)",
     "RightMax": 0,
     "RightMin": 0,
-    "Title": "Arduino Flow - Last 2 days",
+    "Title": "",
     "Interpolation": "linear",
     "TickLine": 0,
     "DateLabel": "top",
@@ -122,24 +132,54 @@ var source2 = {
     "HideRightControls": 1,
     "graphSensors": [
       {
-        "Name": "MAD",
-        "Codifier": "X2",
+        "Name": "Man-in",
+        "Codifier": "A3",
         "Field": "value",
         "Axis": "Right",
         "Interpolation": "linear",
         "Frequency": "60.00",
-        "Filter": "0.50",
-        "Smoothing": "30.00"
+        "Filter": "1.00",
+        "Smoothing": "15.00"
       },
       {
-        "Name": "AQUA",
-        "Codifier": "Y2",
+        "Name": "Rad-in",
+        "Codifier": "A1",
         "Field": "value",
         "Axis": "Right",
         "Interpolation": "linear",
         "Frequency": "60.00",
-        "Filter": "0.50",
-        "Smoothing": "30.00"
+        "Filter": "1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Rad-out",
+        "Codifier": "A2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Man-out (aqua)",
+        "Codifier": "A5",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Man-out (mad)",
+        "Codifier": "A4",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "1.00",
+        "Smoothing": "15.00"
       }
     ]
   }
@@ -147,18 +187,18 @@ var source2 = {
 var g2 = new LineGraph({containerId: 'graph2', data: source2});
 
 var source3 = {
-  "Name": "Arduino 10min",
+  "Name": "Water 10min",
   "Settings": {
     "AutoUpdate": 1,
     "UpdateInterval": 10,
     "SecondsToShow": 600,
-    "LeftLegend": "Temp (C)",
+    "LeftLegend": "LeftLegend",
     "LeftMax": 0,
     "LeftMin": 0,
-    "RightLegend": "Liters/pm",
+    "RightLegend": "Temp (C)",
     "RightMax": 0,
     "RightMin": 0,
-    "Title": "Arduino Flow - Last 10 minute",
+    "Title": "",
     "Interpolation": "linear",
     "TickLine": 0,
     "DateLabel": "top",
@@ -172,8 +212,8 @@ var source3 = {
     "HideRightControls": 1,
     "graphSensors": [
       {
-        "Name": "MAD",
-        "Codifier": "X2",
+        "Name": "Man-in",
+        "Codifier": "A3",
         "Field": "value",
         "Axis": "Right",
         "Interpolation": "linear",
@@ -182,12 +222,12 @@ var source3 = {
         "Smoothing": "1.00"
       },
       {
-        "Name": "AQUA",
-        "Codifier": "Y2",
+        "Name": "Rad-in",
+        "Codifier": "A1",
         "Field": "value",
         "Axis": "Right",
         "Interpolation": "linear",
-        "Frequency": "15.00",
+        "Frequency": "60.00",
         "Filter": "-1.00",
         "Smoothing": "1.00"
       }
