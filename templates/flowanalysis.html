@@ -15,41 +15,80 @@
 
 <script>
 var source1 = {
-  "Name": "default",
+  "Name": "Arduino Flow",
   "Settings": {
     "AutoUpdate": 1,
     "UpdateInterval": 10,
-    "SecondsToShow": 86400,
-    "LeftLegend": "LeftLegend",
+    "SecondsToShow": 7200,
+    "LeftLegend": "Temp (C)",
     "LeftMax": 0,
     "LeftMin": 0,
-    "RightLegend": "RightLegend",
+    "RightLegend": "Liters/pm",
     "RightMax": 0,
     "RightMin": 0,
-    "Title": "",
+    "Title": "Arduino Flow - Last Two Hours",
     "Interpolation": "linear",
     "TickLine": 0,
     "DateLabel": "top",
     "HideDateLabel": 0,
     "HideLegend": 0,
     "HideXAxis": 0,
-    "HideAxisLeft": 1,
+    "HideAxisLeft": 0,
     "HideAxisRight": 0,
     "HideButtons": 1,
     "HideLeftControls": 1,
     "HideRightControls": 1,
     "graphSensors": [
-    {
-      "Name": "Loop2",
-      "Codifier": "C4",
-      "Field":"median-hour",
-      "Axis": "Right",
-      "Interpolation": "linear",
-      "Hidden": "0",
-      "Frequency": "0.00",
-      "Filter": "-1.00",
-      "Smoothing": "1"
-    }
+      {
+        "Name": "MAD",
+        "Codifier": "X2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.20",
+        "Smoothing": "30.00"
+      },
+      {
+        "Name": "MAD-raw",
+        "Codifier": "X2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "AQUA",
+        "Codifier": "Y2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.20",
+        "Smoothing": "30.00"
+      },
+      {
+        "Name": "AQUA-raw",
+        "Codifier": "Y2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "Water Temp",
+        "Codifier": "A3",
+        "Field": "value",
+        "Axis": "Left",
+        "Interpolation": "linear",
+        "Frequency": "0.00",
+        "Filter": "0.20",
+        "Smoothing": "30.00"
+      }
     ]
   }
 };
