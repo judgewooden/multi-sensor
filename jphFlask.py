@@ -203,6 +203,10 @@ def logout():
 def flowanalysis():
     return render_template('flowanalysis.html')
 
+@app.route('/wateranalysis')
+def wateranalysis():
+    return render_template('wateranalysis.html')
+
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html', sensors = channel.getAllSensors())
