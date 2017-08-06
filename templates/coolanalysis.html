@@ -1,0 +1,252 @@
+{% extends "layout.html" %}
+{% block head %}
+{{ includes.graphs() }}
+{% endblock %}
+{% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script>
+<script src="https://d3js.org/d3.v3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
+
+<div class="container-fluid">
+  <div id="graph1" class="jph-graph-box" style="height:300px;color:#f6f6f6;background:#12120a"></div>
+  <div id="graph2" class="jph-graph-box" style="float:left;position:relative;width:49%;height:200px;color:#f6f6f6;background:#12120a"></div>
+  <div id="graph3" class="jph-graph-box" style="float:left;position:relative;width:49%;height:200px;color:#f6f6f6;background:#12120a"></div>
+</div>
+
+<script>
+var source1 = {
+  "Name": "Kast 2 hours",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 7200,
+    "LeftLegend": "LeftLegend",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Temp (C)",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Cool room - Last two hours",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "Inside",
+        "Codifier": "F6",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "30.00",
+        "Filter": "-1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Rad-in",
+        "Codifier": "A1",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "30.00",
+        "Filter": "-1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Rad-out",
+        "Codifier": "A2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "30.00",
+        "Filter": "-1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Outside",
+        "Codifier": "F1",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "30.00",
+        "Filter": "-1.00",
+        "Smoothing": "15.00"
+      }
+    ]
+  }
+};
+var g1 = new LineGraph({containerId: 'graph1', data: source1});
+
+var source2 = {
+  "Name": "Kast 2days",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 172800,
+    "LeftLegend": "Humidity (%)",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Temp (C)",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Cool Room - Last Two Days",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "Inside-Temp",
+        "Codifier": "F6",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "14.00",
+        "Filter": "2.00",
+        "Smoothing": "30.00"
+      },
+      {
+        "Name": "Inside-Hum",
+        "Codifier": "F7",
+        "Field": "value",
+        "Axis": "Left",
+        "Interpolation": "linear",
+        "Frequency": "120.00",
+        "Filter": "2.00",
+        "Smoothing": "30.00"
+      },
+      {
+        "Name": "Outside-Hum",
+        "Codifier": "F2",
+        "Field": "value",
+        "Axis": "Left",
+        "Interpolation": "linear",
+        "Frequency": "120.00",
+        "Filter": "2.00",
+        "Smoothing": "30.00"
+      },
+      {
+        "Name": "Outside-Temp",
+        "Codifier": "F1",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "120.00",
+        "Filter": "2.00",
+        "Smoothing": "30.00"
+      },
+      {
+        "Name": "Weather-Temp",
+        "Codifier": "N5",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "120.00",
+        "Filter": "2.00",
+        "Smoothing": "30.00"
+      },
+      {
+        "Name": "Weather-Hum",
+        "Codifier": "N6",
+        "Field": "value",
+        "Axis": "Left",
+        "Interpolation": "linear",
+        "Frequency": "120.00",
+        "Filter": "2.00",
+        "Smoothing": "30.00"
+      }
+    ]
+  }
+};
+var g2 = new LineGraph({containerId: 'graph2', data: source2});
+
+var source3 = {
+  "Name": "Kast 10min",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 600,
+    "LeftLegend": "Humidity (%)",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Temp (C)",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Cool Room - 10 minutes",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "Kast-Temp",
+        "Codifier": "F6",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "15.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "Outside-Temp",
+        "Codifier": "F1",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "15.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "kastpi-Temp",
+        "Codifier": "C1",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "15.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "house-Temp",
+        "Codifier": "N2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "120.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      }
+    ]
+  }
+};
+var g3 = new LineGraph({containerId: 'graph3', data: source3});
+
+
+</script>
+
+{% endblock %}
