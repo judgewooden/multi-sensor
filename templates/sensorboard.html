@@ -24,6 +24,9 @@
 		<option {% if soption.Codifier == sensor.Codifier %}selected{% endif %} value="{{ soption.Codifier }}">{{ soption.Codifier }} - {{ soption.ShortName }}</option> {% endfor %}
 		</select></label>
 	</div>
+    <div id="{{ sensor.Codifier }}Name" class="jph-name-box" style="clear:left;width:100%">
+        <div style="centre">{{sensor.Name}}</table>
+    </div>
 	<div style="width:100%">
 		<div class="jph-sens-box" data-click="controls" id="{{ sensor.Codifier }}b" >
 			<div class="jph-box-header {% if sensor.Active %} jph-info {% else %} jph-info {% endif %}" id="{{ sensor.Codifier }}h">{{ sensor.Codifier }} - {{ sensor.ShortName }}</div>
