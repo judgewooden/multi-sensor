@@ -52,12 +52,13 @@ body {
 .jph-name-box{
   float: left;
   font-size: 24px;
-  border: none;
+  border: .11em black;
   border-radius: .5em;
-  
+  text-align: center;
   box-shadow: none;
   background-color: #dddddd;
   color: red;
+  margin-bottom: .5em;
 /*
   height: 4.75em; 
   min-width: 9.75em;
