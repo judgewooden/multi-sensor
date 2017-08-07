@@ -56,10 +56,11 @@ body {
   border-radius: .5em;
   text-align: center;
   box-shadow: none;
-  background-color: #dddddd;
+  
   color: red;
   margin-bottom: .5em;
 /*
+  background-color: #dddddd;
   height: 4.75em; 
   min-width: 9.75em;
   padding: 0;
