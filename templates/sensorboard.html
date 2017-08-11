@@ -47,7 +47,8 @@
             <div class="jph-box-header jph-info">Control</div>
             <div class="jph-box-value"> 
                 <input type="number" style="width:90px;font-size:14px" id="targetValue">
-                <button type="button" {% if sensor.Control != "enabled" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Control == "enabled" %}Send Target Value{% else %}Not enabled{% endif %}" " id="{{ sensor.Codifier }}A"><i class="fa fa-thermometer fa-inverse"></i></button>
+                <button type="button" {% if sensor.Control != "enabled" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Control == "enabled" %}Send Target Value{% else %}Not enabled{% endif %}" " id="{{ sensor.Codifier }}A">
+                <!--- <i class="fa fa-thermometer fa-inverse"></i></button> -->
             </div>
             <div class="jph-box-value"> 
                 <input type="number" style="width:90px;font-size:14px" id="stepValue">
