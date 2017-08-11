@@ -16,6 +16,12 @@
 		</select> </label>
 		<button id="UpdateNow" aria-controls="example" class="">Update</button>
 	</div>
+	<div class="jph-box" id="xxx" >
+		<div class="jph-box-header jph-info id="x123">Head</div>
+		<div class="jph-box-buttons jph-info id="y123">buttons</div>
+		<div class="card-text jph-box-value" id="z123">text</div>
+		<div class="card-footer jph-box-footer" id="t123">foot</div>
+	</div>
 {% for sensor in sensors %}
 	<div class="jph-box" data-click="controls" id="{{ sensor.Codifier }}b" >
 		<div class="jph-box-header {% if sensor.Active %} jph-info {% else %} jph-info {% endif %}" id="{{ sensor.Codifier }}h">{{ sensor.Codifier }} - {{ sensor.ShortName }}</div>
@@ -59,10 +65,9 @@ $.ajax({
 })
 
 $(function() {
-	$('#CFb').on("swipe", function (event) {
+	$('#xxx').on("swipe", function (event) {
 		$(this).hide();
-		var code=$(this).attr("id").substring(0,2); 
-		window.location = "/sensorboard/" + code;
+		window.location = "/sensorboard/X1";
 	});
 })
 
