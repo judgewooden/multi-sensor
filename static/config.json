@@ -67,7 +67,7 @@
     "Sensors":[{
             "Codifier":"CF",
             "ShortName":"Web Server",
-            "Name":"Flask based Webserver",
+            "Name":"Controller for Flask based Webserver",
             "Symbol":"",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -86,7 +86,7 @@
         }, {
             "Codifier":"CC",
             "ShortName":"Control",
-            "Name":"Primary Console Program",
+            "Name":"Code used for Console Program",
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -97,7 +97,7 @@
         }, {
             "Codifier":"CK",
             "ShortName":"Kast Control",
-            "Name":"Secondary Console Program",
+            "Name":"Code used for Secondary Console Program",
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -127,7 +127,7 @@
         }, {
             "Codifier":"Q2",
             "ShortName":"SQL calc",
-            "Name":"Module for calculating the Timeseries",
+            "Name":"Module for calculating Timeseries",
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -146,7 +146,7 @@
         }, {
             "Codifier":"R1",
             "ShortName":"Redis Cache",
-            "Name":"Redis cache used by the Web server",
+            "Name":"Redis cache to store the last state of messages on the network",
             "Symbol":"p/m",
             "KeepAliveInterval":60,
             "SensorInterval":60,
@@ -157,7 +157,7 @@
         }, {
             "Codifier":"C1",
             "ShortName":"kastpi Temp",
-            "Name":"kastpi Raspberry Pi CPU Temperature",
+            "Name":"Raspberry Pi (kastpi) CPU Temperature",
             "Symbol":"C",
             "KeepAliveInterval":10,
             "SensorInterval":5,
@@ -171,7 +171,7 @@
         }, {
             "Codifier":"C2",
             "ShortName":"pihost Temp",
-            "Name":"pihost Raspberry Pi CPU Temparature",
+            "Name":"Raspberry Pi (pihost) CPU Temperature",
             "Symbol":"C",
             "KeepAliveInterval":30,
             "TimeoutWarning":20,
@@ -185,7 +185,7 @@
         }, {
             "Codifier":"C3",
             "ShortName":"mad Temp",
-            "Name":"mad Intel Linux CPU Temperature",
+            "Name":"PC (mad) CPU Temperature (Inactive)",
             "Symbol":"C",
             "KeepAliveInterval":60,
             "TimeoutWarning":20,
@@ -199,7 +199,7 @@
         }, {
             "Codifier":"C4",
             "ShortName":"pimon Temp",
-            "Name":"pimonitor Raspberry Pi CPU Temparature",
+            "Name":"Raspberry Pi (pimon) CPU Temperature",
             "Symbol":"C",
             "KeepAliveInterval":30,
             "TimeoutWarning":20,
@@ -213,7 +213,7 @@
         }, {
             "Codifier":"X1",
             "ShortName":"Mad Flow",
-            "Name":"MAD Water sensors Rotations",
+            "Name":"HTTP xml reader (Arduino) MAD loop - Rotations",
             "Symbol":"rpm",
             "KeepAliveInterval":60,
             "SensorInterval":10,
@@ -238,7 +238,7 @@
         }, {
             "Codifier":"X2",
             "ShortName":"Mad Liters",
-            "Name":"MAD Liters Per Minute",
+            "Name":"HTTP xml reader (Arduino) MAD loop - Liters Per Minute",
             "Symbol":"lpm",
             "Type":"Proxy",
             "Sensor":{
@@ -247,7 +247,7 @@
         }, {
             "Codifier":"X3",
             "ShortName":"Water State",
-            "Name":"Power is ON/OFF",
+            "Name":"HTTP xml reader (Arduino) MAD loop - Power is ON/OFF",
             "Symbol":"",
             "DataType":"bool",
             "Type":"Proxy",
@@ -257,7 +257,7 @@
         }, {
             "Codifier":"X4",
             "ShortName":"Mad Mode",
-            "Name":"In what mode is Mad",
+            "Name":"HTTP xml reader (Arduino) MAD loop - Mode",
             "Symbol":"",
             "DataType":"integer",
             "Type":"Proxy",
@@ -267,7 +267,7 @@
         }, {
             "Codifier":"Y1",
             "ShortName":"Aqua Flow",
-            "Name":"AQUA Water sensors Rotations",
+            "Name":"HTTP xml reader (Arduino) AQUA loop - Rotations",
             "Symbol":"rpm",
             "KeepAliveInterval":60,
             "SensorInterval":10,
@@ -289,7 +289,7 @@
         }, {
             "Codifier":"Y2",
             "ShortName":"Aqua Liters",
-            "Name":"AQUA Liters Per Minute",
+            "Name":"HTTP xml reader (Arduino) AQUA loop - Liters Per Minute",
             "Symbol":"lpm",
             "Type":"Proxy",
             "Sensor":{
@@ -298,7 +298,7 @@
         }, {
             "Codifier":"Y3",
             "ShortName":"Aqua Mode",
-            "Name":"In what mode is Aqua?",
+            "Name":"HTTP xml reader (Arduino) AQUA loop - Mode",
             "Symbol":"",
             "DataType":"integer",
             "Type":"Proxy",
@@ -355,7 +355,7 @@
         }, {
             "Codifier":"A4",
             "ShortName":"Mad Man-out",
-            "Name":"Mad Manifold Temp OUT",
+            "Name":"MAD Manifold Temp OUT",
             "Symbol":"C",
             "DataType":"float",
             "Type":"Proxy",
@@ -365,7 +365,7 @@
         }, {
             "Codifier":"A5",
             "ShortName":"Aqua Man-out",
-            "Name":"Aqua Manifold Temp OUT",
+            "Name":"AQUA Manifold Temp OUT",
             "Symbol":"C",
             "DataType":"float",
             "Type":"Proxy",
