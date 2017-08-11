@@ -59,21 +59,7 @@ $.ajax({
 })
 
 $(function() {
-	$('[data-click="controls"]').on("taphold", function (event) {
-		var code=$(this).attr("id").substring(0,2); 
-		window.location = "/sensorboard/" + code;
-	});
-})
-
-$(function() {
-	$('[data-click="controls"]').on("tap", function (event) {
-		var code=$(this).attr("id").substring(0,2); 
-		window.location = "/sensorboard/" + code;
-	});
-})
-
-$(function() {
-	$('[data-click="controls"]').on("swipe", function (event) {
+	$('[id="C1b"]').on("swipe", function (event) {
 		$(this).hide();
 		var code=$(this).attr("id").substring(0,2); 
 		window.location = "/sensorboard/" + code;
@@ -89,7 +75,7 @@ $(function() {
 
 var ocard=""
 $(function() {
-	$('[data-click="controls"]').clock(function (event) {
+	$('[data-click="controls"]').click(function (event) {
 	  var code=$(this).attr("id").substring(0,2); 
 		if ((ocard != "") && (ocard!=code)) {
 			$('#'+ocard+'c').slideUp()
