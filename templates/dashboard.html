@@ -59,7 +59,23 @@ $.ajax({
 })
 
 $(function() {
-	$('[data-click="controls"]').on("taphold", function (event) {
+	$('[data-click="controls"]').on("taphold", function () {
+	  var code=$(this).attr("id").substring(0,2); 
+		window.location = "/sensorboard/" + code;
+	});
+})
+
+
+$(function() {
+	$('[data-click="controls"]').on("tap", function () {
+	  var code=$(this).attr("id").substring(0,2); 
+		window.location = "/sensorboard/" + code;
+	});
+})
+
+
+$(function() {
+	$('[data-click="controls"]').on("swipe", function () {
 	  var code=$(this).attr("id").substring(0,2); 
 		window.location = "/sensorboard/" + code;
 	});
