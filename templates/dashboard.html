@@ -17,10 +17,10 @@
 		<button id="UpdateNow" aria-controls="example" class="">Update</button>
 	</div>
 	<div class="jph-box" id="x1" >
-		<div class="jph-box-header jph-info" id="x1">Head</div>
-		<div class="jph-box-buttons jph-info" id="x2">buttons</div>
-		<div class="card-text jph-box-value" id="x3">text</div>
-		<div class="card-footer jph-box-footer" id="x4">foot</div>
+		<div class="jph-box-header jph-info" id="x2">Head</div>
+		<div class="jph-box-buttons jph-info" id="x3">buttons</div>
+		<div class="card-text jph-box-value" id="x4">text</div>
+		<div class="card-footer jph-box-footer" id="x5">foot</div>
 	</div>
 {% for sensor in sensors %}
 	<div class="jph-box" data-click="controls" id="{{ sensor.Codifier }}b" >
@@ -65,35 +65,36 @@ $.ajax({
 })
 
 $(function() {
-	$('#x1').on("swipe", function (event) {
-		$(this).hide();
+	$('#x1').on("tap", function (event) {
+		console.log("X1")
 		window.location = "/sensorboard/X1";
 	});
 })
 $(function() {
-	$('#x2').on("swipe", function (event) {
-		$(this).hide();
+	$('#x2').on("tap", function (event) {
+		console.log("X2")
 		window.location = "/sensorboard/X2";
 	});
 })
 $(function() {
-	$('#x3').on("swipe", function (event) {
-		$(this).hide();
+	$('#x3').on("tap", function (event) {
+		console.log("X3")
 		window.location = "/sensorboard/X3";
 	});
 })
 $(function() {
-	$('#x4').on("swipe", function (event) {
-		$(this).hide();
+	$('#x4').on("tap", function (event) {
+		console.log("X4")
 		window.location = "/sensorboard/X4";
 	});
 })
 $(function() {
-	$('#x5').on("swipe", function (event) {
-		$(this).hide();
+	$('#x5').on("tap", function (event) {
+		console.log("X5")
 		window.location = "/sensorboard/X5";
 	});
 })
+
 $(function() {
 	$('[data-click="controls"]').dblclick(function (event) {
 		var code=$(this).attr("id").substring(0,2); 
