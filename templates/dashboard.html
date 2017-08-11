@@ -81,6 +81,14 @@ $(function() {
 	});
 })
 
+
+$(function() {
+	$('[data-click="controls"]').touch(function (event) {
+	  var code=$(this).attr("id").substring(0,2); 
+		window.location = "/sensorboard/" + code;
+	});
+})
+
 $(function() {
 	$('[data-click="controls"]').dblclick(function (event) {
 	  var code=$(this).attr("id").substring(0,2); 
