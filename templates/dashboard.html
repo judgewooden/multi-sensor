@@ -59,7 +59,7 @@ $.ajax({
 })
 
 $(function() {
-	$('[id="C1b"]').on("swipe", function (event) {
+	$('#CFb').on("swipe", function (event) {
 		$(this).hide();
 		var code=$(this).attr("id").substring(0,2); 
 		window.location = "/sensorboard/" + code;
