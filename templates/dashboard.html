@@ -65,14 +65,12 @@ $(function() {
 	});
 })
 
-
 $(function() {
 	$('[data-click="controls"]').on("tap", function (event) {
 	  var code=$(this).attr("id").substring(0,2); 
 		window.location = "/sensorboard/" + code;
 	});
 })
-
 
 $(function() {
 	$('[data-click="controls"]').on("swipe", function (event) {
@@ -90,7 +88,7 @@ $(function() {
 
 var ocard=""
 $(function() {
-	$('[data-click="controls"]').click(function (event) {
+	$('[data-click="controls"]').clock(function (event) {
 	  var code=$(this).attr("id").substring(0,2); 
 		if ((ocard != "") && (ocard!=code)) {
 			$('#'+ocard+'c').slideUp()
