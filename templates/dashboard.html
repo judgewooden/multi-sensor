@@ -94,17 +94,17 @@ $(function() {
 		window.location = "/sensorboard/X5";
 	});
 })
-
+/*
 $(function() {
 	$('[data-click="controls"]').dblclick(function (event) {
 		var code=$(this).attr("id").substring(0,2); 
 		window.location = "/sensorboard/" + code;
 	});
-})
+})*/
 
 var ocard=""
 $(function() {
-	$('[data-click="controls"]').click(function (event) {
+	$('[data-click="controls"]').on('mousedown', function (event) {
 	  var code=$(this).attr("id").substring(0,2); 
 		if ((ocard != "") && (ocard!=code)) {
 			$('#'+ocard+'c').slideUp()
