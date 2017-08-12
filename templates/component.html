@@ -1,11 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
 <br>
-<!--
-<div style="margin:auto;position:absolute; width:50%;height:50%;vertical-align:middle;text-align:center;background:blue;">
-<div style="margin:auto;position:relative;top:0;left:0;bottom:0;right:0;background:blue;">
-  <div style="margin:auto;background:red;">
--->
 <div style="position:relative;display:table-cell">
   <div style="height:22px"></div>
   <img style="float:left;border:5;padding:5:width:700px;height:380px" src={{ url_for('static', filename='components.png') }}>
@@ -89,7 +84,7 @@ var initSensors = function() {
     }
     Sensors.push(temp);
   }
-  MySensors="";                     // Freeup some RAM
+  mySensors="";                     // Freeup some RAM
 };
 
 var updateValues = function() {
@@ -126,7 +121,6 @@ var updateValues = function() {
               break;
           }
         }
-        // Do colours here
       }
     }
     RefreshInProgress = false;
