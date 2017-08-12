@@ -432,7 +432,7 @@ def sensorts(query):
 @app.errorhandler(404)
 def page_not_found(e):
     flash("404 Error. Page not found.")
-    rand=str(random.randint(2, 32))
+    rand=str(random.randint(1, 33))
     return render_template('404.html', rand=rand)
 
 if __name__ == '__main__':
