@@ -204,6 +204,12 @@ body {
   text-align: center;
   border: 0.063px solid transparent; 
 }
+.jph-box-vbuttons{
+  height: 1.875em;
+  padding: 0;
+  text-align: center;
+  border: 0.063px solid transparent; 
+}
 .jph-btn {
   display: inline-block;
   width: 1.6em;
