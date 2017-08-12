@@ -69,7 +69,6 @@ except Exception as e:
     channel.logger.critical("Unexpected error reading password file: %s", e)
     sys.exit()
 
-# SQLALCHEMY_DATABASE_URI = ("postgresql://%s:%s@%s:5432/%s" % (dbuser,sqlpassword,dbhost,dbname))
 app.config['SQLALCHEMY_DATABASE_URI'] = ("postgresql://%s:%s@%s:5432/%s" % (dbuser,sqlpassword,dbhost,dbname))
 if (os.getenv("JPH_DEBUG", "0")=="1"):
     app.config['SQLALCHEMY_ECHO'] = True
