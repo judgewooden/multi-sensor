@@ -94,31 +94,38 @@ $(function() {
 		window.location = "/sensorboard/X5";
 	});
 })
-/*
+
 $(function() {
 	$('[data-click="controls"]').dblclick(function (event) {
 		var code=$(this).attr("id").substring(0,2); 
 		window.location = "/sensorboard/" + code;
 	});
-})*/
+})
+
+var supportsTouch = 'ontouchstart' in window || navigator.msMaxTouchPoints
 
 var ocard=""
 $(function() {
-	$('[data-click="controls"]').on('mousedown', function (event) {
-	  var code=$(this).attr("id").substring(0,2); 
-		if ((ocard != "") && (ocard!=code)) {
-			$('#'+ocard+'c').slideUp()
-			$('#'+ocard+'v').slideDown('slow')
-			ocard=""
-		}
-		if ($('#'+code+'c').css('display') != 'none') {
-			$('#'+code+'c').slideUp();
-			$('#'+code+'v').slideDown('slow');
-			ocard=""
+	$('[data-click="controls"]').onclick(function (event) {
+		if (supportsTouch) {
+			var code=$(this).attr("id").substring(0,2); 
+			window.location = "/sensorboard/" + code;		
 		} else {
-			$('#'+code+'v').slideUp();
-			$('#'+code+'c').slideDown('slow');
-			ocard=code;
+		  var code=$(this).attr("id").substring(0,2); 
+			if ((ocard != "") && (ocard!=code)) {
+				$('#'+ocard+'c').slideUp()
+				$('#'+ocard+'v').slideDown('slow')
+				ocard=""
+			}
+			if ($('#'+code+'c').css('display') != 'none') {
+				$('#'+code+'c').slideUp();
+				$('#'+code+'v').slideDown('slow');
+				ocard=""
+			} else {
+				$('#'+code+'v').slideUp();
+				$('#'+code+'c').slideDown('slow');
+				ocard=code;
+			}
 		}
 	})
 })
