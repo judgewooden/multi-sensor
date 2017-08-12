@@ -107,7 +107,7 @@ console.log("SupportTouch", supportsTouch);
 
 var ocard=""
 $(function() {
-	$('[data-click="controls"]').onclick(function (event) {
+	$('[data-click="controls"]').click(function (event) {
 		if (supportsTouch) {
 			var code=$(this).attr("id").substring(0,2); 
 			window.location = "/sensorboard/" + code;		
