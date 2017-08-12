@@ -30,13 +30,7 @@
 	<div style="width:100%">
 		<div class="jph-sens-box" data-click="controls" id="{{ sensor.Codifier }}b" >
 			<div class="jph-box-header {% if sensor.Active %} jph-info {% else %} jph-info {% endif %}" id="{{ sensor.Codifier }}h">{{ sensor.Codifier }} - {{ sensor.ShortName }}</div>
-			<div class="jph-box-buttons" id="{{ sensor.Codifier }}c"> 
-				<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Start the Sensor{% endif %}" id="{{ sensor.Codifier }}S"><i class="fa fa-play fa-inverse"></i></button>
-				<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Pause the Sensor{% endif %}" id="{{ sensor.Codifier }}H"><i class="fa fa-pause fa-inverse"></i></button>
-				<button type="button" class="btn jph-btn jph-okay" data-trigger="focus" rel="jph-popover" data-placement="bottom" data-html="true" data-content='<iframe scrolling="yes" class="jph-iframe-popover" src="/sensorinfo/{{ sensor.Codifier }}"></iframe>' title="{{ sensor.Name }}" id="{{ sensor.Codifier }}i"><i class="fa fa-info fa-inverse"></i></button>
-				<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Ping the Sensor{% endif %}" id="{{ sensor.Codifier }}P"><i class="fa fa-heartbeat fa-inverse"></i></button>
-				<button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Reload Configuration{% endif %}" id="{{ sensor.Codifier }}C"><i class="fa fa-refresh fa-inverse"></i></button>
-			</div>
+
 			<div class="card-text jph-box-value" id="{{ sensor.Codifier }}v"></div>
 			<div class="card-footer jph-box-footer" id="{{ sensor.Codifier }}t"></div>
 		</div>
@@ -45,6 +39,13 @@
     <div style="width:100%">
         <div id="{{ sensor.Codifier }}commands" class="jph-left-box" style="height:108px" >
             <div class="jph-box-header jph-info">Control</div>
+            <div class="jph-box-buttons" id="{{ sensor.Codifier }}c"> 
+                <button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Start the Sensor{% endif %}" id="{{ sensor.Codifier }}S"><i class="fa fa-play fa-inverse"></i></button>
+                <button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Pause the Sensor{% endif %}" id="{{ sensor.Codifier }}H"><i class="fa fa-pause fa-inverse"></i></button>
+                <button type="button" class="btn jph-btn jph-okay" data-trigger="focus" rel="jph-popover" data-placement="bottom" data-html="true" data-content='<iframe scrolling="yes" class="jph-iframe-popover" src="/sensorinfo/{{ sensor.Codifier }}"></iframe>' title="{{ sensor.Name }}" id="{{ sensor.Codifier }}i"><i class="fa fa-info fa-inverse"></i></button>
+                <button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Ping the Sensor{% endif %}" id="{{ sensor.Codifier }}P"><i class="fa fa-heartbeat fa-inverse"></i></button>
+                <button type="button" {% if sensor.Type == "Proxy" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Type == "Proxy" %}Proxied by {{ sensor.Sensor.Codifier }}{% else %}Reload Configuration{% endif %}" id="{{ sensor.Codifier }}C"><i class="fa fa-refresh fa-inverse"></i></button>
+            </div>
             <div class="jph-box-value"> 
                 <input type="number" style="width:90px;font-size:14px" id="targetValue">
                 <button type="button" {% if sensor.Control != "enabled" %}disabled{% endif %} class="btn jph-btn jph-okay" data-btn="jphbtn" data-toggle="tooltip" data-placement="bottom" title="{% if sensor.Control == "enabled" %}Send Target Value{% else %}Not enabled{% endif %}" " id="{{ sensor.Codifier }}A"><i class="fa fa-thermometer fa-inverse"></i></button>
@@ -303,8 +304,6 @@ for (var key in mySensors) {
 	mySensors[key].LastDTimestamp=0;
 	mySensors[key].LastStatus=STATUS.INIT;
 }
-
-
 
 var updateLog = function() {
     var tr, td, tbody, text;
