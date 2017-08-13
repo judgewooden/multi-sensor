@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="description" content="Monitoring temperature & water flow for multiple computers on one water cooling loop.">
-  <meta name="robots" content="nofollow">
   <meta name="google-site-verification" content="X4S32hBj9k5VNUjcrPlhbzCRuZXIeEXYtcKBD9Ump3I" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>JPH Monitor</title>
@@ -66,12 +65,19 @@
     	<li>
     </ul>
   </div>
-</nav>{% with messages = get_flashed_messages() %}{% if messages %}
+</nav>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
 <div data-btn="clear" class="jph-notify-show jph-error">
-		<ul>{% for message in messages %}
-		  <li id="jph-notice">{{ message }}</li>{% endfor %}
+		<ul> 
+		{% for message in messages %}
+		  <li id="jph-notice">{{ message }}</li>
+		{% endfor %}
 		</ul>
-	</div>{% else %}{% endif %}{% endwith %}
+	</div>
+{% else %}
+{% endif %}
+{% endwith %}
 <div id="jph-notice-bar" data-btn="clear" class="jph-notify-hide">
 	<div id="jph-notice"></div>
 </div>
