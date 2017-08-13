@@ -1,4 +1,4 @@
-from flask import Flask, url_for, render_template, Response, jsonify, request, redirect, flash, send_file
+from flask import Flask, url_for, render_template, Response, jsonify, request, redirect, flash, send_file, send_from_directory
 from flask_redis import FlaskRedis
 import flask_login as login
 from flask_sqlalchemy import SQLAlchemy
@@ -17,7 +17,7 @@ import random
 #
 # Configure Flask & Redis
 #
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'redis'
