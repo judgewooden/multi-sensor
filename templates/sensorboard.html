@@ -70,6 +70,7 @@
 -->
 <script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
 <script>
+// var x = {{ timeoutsensor }};
 var source1 = {
   "Name": "Graph1",
   "Settings": {
@@ -169,7 +170,7 @@ var source2 = {
         ]
     }
 }
-
+var x={{ timeoutsensor }}
 var l2 = new LineGraph({containerId: '{{ sensor.Codifier }}Week', data: source2})
 
 var t0=(new Date()).valueOf();
