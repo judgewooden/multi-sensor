@@ -70,7 +70,7 @@
 -->
 <script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
 <script>
-// var x = {{ timeoutsensor }};
+// var x = {{ timeoutsensor|tojson }};
 var source1 = {
   "Name": "Graph1",
   "Settings": {
