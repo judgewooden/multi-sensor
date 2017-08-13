@@ -287,7 +287,7 @@ def sensorboard(codifier=None):
     else:
         timeoutsensor=sensor
     return render_template('sensorboard.html',
-            sensor=sensor, sensors=channel.getAllSensors(), timeoutsensor=timeoutsensor)
+            sensor=sensor, sensors=channel.getAllSensors(), mainSensor=timeoutsensor)
 
 @app.route('/ntp')
 def ntp():

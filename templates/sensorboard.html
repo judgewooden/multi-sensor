@@ -75,15 +75,15 @@ var source1 = {
   "Name": "Graph1",
   "Settings": {
     "AutoUpdate": 1,
-    "UpdateInterval": 5,
-    "SecondsToShow": 60,
+    "UpdateInterval": {{ mainSensor.SensorInterval }},
+    "SecondsToShow": 180,
     "LeftLegend": "",
     "LeftMax": 0,
     "LeftMin": 0,
     "RightLegend": "",
     "RightMax": 0,
     "RightMin": 0,
-    "Title": "Last minute",
+    "Title": "Last 3 minutes",
     "Interpolation": "linear",
     "TickLine": 0,
     "DateLabel": "bottom",
@@ -103,7 +103,7 @@ var source1 = {
         "Axis": "Right",
         "Interpolation": "linear",
         "Hidden": "0",
-        "Frequency": "10.00",
+        "Frequency": "{{ mainSensor.TimeoutWarning }}",
         "Filter": "-1.00",
         "Smoothing": "1"
       }
