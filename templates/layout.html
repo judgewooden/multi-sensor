@@ -66,19 +66,12 @@
     	<li>
     </ul>
   </div>
-</nav>
-{% with messages = get_flashed_messages() %}
-{% if messages %}
+</nav>{% with messages = get_flashed_messages() %}{% if messages %}
 <div data-btn="clear" class="jph-notify-show jph-error">
-		<ul> 
-		{% for message in messages %}
-		  <li id="jph-notice">{{ message }}</li>
-		{% endfor %}
+		<ul>{% for message in messages %}
+		  <li id="jph-notice">{{ message }}</li>{% endfor %}
 		</ul>
-	</div>
-{% else %}
-{% endif %}
-{% endwith %}
+	</div>{% else %}{% endif %}{% endwith %}
 <div id="jph-notice-bar" data-btn="clear" class="jph-notify-hide">
 	<div id="jph-notice"></div>
 </div>
