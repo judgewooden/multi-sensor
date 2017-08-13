@@ -4,29 +4,6 @@
 {{ includes.jqwidgets() }}
 {% endblock %}
 {% block body %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script>
-<script src="https://d3js.org/d3.v3.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='jqwidgets/styles/jqx.base.css') }}" type="text/css" />
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxcore.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdata.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdata.export.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxbuttons.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxscrollbar.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxlistbox.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdropdownlist.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxmenu.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxnumberinput.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.selection.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.columnsresize.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.export.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.edit.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdocking.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxwindow.js') }}"></script>
-
 <div class="container-fluid">
   <div id="myGraph" class="jph-graph-box" style="height:300px;color:#f6f6f6;background:#12120a"></div>
 </div>

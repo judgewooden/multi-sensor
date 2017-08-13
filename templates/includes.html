@@ -1,6 +1,6 @@
 {% macro jph() -%}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
-  integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
 <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jphStyle.css') }}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
@@ -8,18 +8,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
 <script src="{{ url_for('static', filename='jphCommon.js') }}"></script>
 {%- endmacro %}
-
 {% macro datatables() -%}
 <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 {%- endmacro %}
-
 {% macro graphs() -%}
 <script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script>
 <script src="https://d3js.org/d3.v3.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
 {%- endmacro %}
-
 {% macro jqwidgets() -%}
 <link rel="stylesheet" href="{{ url_for('static', filename='jqwidgets/styles/jqx.base.css') }}" type="text/css" />
 <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxcore.js') }}"></script>
