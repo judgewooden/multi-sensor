@@ -125,6 +125,11 @@ def handle_needs_login():
     flash("You have to be logged in to access this page.")
     return redirect(url_for('userauthentication', next=request.endpoint))
 
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
+    
 @app.route('/login',methods=['GET','POST'])
 def userauthentication():
     if request.method == 'GET':
