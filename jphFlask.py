@@ -282,7 +282,10 @@ def sensorboard(codifier=None):
     if (channel.getSensor(codifier) == None):
         return "Please provide a valid Codifier"
     sensor=channel.getSensor(codifier)    
-    sensortype=sensor["Type"]
+    if sensor["Type"]=="Proxy":
+        timeoutsensor==channel.getSensor(sensor["Sensor"]["Codifier"])
+    else:
+        timeoutsensor==sensor
     return render_template('sensorboard.html',
             sensor=sensor, sensors=channel.getAllSensors(), timeoutsensor=sensortype)
 
