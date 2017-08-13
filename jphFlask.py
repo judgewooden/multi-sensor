@@ -281,8 +281,10 @@ def sensorboard(codifier=None):
     codifier=codifier[:2]
     if (channel.getSensor(codifier) == None):
         return "Please provide a valid Codifier"
+    sensor=channel.getSensor(codifier)    
+    sensortype=channel.getSensor(codifier)["Type"]    
     return render_template('sensorboard.html',
-            sensor=channel.getSensor(codifier), sensors = channel.getAllSensors())
+            sensor=sensor, sensors = channel.getAllSensors(), timeoutsensor=sensortype)
 
 @app.route('/ntp')
 def ntp():
