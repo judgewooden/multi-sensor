@@ -138,6 +138,7 @@ body {
   margin-left: .5em;
   margin-bottom: .5em;
 }
+/* GRAPHS */
 .jph-graph-box{
   float: left;
   font-size: 16px;
@@ -152,6 +153,51 @@ body {
   margin-left: .5em;
   margin-bottom: .5em;
   width:100%;
+}
+.jph-graph-box-full{
+  float: left;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #fff;
+  padding: 0;
+  overflow: hidden;
+  margin-top: .7em;
+  margin-left: .5em;
+  margin-bottom: .5em;
+  width:100%;
+  height:300px;
+  color:#f6f6f6;
+  background:#12120a
+}
+.jph-graph-box-half{
+  float: left;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #fff;
+  padding: 0;
+  overflow: hidden;
+  margin-top: .7em;
+  margin-left: .5em;
+  margin-bottom: .5em;
+  width:49%;
+  height:200px;
+  color:#f6f6f6;
+  background:#12120a
+  float:left;
+  position:relative;
+
+}
+@media (min-width: 480px) {
+  .jph-graph-box-half {
+    float: none;
+    width: 100%;
+  }
 }
 .jph-notify-show {
   display: block;
