@@ -189,7 +189,7 @@ body {
   width: 100%;
 
 }
-@media (min-width: 480px) {
+@media (min-width: 800px) {
   .jph-graph-box-half {
     width:49%;
     height:200px;
