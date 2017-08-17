@@ -185,18 +185,18 @@ body {
   margin-top: .7em;
   margin-left: .5em;
   margin-bottom: .5em;
-  width:49%;
-  height:200px;
-  color:#f6f6f6;
-  background:#12120a;
-  float:left;
-  position:relative;
+  float: none;
+  width: 100%;
 
 }
 @media (min-width: 480px) {
   .jph-graph-box-half {
-    float: none;
-    width: 100%;
+    width:49%;
+    height:200px;
+    color:#f6f6f6;
+    background:#12120a;
+    float:left;
+    position:relative;
   }
 }
 .jph-notify-show {
