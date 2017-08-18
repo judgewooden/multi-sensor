@@ -185,7 +185,7 @@ body {
   margin-top: .7em;
   margin-left: .5em;
   margin-bottom: .5em;
-  height:200px;
+  height:400px;
   color:#f6f6f6;
   background:#12120a;
   float: none;
@@ -193,6 +193,7 @@ body {
 }
 @media (min-width: 960px) {
   .jph-graph-box-half {
+    height:200px;
     width:49%;
     float:left;
     position:relative;
