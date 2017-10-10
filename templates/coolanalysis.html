@@ -12,11 +12,11 @@
 
 <script>
 var source1 = {
-  "Name": "Kast 2 hours",
+  "Name": "Kast 24 hours",
   "Settings": {
     "AutoUpdate": 1,
-    "UpdateInterval": 10,
-    "SecondsToShow": 7200,
+    "UpdateInterval": 60,
+    "SecondsToShow": 86400,
     "LeftLegend": "LeftLegend",
     "LeftMax": 0,
     "LeftMin": 0,
@@ -39,40 +39,40 @@ var source1 = {
       {
         "Name": "Inside",
         "Codifier": "F6",
-        "Field": "value",
+        "Field": "mean-10min",
         "Axis": "Right",
         "Interpolation": "linear",
-        "Frequency": "30.00",
+        "Frequency": "60.00",
         "Filter": "-1.00",
         "Smoothing": "15.00"
       },
       {
         "Name": "Rad-in",
         "Codifier": "A1",
-        "Field": "value",
+        "Field": "mean-10min",
         "Axis": "Right",
         "Interpolation": "linear",
-        "Frequency": "30.00",
+        "Frequency": "60.00",
         "Filter": "-1.00",
         "Smoothing": "15.00"
       },
       {
         "Name": "Rad-out",
         "Codifier": "A2",
-        "Field": "value",
+        "Field": "mean-10min",
         "Axis": "Right",
         "Interpolation": "linear",
-        "Frequency": "30.00",
+        "Frequency": "60.00",
         "Filter": "-1.00",
         "Smoothing": "15.00"
       },
       {
         "Name": "Outside",
         "Codifier": "F1",
-        "Field": "value",
+        "Field": "mean-10min",
         "Axis": "Right",
         "Interpolation": "linear",
-        "Frequency": "30.00",
+        "Frequency": "60.00",
         "Filter": "-1.00",
         "Smoothing": "15.00"
       }
