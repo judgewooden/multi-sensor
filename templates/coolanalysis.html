@@ -23,7 +23,7 @@ var source1 = {
     "RightLegend": "Temp (C)",
     "RightMax": 0,
     "RightMin": 0,
-    "Title": "Cool room - Last two hours",
+    "Title": "Cool room - Last 24 Hours",
     "Interpolation": "linear",
     "TickLine": 0,
     "DateLabel": "top",
@@ -82,18 +82,18 @@ var source1 = {
 var g1 = new LineGraph({containerId: 'graph1', data: source1});
 
 var source2 = {
-  "Name": "Kast 2days",
+  "Name": "Kast month",
   "Settings": {
-    "AutoUpdate": 1,
-    "UpdateInterval": 10,
-    "SecondsToShow": 172800,
+    "AutoUpdate": 0,
+    "UpdateInterval": 60,
+    "SecondsToShow": 2592000,
     "LeftLegend": "Humidity (%)",
     "LeftMax": 0,
     "LeftMin": 0,
     "RightLegend": "Temp (C)",
     "RightMax": 0,
     "RightMin": 0,
-    "Title": "Cool Room - Last Two Days",
+    "Title": "Cool Room - Last Month",
     "Interpolation": "linear",
     "TickLine": 0,
     "DateLabel": "top",
@@ -109,7 +109,7 @@ var source2 = {
       {
         "Name": "Inside-Temp",
         "Codifier": "F6",
-        "Field": "value",
+        "Field": "mean-hour",
         "Axis": "Right",
         "Interpolation": "linear",
         "Frequency": "3600.00",
@@ -119,7 +119,7 @@ var source2 = {
       {
         "Name": "Inside-Hum",
         "Codifier": "F7",
-        "Field": "mean-10min",
+        "Field": "mean-hour",
         "Axis": "Left",
         "Interpolation": "linear",
         "Frequency": "3600.00",
@@ -129,7 +129,7 @@ var source2 = {
       {
         "Name": "Outside-Hum",
         "Codifier": "F2",
-        "Field": "mean-10min",
+        "Field": "mean-hour",
         "Axis": "Left",
         "Interpolation": "linear",
         "Frequency": "3600.00",
@@ -139,7 +139,7 @@ var source2 = {
       {
         "Name": "Outside-Temp",
         "Codifier": "F1",
-        "Field": "mean-10min",
+        "Field": "mean-hour",
         "Axis": "Right",
         "Interpolation": "linear",
         "Frequency": "3600.00",
@@ -149,7 +149,7 @@ var source2 = {
       {
         "Name": "Weather-Temp",
         "Codifier": "N5",
-        "Field": "mean-10min",
+        "Field": "mean-hour",
         "Axis": "Right",
         "Interpolation": "linear",
         "Frequency": "3600.00",
@@ -159,7 +159,7 @@ var source2 = {
       {
         "Name": "Weather-Hum",
         "Codifier": "N6",
-        "Field": "mean-10min",
+        "Field": "mean-hour",
         "Axis": "Left",
         "Interpolation": "linear",
         "Frequency": "3600.00",
