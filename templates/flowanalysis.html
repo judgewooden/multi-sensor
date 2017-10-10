@@ -92,19 +92,19 @@ var source1 = {
 var g1 = new LineGraph({containerId: 'graph1', data: source1});
 
 var source2 = {
-  "Name": "Arduino 2days",
+  "Name": "Arduino 30 days",
   "Settings": {
-    "AutoUpdate": 1,
-    "UpdateInterval": 10,
-    "SecondsToShow": 172800,
-    "LeftLegend": "Temp (C)",
+    "AutoUpdate": 0,
+    "UpdateInterval": 60,
+    "SecondsToShow": 2592000,
+    "LeftLegend": "MAD Liters/pm",
     "LeftMax": 0,
     "LeftMin": 0,
-    "RightLegend": "Liters/pm",
+    "RightLegend": "AQUA Liters/pm",
     "RightMax": 0,
     "RightMin": 0,
     "Title": "Arduino Flow - Last 2 days",
-    "Interpolation": "linear",
+    "Interpolation": "cardinal-open",
     "TickLine": 0,
     "DateLabel": "top",
     "HideDateLabel": 0,
@@ -112,30 +112,30 @@ var source2 = {
     "HideXAxis": 0,
     "HideAxisLeft": 0,
     "HideAxisRight": 0,
-    "HideButtons": 1,
+    "HideButtons": 0,
     "HideLeftControls": 1,
     "HideRightControls": 1,
     "graphSensors": [
-      {
-        "Name": "MAD",
-        "Codifier": "X2",
-        "Field": "value",
-        "Axis": "Right",
-        "Interpolation": "linear",
-        "Frequency": "60.00",
-        "Filter": "0.50",
-        "Smoothing": "30.00"
-      },
-      {
-        "Name": "AQUA",
-        "Codifier": "Y2",
-        "Field": "value",
-        "Axis": "Right",
-        "Interpolation": "linear",
-        "Frequency": "60.00",
-        "Filter": "0.50",
-        "Smoothing": "30.00"
-      }
+        {
+            "Name": "MAD",
+            "Codifier": "X2",
+            "Field": "mean-hour",
+            "Axis": "Right",
+            "Interpolation": "linear",
+            "Frequency": "3,600.00",
+            "Filter": "0.00",
+            "Smoothing": "1.00"
+        },
+        {
+            "Name": "AQUA",
+            "Codifier": "Y2",
+            "Field": "mean-hour",
+            "Axis": "Left",
+            "Interpolation": "linear",
+            "Frequency": "3,600.00",
+            "Filter": "0.00",
+            "Smoothing": "1.00"
+        }
     ]
   }
 };
