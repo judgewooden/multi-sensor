@@ -1,4 +1,20 @@
 {% extends "layout.html" %}
+{% block head %}
+<script type='application/ld+json'>
+  {
+    "@context":"http:\\schema.org",
+    "@type":"WebSite",
+    "url":"http:\\jphmonitor.nl",
+    "name":"JPHmonitor",
+    "alternateName":"JPH monitor"
+  }
+</script>
+<ul itemscope itemtype="http://www.schema.org/SiteNavigationElement">
+  <li itemprop="name"><a itemprop="url" href="http://jphmonitor.nl/dashboard">Dashboard</a></li>
+  <li itemprop="name"><a itemprop="url" href="http://jphmonitor.nl/diagram">Flow Diagram</a></li>
+  <li itemprop="name"><a itemprop="url" href="http://jphmonitor.nl/wateranalysis">Temperature Graph</a></li>
+  <li itemprop="name"><a itemprop="url" href="http://jphmonitor.nl/mineanalysis">Efficiency Graph</a></li>
+</ul>
 {% block body %}
 <div class="container">
 <p> </p>
