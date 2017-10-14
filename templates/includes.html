@@ -1,38 +1,37 @@
 {% macro jph() -%}
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
-  <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jphStyle.css') }}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
-  <script src="{{ url_for('static', filename='jphCommon.js') }}"></script>
-  {%- endmacro %}
-  {% macro datatables() -%}
-  <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-  {%- endmacro %}
-  {% macro graphs() -%}
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script>
-  <script src="https://d3js.org/d3.v3.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
-  {%- endmacro %}
-  {% macro jqwidgets() -%}
-  <link rel="stylesheet" href="{{ url_for('static', filename='jqwidgets/styles/jqx.base.css') }}" type="text/css" />
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxcore.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdata.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdata.export.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxbuttons.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxscrollbar.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxlistbox.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdropdownlist.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxmenu.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxnumberinput.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.selection.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.columnsresize.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.export.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.edit.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdocking.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxwindow.js') }}"></script>
-  {%- endmacro %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jphStyle.css') }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='jphCommon.js') }}"></script>
+{%- endmacro %}
+{% macro datatables() -%}
+<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+{%- endmacro %}
+{% macro graphs() -%}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script>
+<script src="https://d3js.org/d3.v3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='sensorGraphV2.js') }}"></script>
+{%- endmacro %}
+{% macro jqwidgets() -%}
+<link rel="stylesheet" href="{{ url_for('static', filename='jqwidgets/styles/jqx.base.css') }}" type="text/css" />
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxcore.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdata.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdata.export.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxbuttons.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxscrollbar.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxlistbox.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdropdownlist.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxmenu.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxnumberinput.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.selection.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.columnsresize.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.export.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxgrid.edit.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxdocking.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jqwidgets/jqxwindow.js') }}"></script>
+{%- endmacro %}
