@@ -1,9 +1,11 @@
 {% extends "layout.html" %}
 {% import 'includes.html' as includes %}
 {% block head %}
+<meta name="description" content="Analysis of sensors in cool room.">
 {{ includes.graphs() }}
 {% endblock %}
 {% block body %}
+<span itemprop="description" content="Analysis of sensors in cool room."/>
 
 <div class="container-fluid">
   <div id="graph1" class="jph-graph-box-full"></div>

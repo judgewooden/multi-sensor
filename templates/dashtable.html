@@ -1,9 +1,11 @@
 {% extends "layout.html" %}
 {% import 'includes.html' as includes %}
 {% block head %}
+<meta name="description" content="Overview of all sensors.">
 {{ includes.datatables() }}
 {% endblock %}
 {% block body %}
+<span itemprop="description" content="Overview of all sensors."/>
 <div class="container-fluid">
 <table id="jphTable" class="cell-border hover order-column nowrap" width="100%">
 	<thead>

@@ -1,9 +1,12 @@
 {% extends "layout.html" %}
 {% import 'includes.html' as includes %}
 {% block head %}
+<meta name="description" content="View log files.">
 {{ includes.datatables() }}
 {% endblock %}
 {% block body %}
+<span itemprop="description" content="View log files."/>
+
 <div class="container-fluid" style="padding:8px">
 <table id="output" class="cell-border compact">
 <thead>

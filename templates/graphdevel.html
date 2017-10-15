@@ -1,10 +1,14 @@
 {% extends "layout.html" %}
 {% import 'includes.html' as includes %}
 {% block head %}
+<meta name="description" content="Setup your own graphs.">
 {{ includes.graphs() }}
 {{ includes.jqwidgets() }}
 {% endblock %}
 {% block body %}
+<span itemprop="description" content="Setup your own graphs."/>
+
+
 <div class="container-fluid">
   <div id="myGraph" class="jph-graph-box" style="height:300px;color:#f6f6f6;background:#12120a"></div>
 </div>

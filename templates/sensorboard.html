@@ -1,9 +1,12 @@
 {% extends "layout.html" %}
 {% import 'includes.html' as includes %}
 {% block head %}
+<meta name="description" content="Details of Sensor: {{ sensor.ShortName }}">
 {{ includes.graphs() }}
 {% endblock %}
 {% block body %}
+<span itemprop="description" content="Details of Sensor: {{ sensor.ShortName }}"/>
+
 <div class="container-fluid">
 	<div style="width:100%">
 		<label>Update:
