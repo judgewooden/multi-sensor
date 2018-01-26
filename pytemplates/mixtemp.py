@@ -135,7 +135,7 @@ if (xs==False):
 dc=100
 times = [{{ A4|DTimestamp }}, {{ A5|DTimestamp }}]
 l=min(times)
-if (!=None):
+if (l!=None):
     if(n-l < 60000):
         maxtemp = max( [{{ A4 }}, {{ A5 }} ])
         terror = maxtemp - 37
