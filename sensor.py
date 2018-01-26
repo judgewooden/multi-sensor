@@ -410,7 +410,7 @@ if __name__ == '__main__':
         from openzwave.node import ZWaveNode
         from openzwave.network import ZWaveNetwork
         from openzwave.option import ZWaveOption
-    if type == "GPIO":
+    if type == "fanControl":
         import RPi.GPIO as GPIO
 
     c=eval(type + '()')

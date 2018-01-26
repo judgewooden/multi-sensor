@@ -952,9 +952,8 @@
             "TimeoutWarning":10,
             "DataType":"float",
             "Control":"enabled",
-            "Type":"GPIO"
+            "Type":"fancontrol"
         }
-
     ]
 }
    
