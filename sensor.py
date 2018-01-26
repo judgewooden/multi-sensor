@@ -356,7 +356,7 @@ class fanControl(object):
         GPIO.setup(24, GPIO.OUT)
         GPIO.output(24, 0)
         self.pwm = GPIO.PWM(25, 10000)  
-        pwm.start(self.value)
+        self.pwm.start(self.value)
 
     def run(self, Timestamp, command="", number=None):
         if command=="A":
