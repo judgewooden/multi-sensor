@@ -569,6 +569,7 @@
             "Symbol":"MH/s",
             "DataType":"float",
             "Type":"Proxy",
+            "Active":false,
             "Sensor":{
                 "__comment":"",
                 "Codifier":"PA"
@@ -799,7 +800,7 @@
             "KeepAliveInterval":60,
             "SensorInterval":60,
             "TimeoutWarning":600,
-            "Active":true,
+            "Active":false,
             "DataType":"float",
             "Type":"DwarfpoolReader",
             "Sensor":{
@@ -816,6 +817,7 @@
             "Symbol":"MH/s",
             "Type":"Proxy",
             "DataType":"float",
+            "Active":false,
             "Sensor":{
                 "Codifier":"M1"
             }
@@ -828,8 +830,8 @@
             "SensorInterval":60,
             "TimeoutWarning":600,
             "DataType":"float",
-            "Active":true,
             "Type":"DwarfpoolReader",
+            "Active":false,
             "Sensor":{
                 "URL":"http://dwarfpool.com/eth/api?wallet=0x03145c9f20af9272cc87ee62c27b608c3b004f6a&email=douwe.jong@gmail.com",
                 "Server":"MAD",
@@ -842,6 +844,7 @@
             "ShortName":"Hash MAD(c)",
             "Name":"Calculated Hash MAD",
             "Symbol":"MH/s",
+            "Active":false,
             "DataType":"float",
             "Type":"Proxy",
             "Sensor":{
@@ -855,7 +858,7 @@
             "KeepAliveInterval":60,
             "SensorInterval":60,
             "TimeoutWarning":60,
-            "Active":true,
+            "Active":false,
             "DataType":"integer",
             "Type":"Flask",
             "Sensor":{
@@ -874,7 +877,7 @@
             "KeepAliveInterval":60,
             "SensorInterval":60,
             "TimeoutWarning":60,
-            "Active":true,
+            "Active":false,
             "DataType":"integer",
             "Type":"ControlProgram"
         }, {
@@ -885,7 +888,7 @@
             "KeepAliveInterval":60,
             "SensorInterval":60,
             "TimeoutWarning":60,
-            "Active":true,
+            "Active":false,
             "DataType":"integer",
             "Type":"jphRedis"
         }, {
@@ -896,7 +899,7 @@
             "KeepAliveInterval":60,
             "SensorInterval":60,
             "TimeoutWarning":60,
-            "Active":true,
+            "Active":false,
             "DataType":"integer",
             "Type":"jphCalcHistory",
             "Sensor":{
@@ -915,7 +918,7 @@
             "KeepAliveInterval":60,
             "SensorInterval":60,
             "TimeoutWarning":60,
-            "Active":true,
+            "Active":false,
             "DataType":"integer",
             "Type":"jphPostgreSQL",
             "Sensor":{
@@ -931,14 +934,27 @@
             "ShortName":"Target Indicator",
             "Name":"Example of how values could be controlled",
             "Symbol":"",
-            "Active":true,
+            "Active":false,
             "KeepAliveInterval":60,
             "SensorInterval":5,
             "TimeoutWarning":10,
             "DataType":"float",
             "Control":"enabled",
             "Type":"controlSensor"
+        }, {
+            "Codifier":"FK",
+            "ShortName":"Fan Outside",
+            "Name":"Radoator Fan",
+            "Symbol":"dc",
+            "Active":true,
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "DataType":"float",
+            "Control":"enabled",
+            "Type":"GPIO"
         }
+
     ]
 }
    

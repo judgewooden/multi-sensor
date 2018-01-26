@@ -348,6 +348,35 @@ class controlSensor(object):
                 self.value=self.value+number
         channel.sendData(data=self.value)
 
+class fanControl(object):
+    def __init__(self):
+        self.value = 0
+        GPIO.setmode(GPIO.BCM)   # This example uses the BCM pin numbering
+        GPIO.setup(25, GPIO.OUT) # GPIO 25 is set to be an output.
+        GPIO.setup(24, GPIO.OUT)
+        GPIO.output(24, 0)
+        self.pwm = GPIO.PWM(25, 10000)  
+        pwm.start(self.value)
+
+    def run(self, Timestamp, command="", number=None):
+        if command=="A":
+            if number==None:
+                channel.logger.error("Command A expects target value")
+            else:
+                self.value=number
+        if command=="E":
+            if number==None:
+                channel.logger.error("Command E expects step value")
+            else:
+                self.value=self.value+number
+        if command!="":
+            if ( self.value < 0 ):
+                self.value=0
+            if ( self.value > 100 ):
+                self.value=100
+            self.pwm.ChangeDutyCycle(self.value)
+        channel.sendData(data=self.value)
+
 if __name__ == '__main__':
 
     channel=jph.jph(configURL=configURL, Codifier=Codifier)
@@ -381,6 +410,8 @@ if __name__ == '__main__':
         from openzwave.node import ZWaveNode
         from openzwave.network import ZWaveNetwork
         from openzwave.option import ZWaveOption
+    if type == "GPIO":
+        import RPi.GPIO as GPIO
 
     c=eval(type + '()')
     channel.run(timeCallback=c.run )
