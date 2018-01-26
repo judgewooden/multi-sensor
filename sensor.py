@@ -350,7 +350,7 @@ class controlSensor(object):
 
 class fanControl(object):
     def __init__(self):
-        self.value = 0
+        self.value = 100
         GPIO.setmode(GPIO.BCM)   # This example uses the BCM pin numbering
         GPIO.setup(25, GPIO.OUT) # GPIO 25 is set to be an output.
         GPIO.setup(24, GPIO.OUT)
