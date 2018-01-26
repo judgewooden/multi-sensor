@@ -952,7 +952,7 @@
             "TimeoutWarning":10,
             "DataType":"float",
             "Control":"enabled",
-            "Type":"fancontrol"
+            "Type":"fanControl"
         }
     ]
 }
