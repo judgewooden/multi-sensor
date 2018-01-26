@@ -140,7 +140,7 @@ if (l!=None):
         maxtemp = max( [{{ A4 }}, {{ A5 }} ])
         terror = maxtemp - 37
         dc={{ FK }} + 1/6 * 5 * terror
-        printf(maxtemp, terror, dc, {{ FK }}, {{ A4 }}, {{ A5 }})
+        print(maxtemp, terror, dc, {{ FK }}, {{ A4 }}, {{ A5 }})
 channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
 
 
