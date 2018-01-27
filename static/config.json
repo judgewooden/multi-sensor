@@ -930,11 +930,11 @@
                 }
             }
         }, {
-            "Codifier":"ZZ",
-            "ShortName":"Target Indicator",
-            "Name":"Example of how values could be controlled",
-            "Symbol":"",
-            "Active":false,
+            "Codifier":"FJ",
+            "ShortName":"Target Temp",
+            "Name":"Temperature targe",
+            "Symbol":"C",
+            "Active":true,
             "KeepAliveInterval":60,
             "SensorInterval":5,
             "TimeoutWarning":10,
@@ -945,7 +945,7 @@
             "Codifier":"FK",
             "ShortName":"Fan Outside",
             "Name":"Radoator Fan",
-            "Symbol":"dc",
+            "Symbol":"%",
             "Active":true,
             "KeepAliveInterval":60,
             "SensorInterval":5,
@@ -953,7 +953,34 @@
             "DataType":"float",
             "Control":"enabled",
             "Type":"fanControl"
-        }
+        }, {
+            "Codifier":"FL",
+            "ShortName":"Fan Calc",
+            "Name":"Fan Controller",
+            "Symbol":"ms",
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":20,
+            "Active":true,
+            "Type":"PythonNinja",
+            "Sensor":{
+                "Filename":"pytemplates/fancontrol.py",
+                "Proxy":[{
+                    "Codifier":"FM"
+                }]
+            }
+        }, {
+            "Codifier":"FM",
+            "ShortName":"Fan Calc2",
+            "Name":"Fan Controller 2",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        },  
     ]
 }
    
