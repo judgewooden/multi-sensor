@@ -1,6 +1,7 @@
 # mad=A4
 # Aqua=A5 
-print("myself", {{ FL }})
+if ({{ FL }}==None)
+    return
 n=jph.timeNow()
 
 #
