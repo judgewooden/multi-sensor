@@ -1,6 +1,6 @@
 # mad=A4
 # Aqua=A5 
-if ({{ FL }}==None)
+if ({{ FL }}==None):
     return
 n=jph.timeNow()
 
