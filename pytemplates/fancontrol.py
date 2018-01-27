@@ -15,7 +15,7 @@ if (l!=None):
 #
 # check if we have a target temperature
 #
-print("target", target)
+print("target", {{ FJ }})
 target={{ FJ }}
 if (target==None or target<10):
     target=37 # assume a consant if no user value
