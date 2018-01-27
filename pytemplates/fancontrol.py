@@ -15,6 +15,7 @@ if (l!=None):
 #
 # check if we have a target temperature
 #
+print("target", target)
 target={{ FJ }}
 if (target==None or target<10):
     target=37 # assume a consant if no user value
@@ -29,6 +30,6 @@ if (l!=None):
         maxtemp = max( [{{ A4 }}, {{ A5 }} ])
         terror = maxtemp - target
         dc=fk + 1/6 * 5 * terror
-        print(target, maxtemp, terror, dc, fk , {{ A4 }}, {{ A5 }})
+        print(target, maxtemp, terror, dc, fk, {{ A4 }}, {{ A5 }})
 channel.sendData(data=dc, Codifier="FM")
 channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
