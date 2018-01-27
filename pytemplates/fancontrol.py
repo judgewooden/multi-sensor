@@ -1,5 +1,6 @@
 # mad=A4
 # Aqua=A5 
+print("myself", {{ FL }})
 n=jph.timeNow()
 
 #
