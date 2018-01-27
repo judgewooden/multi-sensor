@@ -19,7 +19,7 @@ print("target", {{ FJ }})
 target={{ FJ }}
 if (target==None or target<10):
     target=37 # assume a consant if no user value
-    channel.sendCtrl(to="FJ", flag="A", timeComponent=target)
+#    channel.sendCtrl(to="FJ", flag="A", timeComponent=target)
 
 
 dc=100
