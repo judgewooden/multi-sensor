@@ -104,7 +104,7 @@ class jph(object):
         try:
             self.configJSON=json.loads(urllib2.urlopen(self.configURL).read())
         except Exception as e:
-            self.logger.critical("Failed to JSON config (URL:%s): %s", self.configURL, e)
+            self.logger.critical("Failed to load JSON config (URL:%s): %s", self.configURL, e)
             raise ValueError(e)
 
         f=""
@@ -168,7 +168,8 @@ class jph(object):
         else:
             logger2=logging.getLogger(f)
             self.logger=logging.LoggerAdapter(logger2, {'codifier': self.Codifier})
-            self.logger.info("(Re)Starting %s on logger: %s", __name__ + '-' + self.Codifier, f)
+            if (os.getenv("JPH_SILENT", None)!=None):
+                self.logger.info("(Re)Starting %s on logger: %s", __name__ + '-' + self.Codifier, f)
 
     def getConfig(self):
         return self.configJSON

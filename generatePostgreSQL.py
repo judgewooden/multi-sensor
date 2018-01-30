@@ -123,6 +123,7 @@ def createDB():
     print("GRANT ALL PRIVILEGES ON TABLE Users to %s;" % (dbuser))
 
 # main 
+os.putenv("JPH_SILENT", "True")
 channel=jph.jph(configURL=configURL, Codifier=Codifier)
 
 dbname=channel.getMySensorElement("SQL")["Database"]
