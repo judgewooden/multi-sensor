@@ -124,7 +124,6 @@ def createDB():
 
 # main 
 os.environ["JPH_SILENT"]="TRUE"
-print(os.getenv("JPH_SILENT", "xxxx"))
 channel=jph.jph(configURL=configURL, Codifier=Codifier)
 
 dbname=channel.getMySensorElement("SQL")["Database"]

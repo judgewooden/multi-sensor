@@ -975,6 +975,12 @@
                     "Codifier":"FP"
                 }, {
                     "Codifier":"FQ"
+                }, {
+                    "Codifier":"FR"
+                }, {
+                    "Codifier":"FS"
+                }, {
+                    "Codifier":"FT"
                 }]
             }
         }, {
@@ -1023,6 +1029,39 @@
             }
         }, {
             "Codifier":"FQ",
+            "ShortName":"Reserved ",
+            "Name":"Reserved",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FR",
+            "ShortName":"Reserved ",
+            "Name":"Reserved",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FS",
+            "ShortName":"Reserved ",
+            "Name":"Reserved",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FT",
             "ShortName":"Reserved ",
             "Name":"Reserved",
             "Symbol":"",
