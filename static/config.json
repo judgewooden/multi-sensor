@@ -967,6 +967,14 @@
                 "Filename":"pytemplates/fancontrol.py",
                 "Proxy":[{
                     "Codifier":"FM"
+                }, {
+                    "Codifier":"FN"
+                }, {
+                    "Codifier":"FO"
+                }, {
+                    "Codifier":"FP"
+                }, {
+                    "Codifier":"FQ"
                 }]
             }
         }, {
@@ -980,7 +988,51 @@
                 "__comment":"Reserved for fan memory",
                 "Codifier":"FL"
             }
-        }  
+        }, {
+            "Codifier":"FN",
+            "ShortName":"Max Temp",
+            "Name":"Current Max input Temp",
+            "Symbol":"C",
+            "DataType":"integer",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FO",
+            "ShortName":"Reserved ",
+            "Name":"Reserved",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FP",
+            "ShortName":"Reserved ",
+            "Name":"Reserved",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FQ",
+            "ShortName":"Reserved ",
+            "Name":"Reserved",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        }   
     ]
 }
    
