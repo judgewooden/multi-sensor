@@ -123,7 +123,7 @@ def createDB():
     print("GRANT ALL PRIVILEGES ON TABLE Users to %s;" % (dbuser))
 
 # main 
-os.putenv("JPH_SILENT", "True")
+os.environ["JPH_SILENT"]="TRUE"
 print(os.getenv("JPH_SILENT", "xxxx"))
 channel=jph.jph(configURL=configURL, Codifier=Codifier)
 
