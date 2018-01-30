@@ -168,8 +168,7 @@ class jph(object):
         else:
             logger2=logging.getLogger(f)
             self.logger=logging.LoggerAdapter(logger2, {'codifier': self.Codifier})
-            print (os.getenv("JPH_SILENT", None))
-            if (os.getenv("JPH_SILENT", None)!=None):
+            if (os.getenv("JPH_SILENT", None)==None):
                 self.logger.info("(Re)Starting %s on logger: %s", __name__ + '-' + self.Codifier, f)
 
     def getConfig(self):
