@@ -32,6 +32,6 @@ if ({{ FL }}!=None):
             channel.sendData(data=maxtemp, Codifier="FN")
             terror = maxtemp - target
             dc=fk + 1/6 * 5 * terror
-            print(target, maxtemp, terror, dc, fk, {{ A4 }}, {{ A5 }})
+            #print(target, maxtemp, terror, dc, fk, {{ A4 }}, {{ A5 }})
     channel.sendData(data=dc, Codifier="FM")
     channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
