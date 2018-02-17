@@ -334,7 +334,7 @@ class ZwavePower(object):
 class controlSensor(object):
     def __init__(self):
         try:
-            self.value=channel.getMySensorElement("Default")
+            self.value=float(channel.getMySensorElement("Default"))
         except:
             self.value=0
 
