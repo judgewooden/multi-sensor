@@ -43,3 +43,29 @@ else:
     if ({{ FI }}!=1):
         channel.sendData(data=0, Codifier="FM")
         channel.sendCtrl(to="FK", flag="A", timeComponent=0)
+
+
+#
+# Dew temp calculator
+#
+if ({{ FL }}!=None):
+
+    n=jph.timeNow()
+
+    #
+    # check of the nest values are recent
+    #
+    times = [{{ N5|DTimestamp }}]
+    l=min(times)
+    if (l!=None):
+        if(n-l < 60000):
+            dew =243.04 * ( log( {{ N6 }} / 100 ) + (( 17.625 * {{ N5 }} ) / ( 243.04 + {{ N4 }} ))) / ( 17.625 - log( {{ N6 }} / 100) - (( 17.625 * {{ N5 }}) / ( 243.04 + {{ N5 }})))
+            channel.sendData(data=dew, Codifier="FO")
+
+            times =[{{ FH|DTimestamp }}]
+            l=min(times)
+            if (l!=None):
+                if(n-l < 60000):
+                    low =243.04 * ((( 17.625 * dew ) / ( 243.04 + dew )) - log( {{ FH }} / 100 )) / ( 17.625 + log( {{ FH }} / 100) - (( 17.625 * dew ) / ( 243.04 + dew )))
+                    channel.sendData(data=low, Codifier="FP")
+

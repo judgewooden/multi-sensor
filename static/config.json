@@ -930,10 +930,22 @@
                 }
             }
         }, {
+            "Codifier":"FH",
+            "ShortName":"Target Humid",
+            "Name":"Target Humidity",
+            "Symbol":"%",
+            "Active":true,
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "DataType":"float",
+            "Control":"enabled",
+            "Type":"controlSensor"
+        }, {
             "Codifier":"FI",
             "ShortName":"Fan on/off",
-            "Name":"Enable fan control",
-            "Symbol":" on/off",
+            "Name":"Enable fan control (1=on else off)",
+            "Symbol":"",
             "Active":true,
             "KeepAliveInterval":60,
             "SensorInterval":5,
@@ -1019,8 +1031,8 @@
             }
         }, {
             "Codifier":"FO",
-            "ShortName":"Reserved ",
-            "Name":"Reserved",
+            "ShortName":"Dew Temp ",
+            "Name":"Dew Temp",
             "Symbol":"",
             "DataType":"float",
             "Type":"Proxy",
@@ -1030,7 +1042,7 @@
             }
         }, {
             "Codifier":"FP",
-            "ShortName":"Reserved ",
+            "ShortName":"Low Temp ",
             "Name":"Reserved",
             "Symbol":"",
             "DataType":"float",
