@@ -33,5 +33,13 @@ if ({{ FL }}!=None):
             terror = maxtemp - target
             dc=fk + 1/6 * 5 * terror
             #print(target, maxtemp, terror, dc, fk, {{ A4 }}, {{ A5 }})
-    channel.sendData(data=dc, Codifier="FM")
-    channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
+    if ({{ FI }}==1):
+        channel.sendData(data=dc, Codifier="FM")
+        channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
+    else:
+        channel.sendData(data=0, Codifier="FM")
+        channel.sendCtrl(to="FK", flag="A", timeComponent=0)
+else:
+    if ({{ FI }}!=1):
+        channel.sendData(data=0, Codifier="FM")
+        channel.sendCtrl(to="FK", flag="A", timeComponent=0)

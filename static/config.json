@@ -930,6 +930,18 @@
                 }
             }
         }, {
+            "Codifier":"FI",
+            "ShortName":"Fan on/off",
+            "Name":"Enable fan control",
+            "Symbol":" on/off",
+            "Active":true,
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "DataType":"integer",
+            "Control":"enabled",
+            "Type":"controlSensor"
+        }, {
             "Codifier":"FJ",
             "ShortName":"Target Temp",
             "Name":"Temperature targe",
@@ -944,7 +956,7 @@
         }, {
             "Codifier":"FK",
             "ShortName":"Fan Outside",
-            "Name":"Radoator Fan",
+            "Name":"Radiator Fan",
             "Symbol":"%",
             "Active":true,
             "KeepAliveInterval":60,
@@ -955,7 +967,7 @@
             "Type":"fanControl"
         }, {
             "Codifier":"FL",
-            "ShortName":"Fan Calc",
+            "ShortName":"Fan Control",
             "Name":"Fan Controller",
             "Symbol":"ms",
             "KeepAliveInterval":60,
@@ -985,8 +997,8 @@
             }
         }, {
             "Codifier":"FM",
-            "ShortName":"Fan Calc2",
-            "Name":"Fan Controller 2",
+            "ShortName":"msg to FK",
+            "Name":"Signal send to FK",
             "Symbol":"",
             "DataType":"float",
             "Type":"Proxy",
@@ -996,7 +1008,7 @@
             }
         }, {
             "Codifier":"FN",
-            "ShortName":"Max Temp",
+            "ShortName":"Current Temp",
             "Name":"Current Max input Temp",
             "Symbol":"C",
             "DataType":"integer",
