@@ -63,7 +63,7 @@ if ({{ FL }}!=None):
     #
     # check of the nest values are recent
     #
-    times = [{{ N5|DTimestamp }}]
+    times = [{{ N3|DTimestamp }}]
     l=min(times)
     if (l!=None):
         if(n-l < 60000):
