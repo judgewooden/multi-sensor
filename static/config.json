@@ -940,7 +940,10 @@
             "TimeoutWarning":10,
             "DataType":"float",
             "Control":"enabled",
-            "Type":"controlSensor"
+            "Type":"controlSensor",
+            "Sensor":{
+                "Default":"80"
+            }
         }, {
             "Codifier":"FI",
             "ShortName":"Fan on/off",
@@ -964,7 +967,10 @@
             "TimeoutWarning":10,
             "DataType":"float",
             "Control":"enabled",
-            "Type":"controlSensor"
+            "Type":"controlSensor",
+            "Sensor":{
+                "Default":"37"
+            }
         }, {
             "Codifier":"FK",
             "ShortName":"Fan Outside",

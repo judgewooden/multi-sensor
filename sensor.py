@@ -333,7 +333,7 @@ class ZwavePower(object):
 
 class controlSensor(object):
     def __init__(self):
-        self.value = 0
+        self.value=channel.getMySensorElement("Default")
 
     def run(self, Timestamp, command="", number=None):
         if command=="A":
