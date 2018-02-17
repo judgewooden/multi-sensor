@@ -55,10 +55,10 @@ if ({{ FL }}!=None):
     #
     # check if we have a target humidity
     #
-    target={{ FH }}
-    if (target==None or target<1):
-        target=80 # assume a consant if no user value
-        channel.sendCtrl(to="FJ", flag="A", timeComponent=target)
+    fh={{ FH }}
+    if (fh==None or fh<1):
+        fh=80 # assume a consant if no user value
+        channel.sendCtrl(to="FJ", flag="A", timeComponent=fh)
 
     #
     # check of the nest values are recent
@@ -74,6 +74,6 @@ if ({{ FL }}!=None):
             l=min(times)
             if (l!=None):
                 if(n-l < 60000):
-                    low =243.04 * ((( 17.625 * dew ) / ( 243.04 + dew )) - log( {{ FH }} / 100 )) / ( 17.625 + log( {{ FH }} / 100) - (( 17.625 * dew ) / ( 243.04 + dew )))
+                    low =243.04 * ((( 17.625 * dew ) / ( 243.04 + dew )) - log( fh / 100 )) / ( 17.625 + log( fh / 100) - (( 17.625 * dew ) / ( 243.04 + dew )))
                     channel.sendData(data=low, Codifier="FP")
 
