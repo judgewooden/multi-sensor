@@ -53,6 +53,14 @@ if ({{ FL }}!=None):
     n=jph.timeNow()
 
     #
+    # check if we have a target humidity
+    #
+    target={{ FH }}
+    if (target==None or target<1):
+        target=80 # assume a consant if no user value
+        channel.sendCtrl(to="FJ", flag="A", timeComponent=target)
+
+    #
     # check of the nest values are recent
     #
     times = [{{ N5|DTimestamp }}]

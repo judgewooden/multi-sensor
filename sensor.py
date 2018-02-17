@@ -397,6 +397,7 @@ if __name__ == '__main__':
         import json
     if type == "PythonNinja":
         import redis
+        from math import log
         r=redis.Redis()
     if type == "ADCpiReader":
         sys.path.append("/home/jphmonitor")
