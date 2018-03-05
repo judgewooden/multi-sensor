@@ -39,7 +39,7 @@ if ({{ FL }}!=None):
     if (fi==True):
         if (fn==999):
             dc=fk  # if I don't know the current temp put the fan on max
-        else
+        else:
             terror = fn - fj
             dc=fk + 1/6 * 5 * terror
         channel.sendData(data=dc, Codifier="FM")
@@ -59,15 +59,15 @@ if ({{ FL }}!=None):
 
     times = [{{ FH|DTimestamp }}]
     l=min(times)
-    if (l!=None):
+    if (l!=None)
         if(n-l < timeout):
             fh={{ FH }}
 
     #
     # check of the nest values are recent
-    #
-    times = [{{ N3|DTimestamp }}]
-    l=min(times)
+    # 
+    times = [ {{ N3 | DTimestamp }} ]
+    l = min(times)
     if (l!=None):
         if(n-l < timeout):
             n3={{ N3 }}
