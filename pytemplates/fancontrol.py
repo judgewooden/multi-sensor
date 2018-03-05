@@ -1,10 +1,19 @@
 n=jph.timeNow()
 timeout=60000
 fn=999          # if current temp is broken, set fan to fk value
-fi=False
+fi=True         # Fan is on by defaukt
+fq=True         # Assume fan is operating
 fk=100          # Assume 100% duty cycle for fan
 fj=35           # Assume 35 if the user do not provide a value
+fg=5            # Assume 5% range if the user do not provide a value
 fh=80           # assume 80% humidity target if there is not user value
+
+class State:
+    MISSING=1
+    ON=2
+    OFF=3
+
+    
 
 if ({{ FL }}!=None):
 
@@ -23,35 +32,79 @@ if ({{ FL }}!=None):
         if(n-l < timeout):
             fj={{ FJ }}
 
-    # Is the system on, if so get current duty cycle
-    if (int(float("0{{ FI }}"))==1):
-        fi=True
+    # Get the user input value for Range system
+    times = [{{ FG|DTimestamp }}]
+    l=min(times)
+    if (l!=None):
+        if(n-l < timeout):
+            fg={{ FG }}
+
+    # Is the system ON or OFF by the User
+    times = [{{ FI|DTimestamp }}]
+    l=min(times)
+    if (l!=None):
+        if(n-l < timeout):
+            if (int(float("0{{ FI }}"))==1):
+                fi=True
+            else:
+                fi=False
+
+    # Determine our operating state
+    if (fi == True):
+        times = [{{ FQ|DTimestamp }}]
+        l=min(times)
+        if (l!=None):
+            if(n-l < timeout):
+                if (int(float("0{{ FI }}"))==0):
+                    fq=False
+
+        if (fn==999):
+            fq=True
+            channel.sendData(data="1", Codifier="FQ")
+        else:
+            x=(fn * fg/ 100.0)
+            fnMax=fn+x
+            fnMin=fn-x
+
+            print(fn, fnMax, fnMin)
+
+            if (fq == True):
+                if (fn < fnMin):
+                    fq = False
+                    channel.sendData(data="0", Codifier="FQ")
+                else
+                    channel.sendData(data="1", Codifier="FQ")
+
+            else:
+                if (fn > fnMax):
+                    fq = True
+                    channel.sendData(data="1", Codifier="FQ")
+                else:
+                    channel.sendData(data="0", Codifier="FQ")
+    else:
+        fq=False
+        channel.sendData(data="0", Codifier="FQ")
+
+    # If in operating mode get current dc
+    if (fq == True):
         times = [{{ FK|DTimestamp }}]
         l=min(times)
         if (l!=None):
             if(n-l < timeout):
-                fk={{ FK }}
+                fk = {{ FK }}
+
+        if (fn == 999):
+            dc = fk  # if I don't know the current temp put the fan on max
+        else:
+            terror = fn - fj
+            dc = fk + 1/6 * 5 * terror
+        channel.sendData(data=dc, Codifier="FM")
+        channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
+
     else:
         channel.sendData(data=0, Codifier="FM")
         channel.sendCtrl(to="FK", flag="A", timeComponent=0)
         fk=0
-
-    if (fi==True):
-        if (fn==999):
-            dc=fk  # if I don't know the current temp put the fan on max
-        else:
-            terror = fn - fj
-            dc=fk + 1/6 * 5 * terror
-        channel.sendData(data=dc, Codifier="FM")
-        channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
-
-    # -----------------------------------------
-    # Control if the Fan should be on or of
-    # -----------------------------------------
-    
-    #  if ( int("{{ FI }}") != 1 ):
-    #      channel.sendCtrl(to="FQ", flag="A", timeComponent=0)
-    #  else:
 
     # ----------------------------------------
     # Dew temp calculator
