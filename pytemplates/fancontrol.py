@@ -61,6 +61,7 @@ if ({{ FL }}!=None):
         if (fn==999):
             fq=True
             channel.sendData(data="1", Codifier="FQ")
+            dc = fk  # if I don't know the current temp put the fan on max
         else:
             x=(fn * fg/ 100.0)
             fnMax=fj+x
@@ -81,30 +82,28 @@ if ({{ FL }}!=None):
                     channel.sendData(data="1", Codifier="FQ")
                 else:
                     channel.sendData(data="0", Codifier="FQ")
+
+            if (fq == True):
+                times = [{{ FK|DTimestamp }}]
+                l=min(times)
+                if (l!=None):
+                    if(n-l < timeout):
+                        fk = {{ FK }}
+
+                terror = fnMin - fj
+                dc = fk + 1/6 * 5 * terror
+
+        if (fq == True):
+            channel.sendData(data=dc, Codifier="FM")
+            channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
+
     else:
         fq=False
         channel.sendData(data="0", Codifier="FQ")
 
-    # If in operating mode get current dc
-    if (fq == True):
-        times = [{{ FK|DTimestamp }}]
-        l=min(times)
-        if (l!=None):
-            if(n-l < timeout):
-                fk = {{ FK }}
-
-        if (fn == 999):
-            dc = fk  # if I don't know the current temp put the fan on max
-        else:
-            terror = fn - fj
-            dc = fk + 1/6 * 5 * terror
-        channel.sendData(data=dc, Codifier="FM")
-        channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
-
-    else:
+    if (fq == False):
         channel.sendData(data=0, Codifier="FM")
         channel.sendCtrl(to="FK", flag="A", timeComponent=0)
-        fk=0
 
     # ----------------------------------------
     # Dew temp calculator
