@@ -63,11 +63,11 @@ if ({{ FL }}!=None):
             fjMin=fj-x
 
             if (fq == True):
-                if (fn < fnMin):
+                if (fn < fjMin):
                     fq = False
 
             else:
-                if (fn > fnMax):
+                if (fn > fjMax):
                     fq = True
 
             if (fq == True):
