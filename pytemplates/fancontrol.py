@@ -1,10 +1,8 @@
 n=jph.timeNow()
 timeout=60000
-fn=999          # if current temp is broken, set fan to fk value
-fi=True         # Fan is on by defaukt
+fn=999          # if current temp is broken
+fi=True         # Fan is on by default
 fq=True         # Assume fan is operating
-fk=100          # Assume 100% duty cycle for fan
-dc=fk           # Set the duty cycle to the max 
 
 # --- GET THESE VALUES FROM THE CONFIG !!!!
 fj=35           # Assume 35 if the user do not provide a value
@@ -56,7 +54,7 @@ if ({{ FL }}!=None):
 
         if (fn==999):
             fq=True
-            dc = fk  # if I don't know the current temp put the fan on max
+            dc = 100
         else:
             x=(fj * fg/ 100.0)
             fjMax=fj+x
@@ -65,17 +63,19 @@ if ({{ FL }}!=None):
             if (fq == True):
                 if (fn < fjMin):
                     fq = False
+                else:
+                    times = [{{ FK|DTimestamp }}]
+                    l=min(times)
+                    if (l!=None):
+                        if(n-l < timeout):
+                            fk = {{ FK }}
 
             else:
                 if (fn > fjMax):
                     fq = True
+                    fk = 100
 
             if (fq == True):
-                times = [{{ FK|DTimestamp }}]
-                l=min(times)
-                if (l!=None):
-                    if(n-l < timeout):
-                        fk = {{ FK }}
 
                 terror = fn - fjMin
                 dc = fk + 1/6 * 5 * terror
