@@ -955,7 +955,10 @@
             "TimeoutWarning":10,
             "DataType":"integer",
             "Control":"enabled",
-            "Type":"controlSensor"
+            "Type":"controlSensor",
+            "Sensor":{
+                "Default":"1"
+            }
         }, {
             "Codifier":"FJ",
             "ShortName":"Target Temp",
