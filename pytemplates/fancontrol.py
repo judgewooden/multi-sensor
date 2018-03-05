@@ -4,13 +4,11 @@ fn=999          # if current temp is broken
 fi=True         # Fan is on by default
 fq=True         # Assume fan is operating
 
-x={{ FJ|config|Sensor }}['Default']
-
-print('start', x)
 # --- GET THESE VALUES FROM THE CONFIG !!!!
-fj=35           # Assume 35 if the user do not provide a value
-fg=5            # Assume 5% range if the user do not provide a value
-fh=80           # assume 80% humidity target if there is not user value
+fj={{ FJ|config|Sensor }}['Default']
+fg={{ FG|config|Sensor }}['Default']
+fh={{ FH|config|Sensor }}['Default']
+print(fj,fg,fh)
 
 if ({{ FL }}!=None):
 
