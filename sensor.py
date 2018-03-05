@@ -350,7 +350,7 @@ class controlSensor(object):
                 channel.logger.error("Command E expects step value")
             else:
                 self.value=self.value+number
-        print("I am ", channel.getMySensor()['Codifier'] ",with", self.value)
+        print("I am ", channel.getMySensor()['Codifier'], "with", self.value)
         channel.sendData(data=self.value)
 
 class fanControl(object):
