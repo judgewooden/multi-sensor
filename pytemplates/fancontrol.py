@@ -80,8 +80,8 @@ if ({{ FL }}!=None):
                 terror = fn - fjMin
                 dc = fk + 1/6 * 5 * terror
 
-            print(fq, round(dc,1), round(fk,1), round(fj,1), round(fjMax,1),
-                round(fjMin,1), round(fn,1))
+            print(fq, round(dc,1), round(fk,1), round(fn,1), round(fjMin,1),
+                round(fjMax,1))
 
 
     else:
