@@ -59,8 +59,8 @@ if ({{ FL }}!=None):
             dc = fk  # if I don't know the current temp put the fan on max
         else:
             x=(fj * fg/ 100.0)
-            fnMax=fj+x
-            fnMin=fj-x
+            fjMax=fj+x
+            fjMin=fj-x
 
             if (fq == True):
                 if (fn < fnMin):
@@ -77,11 +77,11 @@ if ({{ FL }}!=None):
                     if(n-l < timeout):
                         fk = {{ FK }}
 
-                terror = fn - fnMin
+                terror = fn - fjMin
                 dc = fk + 1/6 * 5 * terror
 
-            print(fq, round(dc,1), round(fk,1), round(fj,1), round(fnMax,1),
-                round(fnMin,1), round(fn,1))
+            print(fq, round(dc,1), round(fk,1), round(fj,1), round(fjMax,1),
+                round(fjMin,1), round(fn,1))
 
 
     else:
