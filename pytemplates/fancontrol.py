@@ -4,16 +4,12 @@ fn=999          # if current temp is broken, set fan to fk value
 fi=True         # Fan is on by defaukt
 fq=True         # Assume fan is operating
 fk=100          # Assume 100% duty cycle for fan
+dc=fk           # Set the duty cycle to the max 
+
+# --- GET THESE VALUES FROM THE CONFIG !!!!
 fj=35           # Assume 35 if the user do not provide a value
 fg=5            # Assume 5% range if the user do not provide a value
 fh=80           # assume 80% humidity target if there is not user value
-
-class State:
-    MISSING=1
-    ON=2
-    OFF=3
-
-    
 
 if ({{ FL }}!=None):
 
@@ -67,21 +63,14 @@ if ({{ FL }}!=None):
             fnMax=fj+x
             fnMin=fj-x
 
-            print(fj, fnMax, fnMin, fn)
 
             if (fq == True):
                 if (fn < fnMin):
                     fq = False
-                    channel.sendData(data="0", Codifier="FQ")
-                else:
-                    channel.sendData(data="1", Codifier="FQ")
 
             else:
                 if (fn > fnMax):
                     fq = True
-                    channel.sendData(data="1", Codifier="FQ")
-                else:
-                    channel.sendData(data="0", Codifier="FQ")
 
             if (fq == True):
                 times = [{{ FK|DTimestamp }}]
@@ -93,17 +82,20 @@ if ({{ FL }}!=None):
                 terror = fnMin - fj
                 dc = fk + 1/6 * 5 * terror
 
-        if (fq == True):
-            channel.sendData(data=dc, Codifier="FM")
-            channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
+            print(fj, fnMax, fnMin, fn, terror)
+
 
     else:
         fq=False
-        channel.sendData(data="0", Codifier="FQ")
 
     if (fq == False):
         channel.sendData(data=0, Codifier="FM")
         channel.sendCtrl(to="FK", flag="A", timeComponent=0)
+        channel.sendData(data="0", Codifier="FQ")
+    else:
+        channel.sendData(data=dc, Codifier="FM")
+        channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
+        channel.sendData(data="1", Codifier="FQ")
 
     # ----------------------------------------
     # Dew temp calculator

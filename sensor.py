@@ -337,6 +337,7 @@ class controlSensor(object):
             self.value=float(channel.getMySensorElement("Default"))
         except:
             self.value=0
+        print("I initialized", self.value)
 
     def run(self, Timestamp, command="", number=None):
         if command=="A":
