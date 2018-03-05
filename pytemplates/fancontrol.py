@@ -6,9 +6,9 @@ fq=True         # Assume fan is operating
 fk = 100        # Assume Fan ison 100%
 
 # --- GET THESE VALUES FROM THE CONFIG !!!!
-fj={{ FJ|config|Sensor }}['Default']
-fg={{ FG|config|Sensor }}['Default']
-fh={{ FH|config|Sensor }}['Default']
+fj=float({{ FJ|config|Sensor }}['Default'])
+fg=float({{ FG|config|Sensor }}['Default'])
+fh=float({{ FH|config|Sensor }}['Default'])
 
 if ({{ FL }}!=None):
 
@@ -17,7 +17,7 @@ if ({{ FL }}!=None):
     l=min(times)
     if (l!=None):
         if(n-l < timeout):
-            fn = max( [{{ A4 }}, {{ A5 }} ])
+            fn = float(max( [{{ A4 }}, {{ A5 }} ]))
             channel.sendData(data=fn, Codifier="FN")
 
     # Get the user input value for Target Temp
@@ -25,14 +25,14 @@ if ({{ FL }}!=None):
     l=min(times)
     if (l!=None):
         if(n-l < timeout):
-            fj={{ FJ }}
+            fj=float({{ FJ }})
 
     # Get the user input value for Range system
     times = [{{ FG|DTimestamp }}]
     l=min(times)
     if (l!=None):
         if(n-l < timeout):
-            fg={{ FG }}
+            fg=float({{ FG }})
 
     # Min/Max temperature calculation
     x=(fj * fg / 100.0)
@@ -102,7 +102,7 @@ if ({{ FL }}!=None):
     l=min(times)
     if (l!=None):
         if(n-l < timeout):
-            fh={{ FH }}
+            fh=float({{ FH }})
 
     #
     # check of the nest values are recent
@@ -111,8 +111,8 @@ if ({{ FL }}!=None):
     l = min(times)
     if (l!=None):
         if(n-l < timeout):
-            n3={{ N3 }}
-            n2={{ N2 }}
+            n3=float( {{ N3 }} )
+            n2=float( {{ N2 }} )
             dew = 243.04 * ( log( n3 / 100 ) + (( 17.625 * n2 ) / ( 243.04 + n2 ))) / ( 17.625 - log( n3 / 100) - (( 17.625 * n2 ) / ( 243.04 + n2 )))
             channel.sendData(data=dew, Codifier="FO")
 
