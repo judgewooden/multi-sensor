@@ -63,10 +63,10 @@ if ({{ FL }}!=None):
             channel.sendData(data="1", Codifier="FQ")
         else:
             x=(fn * fg/ 100.0)
-            fnMax=fn+x
-            fnMin=fn-x
+            fnMax=fj+x
+            fnMin=fj-x
 
-            print(fn, fnMax, fnMin)
+            print(fj, fnMax, fnMin, fn)
 
             if (fq == True):
                 if (fn < fnMin):
