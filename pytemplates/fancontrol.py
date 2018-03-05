@@ -4,6 +4,8 @@ fn=999          # if current temp is broken
 fi=True         # Fan is on by default
 fq=True         # Assume fan is operating
 
+x={{ FJ|config|Sensor }}
+print('start', x)
 # --- GET THESE VALUES FROM THE CONFIG !!!!
 fj=35           # Assume 35 if the user do not provide a value
 fg=5            # Assume 5% range if the user do not provide a value
@@ -76,12 +78,8 @@ if ({{ FL }}!=None):
                     fk = 100
 
             if (fq == True):
-
                 terror = fn - fjMin
                 dc = fk + 1/6 * 5 * terror
-
-            print(fq, round(fn,1), round(fjMin,1), round(fjMax,1))
-
 
     else:
         fq=False
