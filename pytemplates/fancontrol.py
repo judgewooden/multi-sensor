@@ -25,12 +25,6 @@ if ({{ FL }}!=None):
     if (l!=None):
         if(n-l < timeout):
             fj={{ FJ }}
-    x=(fj * fg/ 100.0)
-    fjMax=fj+x
-    channel.sendData(data=fjMax, Codifier="FR")
-    fjMin=fj-x
-    channel.sendData(data=fjMin, Codifier="FS")
-
 
     # Get the user input value for Range system
     times = [{{ FG|DTimestamp }}]
@@ -38,6 +32,13 @@ if ({{ FL }}!=None):
     if (l!=None):
         if(n-l < timeout):
             fg={{ FG }}
+
+    # Min/Max temperature calculation
+    x=(fj * fg/ 100.0)
+    fjMax=fj+x
+    channel.sendData(data=fjMax, Codifier="FR")
+    fjMin=fj-x
+    channel.sendData(data=fjMin, Codifier="FS")
 
     # Is the system ON or OFF by the User
     times = [{{ FI|DTimestamp }}]
