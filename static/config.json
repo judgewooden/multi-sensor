@@ -931,7 +931,7 @@
             }
         }, {
             "Codifier":"FG",
-            "ShortName":"Operating Range",
+            "ShortName":"Control Range",
             "Name":"Only operate the fan in this Range",
             "Symbol":"%",
             "Active":true,
