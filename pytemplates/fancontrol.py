@@ -3,6 +3,7 @@ timeout=60000
 fn=999          # if current temp is broken
 fi=True         # Fan is on by default
 fq=True         # Assume fan is operating
+fk = 100        # Assume Fan ison 100%
 
 # --- GET THESE VALUES FROM THE CONFIG !!!!
 fj={{ FJ|config|Sensor }}['Default']
@@ -34,10 +35,10 @@ if ({{ FL }}!=None):
             fg={{ FG }}
 
     # Min/Max temperature calculation
-    x=(fj * fg/ 100.0)
-    fjMax=fj+x
+    x=(fj * fg / 100.0)
+    fjMax=fj + x
     channel.sendData(data=fjMax, Codifier="FR")
-    fjMin=fj-x
+    fjMin=fj - x
     channel.sendData(data=fjMin, Codifier="FS")
 
     # Is the system ON or OFF by the User
@@ -76,7 +77,6 @@ if ({{ FL }}!=None):
             else:
                 if (fn > fjMax):
                     fq = True
-                    fk = 100
 
             if (fq == True):
                 terror = fn - fjMin

@@ -987,7 +987,7 @@
             "Control":"enabled",
             "Type":"controlSensor",
             "Sensor":{
-                "Default":"34"
+                "Default":"33"
             }
         }, {
             "Codifier":"FK",
