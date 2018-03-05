@@ -25,6 +25,12 @@ if ({{ FL }}!=None):
     if (l!=None):
         if(n-l < timeout):
             fj={{ FJ }}
+    x=(fj * fg/ 100.0)
+    fjMax=fj+x
+    channel.sendData(data=fjMax, Codifier="FR")
+    fjMin=fj-x
+    channel.sendData(data=fjMin, Codifier="FS")
+
 
     # Get the user input value for Range system
     times = [{{ FG|DTimestamp }}]
@@ -56,10 +62,6 @@ if ({{ FL }}!=None):
             fq=True
             dc = 100
         else:
-            x=(fj * fg/ 100.0)
-            fjMax=fj+x
-            fjMin=fj-x
-
             if (fq == True):
                 if (fn < fjMin):
                     fq = False

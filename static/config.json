@@ -1083,8 +1083,8 @@
             }
         }, {
             "Codifier":"FR",
-            "ShortName":"Reserved ",
-            "Name":"Reserved",
+            "ShortName":"Upper Temp ",
+            "Name":"Upper Temp for operating limit",
             "Symbol":"",
             "DataType":"float",
             "Type":"Proxy",
@@ -1094,8 +1094,8 @@
             }
         }, {
             "Codifier":"FS",
-            "ShortName":"Reserved ",
-            "Name":"Reserved",
+            "ShortName":"Lower Temp ",
+            "Name":"Lower Temp for operating limit",
             "Symbol":"",
             "DataType":"float",
             "Type":"Proxy",
