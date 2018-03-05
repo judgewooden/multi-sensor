@@ -82,7 +82,7 @@ if ({{ FL }}!=None):
                 terror = fnMin - fj
                 dc = fk + 1/6 * 5 * terror
 
-            print(fj, fnMax, fnMin, fn, terror)
+            print(fj, fnMax, fnMin, fn)
 
 
     else:
