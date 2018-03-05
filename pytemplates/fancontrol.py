@@ -24,7 +24,7 @@ if ({{ FL }}!=None):
             fj={{ FJ }}
 
     # Is the system on, if so get current duty cycle
-    if (int("0{{ FI }}"==1):
+    if (int("0{{ FI }}")==1):
         fi=True
         times = [{{ FK|DTimestamp }}]
         l=min(times)
