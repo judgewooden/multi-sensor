@@ -1,64 +1,67 @@
-# mad=A4
-# Aqua=A5 
+n=jph.timeNow()
+timeout=60000
+fn=999          # if current temp is broken, set fan to fk value
+fi=False
+fk=100          # Assume 100% duty cycle for fan
+fj=35           # Assume 35 if the user do not provide a value
+fh=80           # assume 80% humidity target if there is not user value
+
 if ({{ FL }}!=None):
 
-    n=jph.timeNow()
-
-    #
-    # check if we have an existing duty cycle in the network  (ie. existing value for the FAN)
-    #
-    fk=100 # assume ON and 100% MAX
-    times = [{{ FK|DTimestamp }}]
-    l=min(times)
-    if (l!=None):
-        if(n-l < 60000):
-            fk={{ FK }}
-
-    #
-    # check if we have a target temperature
-    #
-    target={{ FJ }}
-    if (target==None or target<1):
-        target=37 # assume a consant if no user value
-        channel.sendCtrl(to="FJ", flag="A", timeComponent=target)
-
-
-    dc=100
+    # Calculate Current Temp
     times = [{{ A4|DTimestamp }}, {{ A5|DTimestamp }}]
     l=min(times)
     if (l!=None):
-        if(n-l < 60000):
-            maxtemp = max( [{{ A4 }}, {{ A5 }} ])
-            channel.sendData(data=maxtemp, Codifier="FN")
-            terror = maxtemp - target
-            dc=fk + 1/6 * 5 * terror
-            #print(target, maxtemp, terror, dc, fk, {{ A4 }}, {{ A5 }})
-    if ({{ FI }}==1):
-        channel.sendData(data=dc, Codifier="FM")
-        channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
+        if(n-l < timeout):
+            fn = max( [{{ A4 }}, {{ A5 }} ])
+            channel.sendData(data=fn, Codifier="FN")
+
+    # Get the user input value for Target Temp
+    times = [{{ FJ|DTimestamp }}]
+    l=min(times)
+    if (l!=None):
+        if(n-l < timeout):
+            fj={{ FJ }}
+
+    # Is the system on, if so get current duty cycle
+    if (int("0{{ FI }}"==1):
+        fi=True
+        times = [{{ FK|DTimestamp }}]
+        l=min(times)
+        if (l!=None):
+            if(n-l < timeout):
+                fk={{ FK }}
     else:
         channel.sendData(data=0, Codifier="FM")
         channel.sendCtrl(to="FK", flag="A", timeComponent=0)
-else:
-    if ({{ FI }}!=1):
-        channel.sendData(data=0, Codifier="FM")
-        channel.sendCtrl(to="FK", flag="A", timeComponent=0)
+        fk=0
 
+    if (fi==True):
+        if (fn==999):
+            dc=fk  # if I don't know the current temp put the fan on max
+        else
+            terror = fn - fj
+            dc=fk + 1/6 * 5 * terror
+        channel.sendData(data=dc, Codifier="FM")
+        channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
 
-#
-# Dew temp calculator
-#
-if ({{ FL }}!=None):
+    # -----------------------------------------
+    # Control if the Fan should be on or of
+    # -----------------------------------------
+    
+    #  if ( int("{{ FI }}") != 1 ):
+    #      channel.sendCtrl(to="FQ", flag="A", timeComponent=0)
+    #  else:
 
-    n=jph.timeNow()
+    # ----------------------------------------
+    # Dew temp calculator
+    # ----------------------------------------
 
-    #
-    # check if we have a target humidity
-    #
-    fh={{ FH }}
-    if (fh==None or fh<1):
-        fh=80 # assume a consant if no user value
-        channel.sendCtrl(to="FJ", flag="A", timeComponent=fh)
+    times = [{{ FH|DTimestamp }}]
+    l=min(times)
+    if (l!=None):
+        if(n-l < timeout):
+            fh={{ FH }}
 
     #
     # check of the nest values are recent
@@ -66,14 +69,11 @@ if ({{ FL }}!=None):
     times = [{{ N3|DTimestamp }}]
     l=min(times)
     if (l!=None):
-        if(n-l < 60000):
-            dew =243.04 * ( log( {{ N3 }} / 100 ) + (( 17.625 * {{ N2 }} ) / ( 243.04 + {{ N2 }} ))) / ( 17.625 - log( {{ N3 }} / 100) - (( 17.625 * {{ N2 }}) / ( 243.04 + {{ N2 }})))
+        if(n-l < timeout):
+            n3={{ N3 }}
+            n2={{ N2 }}
+            dew =243.04 * ( log( n3 / 100 ) + (( 17.625 * n2 ) / ( 243.04 + n2 ))) / ( 17.625 - log( n3 / 100) - (( 17.625 * n2  / ( 243.04 + n2 ))
             channel.sendData(data=dew, Codifier="FO")
 
-            times =[{{ FH|DTimestamp }}]
-            l=min(times)
-            if (l!=None):
-                if(n-l < 60000):
-                    low =243.04 * ((( 17.625 * dew ) / ( 243.04 + dew )) - log( fh / 100 )) / ( 17.625 + log( fh / 100) - (( 17.625 * dew ) / ( 243.04 + dew )))
-                    channel.sendData(data=low, Codifier="FP")
-
+            low =243.04 * ((( 17.625 * dew ) / ( 243.04 + dew )) - log( fh / 100 )) / ( 17.625 + log( fh / 100) - (( 17.625 * dew ) / ( 243.04 + dew )))
+            channel.sendData(data=low, Codifier="FP")

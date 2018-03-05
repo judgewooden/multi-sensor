@@ -930,6 +930,21 @@
                 }
             }
         }, {
+            "Codifier":"FG",
+            "ShortName":"Operating Range",
+            "Name":"Only operate the fan in this Range",
+            "Symbol":"%",
+            "Active":true,
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "DataType":"float",
+            "Control":"enabled",
+            "Type":"controlSensor",
+            "Sensor":{
+                "Default":"7"
+            }
+        }, {
             "Codifier":"FH",
             "ShortName":"Target Humid",
             "Name":"Target Humidity",
@@ -955,10 +970,7 @@
             "TimeoutWarning":10,
             "DataType":"integer",
             "Control":"enabled",
-            "Type":"controlSensor",
-            "Sensor":{
-                "Default":"1"
-            }
+            "Type":"controlSensor"
         }, {
             "Codifier":"FJ",
             "ShortName":"Target Temp",
@@ -972,7 +984,7 @@
             "Control":"enabled",
             "Type":"controlSensor",
             "Sensor":{
-                "Default":"37"
+                "Default":"35"
             }
         }, {
             "Codifier":"FK",
@@ -1024,7 +1036,6 @@
             "DataType":"float",
             "Type":"Proxy",
             "Sensor":{
-                "__comment":"Reserved for fan memory",
                 "Codifier":"FL"
             }
         }, {
@@ -1035,7 +1046,6 @@
             "DataType":"integer",
             "Type":"Proxy",
             "Sensor":{
-                "__comment":"Reserved for fan memory",
                 "Codifier":"FL"
             }
         }, {
@@ -1046,7 +1056,6 @@
             "DataType":"float",
             "Type":"Proxy",
             "Sensor":{
-                "__comment":"Reserved for fan memory",
                 "Codifier":"FL"
             }
         }, {
@@ -1057,18 +1066,16 @@
             "DataType":"float",
             "Type":"Proxy",
             "Sensor":{
-                "__comment":"Reserved for fan memory",
                 "Codifier":"FL"
             }
         }, {
             "Codifier":"FQ",
-            "ShortName":"Reserved ",
-            "Name":"Reserved",
+            "ShortName":"Operating",
+            "Name":"On when fan in operating range",
             "Symbol":"",
-            "DataType":"float",
+            "DataType":"integer",
             "Type":"Proxy",
             "Sensor":{
-                "__comment":"Reserved for fan memory",
                 "Codifier":"FL"
             }
         }, {
