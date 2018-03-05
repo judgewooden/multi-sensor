@@ -8,7 +8,6 @@ fq=True         # Assume fan is operating
 fj={{ FJ|config|Sensor }}['Default']
 fg={{ FG|config|Sensor }}['Default']
 fh={{ FH|config|Sensor }}['Default']
-print(fj,fg,fh)
 
 if ({{ FL }}!=None):
 
