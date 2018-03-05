@@ -77,7 +77,7 @@ if ({{ FL }}!=None):
                     if(n-l < timeout):
                         fk = {{ FK }}
 
-                terror = fnMin - fj
+                terror = fn - fnMin
                 dc = fk + 1/6 * 5 * terror
 
             print(fq, round(dc,1), round(fk,1), round(fj,1), round(fnMax,1),
