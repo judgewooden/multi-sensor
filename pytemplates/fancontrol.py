@@ -59,7 +59,7 @@ if ({{ FL }}!=None):
 
     times = [{{ FH|DTimestamp }}]
     l=min(times)
-    if (l!=None)
+    if (l!=None):
         if(n-l < timeout):
             fh={{ FH }}
 
