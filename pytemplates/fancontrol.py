@@ -51,7 +51,7 @@ if ({{ FL }}!=None):
         l=min(times)
         if (l!=None):
             if(n-l < timeout):
-                if (int(float("0{{ FI }}"))==0):
+                if (int(float("0{{ FQ }}"))==20):
                     fq=False
 
         if (fn==999):
@@ -90,11 +90,11 @@ if ({{ FL }}!=None):
     if (fq == False):
         channel.sendData(data=0, Codifier="FM")
         channel.sendCtrl(to="FK", flag="A", timeComponent=0)
-        channel.sendData(data="0", Codifier="FQ")
+        channel.sendData(data="20", Codifier="FQ")
     else:
         channel.sendData(data=dc, Codifier="FM")
         channel.sendCtrl(to="FK", flag="A", timeComponent=dc)
-        channel.sendData(data="1", Codifier="FQ")
+        channel.sendData(data="80", Codifier="FQ")
 
     # ----------------------------------------
     # Dew temp calculator
