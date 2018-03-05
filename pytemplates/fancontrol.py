@@ -72,7 +72,7 @@ if ({{ FL }}!=None):
                 if (fn < fnMin):
                     fq = False
                     channel.sendData(data="0", Codifier="FQ")
-                else
+                else:
                     channel.sendData(data="1", Codifier="FQ")
 
             else:
