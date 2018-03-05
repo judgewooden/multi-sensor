@@ -56,13 +56,11 @@ if ({{ FL }}!=None):
 
         if (fn==999):
             fq=True
-            channel.sendData(data="1", Codifier="FQ")
             dc = fk  # if I don't know the current temp put the fan on max
         else:
             x=(fj * fg/ 100.0)
             fnMax=fj+x
             fnMin=fj-x
-
 
             if (fq == True):
                 if (fn < fnMin):
@@ -82,7 +80,8 @@ if ({{ FL }}!=None):
                 terror = fnMin - fj
                 dc = fk + 1/6 * 5 * terror
 
-            print(fq, fj, fnMax, fnMin, fn)
+            print(fq, round(dc,1), round(fk,1), round(fj,1), round(fnMax,1),
+                round(fnMin,1), round(fn,1))
 
 
     else:
