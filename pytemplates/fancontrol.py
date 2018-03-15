@@ -20,6 +20,15 @@ if ({{ FL }}!=None):
             fn = float(max( [{{ A4 }}, {{ A5 }} ]))
             channel.sendData(data=fn, Codifier="FN")
 
+    # If manifold temp broken use rad input
+    if (fn==999):
+        times = [{{ A1|DTimestamp }}]
+        l=min(times)
+        if (l!=None):
+            if(n-l < timeout):
+                fn = float({{ A1 }})
+                channel.sendData(data=fn, Codifier="FN")
+
     # Get the user input value for Target Temp
     times = [{{ FJ|DTimestamp }}]
     l=min(times)

@@ -337,7 +337,6 @@ class controlSensor(object):
             self.value=float(channel.getMySensorElement("Default"))
         except:
             self.value=0
-        print("I initialized", self.value)
 
     def run(self, Timestamp, command="", number=None):
         if command=="A":
@@ -350,7 +349,6 @@ class controlSensor(object):
                 channel.logger.error("Command E expects step value")
             else:
                 self.value=self.value+number
-        print("I am ", channel.getMySensor()['Codifier'], "with", self.value)
         channel.sendData(data=self.value)
 
 class fanControl(object):
