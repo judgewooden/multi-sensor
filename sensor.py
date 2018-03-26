@@ -337,6 +337,8 @@ class controlSensor(object):
             self.value = str(r.hget( Codifier, "Value"))
             print("redis start: ",self.value)
         except:
+            self.value=0
+        if (self.value == None):
             try:
                 self.value=float(channel.getMySensorElement("Default"))
             except:
