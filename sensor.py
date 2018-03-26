@@ -340,7 +340,7 @@ class controlSensor(object):
             try:
                 self.value=float(channel.getMySensorElement("Default"))
                 print("config:", self.value)
-            else
+            except:
                 self.value=0
                 print("nihil:", self.value)
 
