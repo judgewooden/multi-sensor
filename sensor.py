@@ -334,7 +334,7 @@ class ZwavePower(object):
 class controlSensor(object):
     def __init__(self):
         try:
-            self.value = r.hget( Codifier, "Value")
+            self.value = float(r.hget( Codifier, "Value"))
             print("redis:", self.value)
             if (self.value == None):
                 self.value=float(channel.getMySensorElement("Default"))
