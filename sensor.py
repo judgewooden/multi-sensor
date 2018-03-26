@@ -334,16 +334,15 @@ class ZwavePower(object):
 class controlSensor(object):
     def __init__(self):
         try:
-            self.value = r.hget( Codifier, "Value")
+            self.value = float(r.hget( Codifier, "Value"))
             print("redis:", self.value)
-            if (self.value == None):
+        except:
+            try:
                 self.value=float(channel.getMySensorElement("Default"))
                 print("config:", self.value)
             else
-                self.value=float(self.value)
-                print("float:", self.value)
-        except:
-            self.value=0
+                self.value=0
+                print("nihil:", self.value)
 
     def run(self, Timestamp, command="", number=None):
         if command=="A":
