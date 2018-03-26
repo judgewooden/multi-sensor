@@ -335,14 +335,11 @@ class controlSensor(object):
     def __init__(self):
         try:
             self.value = float(r.hget( Codifier, "Value"))
-            print("redis:", self.value)
         except:
             try:
                 self.value=float(channel.getMySensorElement("Default"))
-                print("config:", self.value)
             except:
                 self.value=0
-                print("nihil:", self.value)
 
     def run(self, Timestamp, command="", number=None):
         if command=="A":

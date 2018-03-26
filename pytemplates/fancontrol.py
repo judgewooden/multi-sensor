@@ -85,6 +85,7 @@ if ({{ FL }}!=None):
 
             else:
                 if (fn > fjMax):
+                    fk = 0
                     fq = True
 
             if (fq == True):
