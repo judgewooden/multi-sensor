@@ -91,6 +91,7 @@ if ({{ FL }}!=None):
             if (fq == True):
                 terror = fn - fjMin
                 dc = fk + 1/6 * 5 * terror
+                print(fk, terror, dc)
 
     else:
         fq=False
