@@ -334,9 +334,12 @@ class ZwavePower(object):
 class controlSensor(object):
     def __init__(self):
         try:
-            self.value=float(channel.getMySensorElement("Default"))
+            self.value = str(r.hget( Codifier, "Value"))
         except:
-            self.value=0
+            try:
+                self.value=float(channel.getMySensorElement("Default"))
+            except:
+                self.value=0
 
     def run(self, Timestamp, command="", number=None):
         if command=="A":
@@ -417,6 +420,9 @@ if __name__ == '__main__':
         from openzwave.option import ZWaveOption
     if type == "fanControl":
         import RPi.GPIO as GPIO
+    if type == "controlSensor":
+        import redis
+        r=redis.Redis()
 
     c=eval(type + '()')
     channel.run(timeCallback=c.run )
