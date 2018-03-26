@@ -341,6 +341,7 @@ class controlSensor(object):
                 print("config:", self.value)
             else
                 self.value=float(self.value)
+                print("float:", self.value)
         except:
             self.value=0
 
