@@ -203,6 +203,10 @@ def logout():
     login.logout_user()
     return redirect(url_for('userauthentication'))
 
+@app.route('/fananalysis')
+def fananalysis():
+    return render_template('fananalysis.html')
+
 @app.route('/flowanalysis')
 def flowanalysis():
     return render_template('flowanalysis.html')
