@@ -942,7 +942,7 @@
             "Control":"enabled",
             "Type":"controlSensor",
             "Sensor":{
-                "Default":"13"
+                "Default":"6"
             }
         }, {
             "Codifier":"FH",
@@ -987,7 +987,7 @@
             "Control":"enabled",
             "Type":"controlSensor",
             "Sensor":{
-                "Default":"33"
+                "Default":"35"
             }
         }, {
             "Codifier":"FK",

@@ -9,6 +9,7 @@
 
 <div class="container-fluid">
   <div id="graph1" class="jph-graph-box-full"></div>
+  <div id="graph2" class="jph-graph-box-full"></div>
   <!--
      <div id="graph2" class="jph-graph-box-half"></div>
     <div id="graph3" class="jph-graph-box-half"></div> 
@@ -85,5 +86,71 @@ var source1 = {
 	}
 }
 var g1 = new LineGraph({containerId: 'graph1', data: source1});
+
+var source2 = {
+	"Name": "Fan Control",
+	"Settings": {
+		"AutoUpdate": 1,
+		"UpdateInterval": 10,
+		"SecondsToShow": 900,
+		"LeftLegend": "%",
+		"LeftMax": 105,
+		"LeftMin": -5,
+		"RightLegend": "Temp",
+		"RightMax": 0,
+		"RightMin": 0,
+		"Title": "Fan Control Last 15 minutes": 0,
+		"HideLegend": 0,
+		"HideXAxis": 0,
+		"HideAxisLeft": 0,
+		"HideAxisRight": 0,
+		"HideButtons": 1,
+		"HideLeftControls": 1,
+		"HideRightControls": 1,
+		"graphSensors": [
+			{
+				"Name": "Duty-Cycle",
+				"Codifier": "FK",
+				"Field": "value",
+				"Axis": "Left",
+				"Interpolation": "linear",
+				"Frequency": "20.00",
+				"Filter": "-1.00",
+				"Smoothing": "1.00"
+			},
+			{
+				"Name": "Water-Temp",
+				"Codifier": "FN",
+				"Field": "value",
+				"Axis": "Right",
+				"Interpolation": "linear",
+				"Frequency": "20.00",
+				"Filter": "-1.00",
+				"Smoothing": "5.00"
+			},
+			{
+				"Name": "Upper",
+				"Codifier": "FR",
+				"Field": "value",
+				"Axis": "Right",
+				"Interpolation": "step",
+				"Frequency": "20.00",
+				"Filter": "-1.00",
+				"Smoothing": "1.00"
+			},
+			{
+				"Name": "Lower",
+				"Codifier": "FS",
+				"Field": "value",
+				"Axis": "Right",
+				"Interpolation": "step",
+				"Frequency": "20.00",
+				"Filter": "-1.00",
+				"Smoothing": "1.00"
+			}
+		]
+	}
+}
+var g2 = new LineGraph({containerId: 'graph2', data: source2});
 </script>
 {% endblock %}
