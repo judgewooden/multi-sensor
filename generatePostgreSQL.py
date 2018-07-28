@@ -35,6 +35,7 @@ def usage():
     print("\t-s <code>: Rebuild table for Time Series Statistics")
     print("\t-S       : Rebuild All Time Series Statistics")
     print("\t-p <u:p> : Add a user:password to the database")
+    print("\t-T       : Truncate database tables")
 try:
     opts, args = getopt.getopt(sys.argv[1:], "thSu:c:l:p:s:df", ["truncate", "help", "allStats=", "url=", "code=", "sqlto=", "database", "user=", "stats=", "force"])
     for opt, arg in opts:
@@ -70,7 +71,7 @@ except Exception as e:
 
 def sqltrunctate(s):
     print("\c %s;" % dbname)
-    print("TRUNCATE TABLE Sensor_%s " % (s["Codifier"]) )
+    print("TRUNCATE TABLE Sensor_%s;" % (s["Codifier"]) )
 
 def sqltable(s):
     print("\c %s;" % dbname)
@@ -148,7 +149,7 @@ if comDB:
         sqltable(sensor)
         sqlstats(sensor)
 
-if comTruncation:
+if comTruncate:
     for sensor in channel.getAllSensors():
         sqltruncate(sensor)
         sqlstats(sensor)
