@@ -20,6 +20,7 @@ comUser=False
 comStatsAll=False
 comStats=""
 comDrop=False
+comTruncate=False
 
 # -------------
 # Read Startup Parameters
@@ -35,10 +36,12 @@ def usage():
     print("\t-S       : Rebuild All Time Series Statistics")
     print("\t-p <u:p> : Add a user:password to the database")
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hSu:c:l:p:s:df", ["help", "allStats=", "url=", "code=", "sqlto=", "database", "user=", "stats=", "force"])
+    opts, args = getopt.getopt(sys.argv[1:], "thSu:c:l:p:s:df", ["truncate", "help", "allStats=", "url=", "code=", "sqlto=", "database", "user=", "stats=", "force"])
     for opt, arg in opts:
         if opt in ("-h", "help"):
             raise
+        elif opt in ("-t", "--truncate"):
+            comTruncate=True
         elif opt in ("-u", "--url"):
             configURL=arg
         elif opt in ("-c", "--code"):
@@ -64,6 +67,10 @@ except Exception as e:
     print("Error: %s" % e)
     usage()
     sys.exit()
+
+def sqltrunctate(s):
+    print("\c %s;" % dbname)
+    print("TRUNCATE TABLE Sensor_%s " % (s["Codifier"]) )
 
 def sqltable(s):
     print("\c %s;" % dbname)
@@ -138,8 +145,13 @@ f.close
 if comDB:
     createDB()
     for sensor in channel.getAllSensors():
-       sqltable(sensor)
-       sqlstats(sensor)
+        sqltable(sensor)
+        sqlstats(sensor)
+
+if comTruncation:
+    for sensor in channel.getAllSensors():
+        sqltruncate(sensor)
+        sqlstats(sensor)
 
 if comTarget!="":
     sqltable(channel.getSensor(comTarget))
@@ -157,3 +169,5 @@ if comUser:
     p_hashed = bcrypt.hashpw(p_encode, bcrypt.gensalt())
     print("\c %s;" % dbname)
     print("INSERT INTO Users VALUES ('%s', '%s');" % (u, p_hashed))
+
+
