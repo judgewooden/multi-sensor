@@ -1,0 +1,1120 @@
+{
+    "Multicast": {
+        "Control-Channel": {
+            "Address":"226.0.0.221",
+            "Port":7001
+        },
+        "Data-Channel": {
+            "Address":"226.0.0.222",
+            "Port":7002
+        }
+    },
+    "Logging":{
+        "version":1,
+        "disable_existing_loggers":true,
+        "formatters":{
+            "brief":{
+                "class":"logging.Formatter",
+                "datefmt":"%I:%M:%S",
+                "format":"%(name)s[%(process)d]: (%(codifier)s) %(levelname)s %(message)s"
+            },
+            "verbose":{
+                "class":"logging.Formatter",
+                "datefmt":"%I:%M:%S",
+                "format":"%(name)s %(codifier)s %(levelname)s (%(lineno)d) %(message)s"
+            }
+        },
+        "handlers":{
+            "operator":{
+                "level":"ERROR",
+                "class":"logging.StreamHandler",
+                "formatter":"verbose",
+                "stream":"ext://sys.stdout"
+            },
+            "console":{
+                "level":"INFO",
+                "class":"logging.StreamHandler",
+                "formatter":"verbose",
+                "stream":"ext://sys.stdout"
+            },
+            "syslog":{
+                "level":"INFO",
+                "class":"logging.handlers.SysLogHandler",
+                "facility":"daemon",
+                "formatter":"brief",
+                "address":"/dev/log"
+            }
+        },
+        "loggers":{
+            "jphMonitor": {
+                "handlers":["syslog", "console"],
+                "level":"INFO"
+            },
+            "jphRedis": {
+                "handlers":["syslog", "console"],
+                "level":"INFO"
+            },
+            "jphPostgreSQL": {
+                "handlers":["syslog", "console"],
+                "level":"INFO"
+            }
+        },
+        "root": {
+            "handlers":["operator"],
+            "level":"NOTSET"
+        }
+    },
+    "Sensors":[{
+            "Codifier":"CF",
+            "ShortName":"Web Server",
+            "Name":"Controller for Flask based Webserver",
+            "Symbol":"",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"Flask",
+            "Sensor":{
+                "SQL":{
+                    "Database":"sensors",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
+        }, {
+            "Codifier":"CC",
+            "ShortName":"Control",
+            "Name":"Code used for Console Program",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"ControlProgram"
+        }, {
+            "Codifier":"CK",
+            "ShortName":"Kast Control",
+            "Name":"Code used for Secondary Console Program",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"ControlProgram"
+        }, {
+            "Codifier":"Q1",
+            "ShortName":"SQL store",
+            "Name":"Postgress SQL adaptor for storing data",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"jphPostgreSQL",
+            "Sensor":{
+                "SQL":{
+                    "Database":"sensors",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
+        }, {
+            "Codifier":"Q2",
+            "ShortName":"SQL calc",
+            "Name":"Module for calculating Timeseries",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"postgresCalcHandler",
+            "Sensor":{
+                "SQL":{
+                    "Database":"sensors",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
+        }, {
+            "Codifier":"R1",
+            "ShortName":"Redis Cache",
+            "Name":"Redis cache to store the last state of messages on the network",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":true,
+            "DataType":"integer",
+            "Type":"jphRedis"
+        }, {
+            "Codifier":"C1",
+            "ShortName":"kastpi Temp",
+            "Name":"Raspberry Pi (kastpi) CPU Temperature",
+            "Symbol":"C",
+            "KeepAliveInterval":10,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "Active":true,
+            "DataType":"float",
+            "Type":"TempLinux",
+            "Sensor":{
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"C2",
+            "ShortName":"pihost Temp",
+            "Name":"Raspberry Pi (pihost) CPU Temperature",
+            "Symbol":"C",
+            "KeepAliveInterval":30,
+            "TimeoutWarning":20,
+            "SensorInterval":5,
+            "Active":true,
+            "DataType":"float",
+            "Type":"TempLinux",
+            "Sensor":{
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"C3",
+            "ShortName":"mad Temp",
+            "Name":"PC (mad) CPU Temperature (Inactive)",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "TimeoutWarning":20,
+            "SensorInterval":5,
+            "Active":false,
+            "DataType":"float",
+            "Type":"TempLinux",
+            "Sensor":{ 
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"C4",
+            "ShortName":"pimon Temp",
+            "Name":"Raspberry Pi (pimon) CPU Temperature",
+            "Symbol":"C",
+            "KeepAliveInterval":30,
+            "TimeoutWarning":20,
+            "SensorInterval":5,
+            "Active":true,
+            "DataType":"float",
+            "Type":"TempLinux",
+            "Sensor":{
+                "Pipe":"/sys/class/thermal/thermal_zone0/temp"
+            }
+        }, {
+            "Codifier":"X1",
+            "ShortName":"Mad Flow",
+            "Name":"HTTP xml reader (Arduino) MAD loop - Rotations",
+            "Symbol":"rpm",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "TimeoutWarning":20,
+            "Active":true,
+            "DataType":"float",
+            "Type":"failsafeReader",
+            "Sensor":{
+                "URL":"http://192.168.0.8/X",
+                "Field":"FlowPerSecond",
+                "Proxy":[{
+                    "Codifier":"X2",
+                    "Field":"LitersPerSecond"
+                    },{
+                    "Codifier":"X3",
+                    "Field":"Power"
+                },{
+                    "Codifier":"X4",
+                    "Field":"Mode"
+                }]
+            }
+        }, {
+            "Codifier":"X2",
+            "ShortName":"Mad Liters",
+            "Name":"HTTP xml reader (Arduino) MAD loop - Liters Per Minute",
+            "Symbol":"lpm",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"X1"
+            }
+        }, {
+            "Codifier":"X3",
+            "ShortName":"Water State",
+            "Name":"HTTP xml reader (Arduino) MAD loop - Power is ON/OFF",
+            "Symbol":"",
+            "DataType":"bool",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"X1"
+            }
+        }, {
+            "Codifier":"X4",
+            "ShortName":"Mad Mode",
+            "Name":"HTTP xml reader (Arduino) MAD loop - Mode",
+            "Symbol":"",
+            "DataType":"integer",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"X1"
+            }
+        }, {
+            "Codifier":"Y1",
+            "ShortName":"Aqua Flow",
+            "Name":"HTTP xml reader (Arduino) AQUA loop - Rotations",
+            "Symbol":"rpm",
+            "KeepAliveInterval":60,
+            "SensorInterval":10,
+            "TimeoutWarning":20,
+            "Active":true,
+            "DataType":"float",
+            "Type":"failsafeReader",
+            "Sensor":{
+                "URL":"http://192.168.0.8/Y",
+                "Field":"FlowPerSecond",
+                "Proxy":[{
+                    "Codifier":"Y2",
+                    "Field":"LitersPerSecond"
+                },{
+                    "Codifier":"Y3",
+                    "Field":"Mode"
+                }]
+            }
+        }, {
+            "Codifier":"Y2",
+            "ShortName":"Aqua Liters",
+            "Name":"HTTP xml reader (Arduino) AQUA loop - Liters Per Minute",
+            "Symbol":"lpm",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"Y1"
+            }
+        }, {
+            "Codifier":"Y3",
+            "ShortName":"Aqua Mode",
+            "Name":"HTTP xml reader (Arduino) AQUA loop - Mode",
+            "Symbol":"",
+            "DataType":"integer",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"Y1"
+            }
+        }, {
+            "Codifier":"A1",
+            "ShortName":"Rad-in Temp",
+            "Name":"Radiator Temperature IN",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":20,
+            "Active":true,
+            "Type":"ADCpiReader",
+            "Sensor":{
+                "Pin":"2",
+                "Proxy":[{
+                    "Codifier":"A2",
+                    "Pin":"1"
+                }]
+            }
+        }, {
+            "Codifier":"A2",
+            "ShortName":"Rad-out Temp",
+            "Name":"Radiator Temperature OUT",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"A1"
+            }
+        }, {
+            "Codifier":"A3",
+            "ShortName":"Manifold-in",
+            "Name":"Mainifold Temp IN",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":20,
+            "Active":true,
+            "Type":"ADCpiReader",
+            "Sensor":{
+                "Pin":"2",
+                "Proxy":[{
+                    "Codifier":"A4",
+                    "Pin":"3"
+                }, {
+                    "Codifier":"A5",
+                    "Pin":"4"
+                }]
+            }
+        }, {
+            "Codifier":"A4",
+            "ShortName":"Mad Man-out",
+            "Name":"MAD Manifold Temp OUT",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"A3"
+            }
+        }, {
+            "Codifier":"A5",
+            "ShortName":"Aqua Man-out",
+            "Name":"AQUA Manifold Temp OUT",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"A3"
+            }
+        }, {
+            "Codifier":"F1",
+            "ShortName":"Air Temp",
+            "Name":"Temperature of the Air outside",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":20,
+            "Active":true,
+            "Type":"ADAfruitReader",
+            "Sensor":{
+                "Pin":"21",
+                "Proxy":[{
+                    "Codifier":"F2"
+                }]
+            }
+        }, {
+            "Codifier":"F2",
+            "ShortName":"Air Humidity",
+            "Name":"Humidity of the Air outside",
+            "Symbol":"%",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"F1"
+            }
+        }, {
+            "Codifier":"F6",
+            "ShortName":"Cupboard Temp",
+            "Name":"Temperature of the Air inside",
+            "Symbol":"C",
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":20,
+            "Active":true,
+            "Type":"ADAfruitReader",
+            "Sensor":{
+                "Pin":"20",
+                "Proxy":[{
+                    "Codifier":"F7"
+                }]
+            }
+        }, {
+            "Codifier":"F7",
+            "ShortName":"Cupboard Humidity",
+            "Name":"Humidity of the Air inside",
+            "Symbol":"%",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"F6"
+            }
+        }, {
+            "Codifier":"PA",
+            "ShortName":"Custom Calc",
+            "Name":"Calculates",
+            "Symbol":"ms",
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":20,
+            "Active":true,
+            "Type":"PythonNinja",
+            "Sensor":{
+                "Filename":"pytemplates/mixtemp.py",
+                "Proxy":[{
+                    "Codifier":"PB"
+                },{
+                    "Codifier":"PC"
+                },{
+                    "Codifier":"PD"
+                },{
+                    "Codifier":"PE"
+                },{
+                    "Codifier":"PF"
+                },{
+                    "Codifier":"PG"
+                },{
+                    "Codifier":"PH"
+                }]
+            }
+        }, {
+            "Codifier":"PB",
+            "ShortName":"Mix Temperature",
+            "Name":"Mix between two Sensors",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Mix temp = (flow1 * temp1 + flow2 * temp2)/(flow 1 + flow 2)",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PC",
+            "ShortName":"Mad Delta-t",
+            "Name":"Difference input output Water",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PD",
+            "ShortName":"Aqua Delta-t",
+            "Name":"Difference input output Water",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PE",
+            "ShortName":"Aqua Cooling",
+            "Name":"Power required to cool",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PF",
+            "ShortName":"Mad Cooling",
+            "Name":"Power required to cool",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PG",
+            "ShortName":"MAD+Aqua W",
+            "Name":"Computer - coolroom",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PH",
+            "ShortName":"Monitor W",
+            "Name":"Total - computer",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PI",
+            "ShortName":"Delta Radiator",
+            "Name":"Difference in Temp between in/out radiator",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PJ",
+            "ShortName":"Total Flow",
+            "Name":"Flow from both loops added",
+            "Symbol":"lpm",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PK",
+            "ShortName":"Radiator Power",
+            "Name":"Radiator cooling power",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"PL",
+            "ShortName":"Combined Calc Hash",
+            "Name":"Total Mining in Ethereum",
+            "Symbol":"MH/s",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Active":false,
+            "Sensor":{
+                "__comment":"",
+                "Codifier":"PA"
+            }
+        }, {
+            "Codifier":"N1",
+            "ShortName":"Nest Status",
+            "Name":"Away or Home from Nest",
+            "Symbol":"",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "DataType":"bool",
+            "Active":true,
+            "Type":"NestReader",
+            "Sensor":{
+                "Field":"nestAway",
+                "Password":"~/.nestpassword",
+                "Proxy":[{
+                    "Field":"nestTemp",
+                    "Codifier":"N2"
+                }, {
+                    "Field":"nestHumidity",
+                    "Codifier":"N3"
+                }, {
+                    "Field":"nestTarget",
+                    "Codifier":"N4"
+                }, {
+                    "Field":"nestTempOutside",
+                    "Codifier":"N5"
+                }, {
+                    "Field":"nestHumiOutside",
+                    "Codifier":"N6"
+                }]
+            }
+        }, {
+            "Codifier":"N2",
+            "ShortName":"Nest Temperature",
+            "Name":"The Room Temperature",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"N1"
+            }
+        }, {
+            "Codifier":"N3",
+            "ShortName":"Nest Humidity",
+            "Name":"The Room Humidity",
+            "Symbol":"%",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"N1"
+            }
+        }, {
+            "Codifier":"N4",
+            "ShortName":"Nest Target",
+            "Name":"The Target User Temperature",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"N1"
+            }
+        }, {
+            "Codifier":"N5",
+            "ShortName":"Outside Temp",
+            "Name":"Nest outside Temperature",
+            "Symbol":"C",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"N1"
+            }
+        }, {
+            "Codifier":"N6",
+            "ShortName":"Outside Humidity",
+            "Name":"Nest Outside Humidity",
+            "Symbol":"%",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"N1"
+            }
+        }, {
+            "Codifier":"W1",
+            "ShortName":"Cupboard power",
+            "Name":"Power1 Consumption",
+            "Symbol":"W",
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":15,
+            "DataType":"float",
+            "Active":true,
+            "Type":"ZwavePower",
+            "Sensor":{
+                "node":2,
+                "index":4,
+                "instance":1,
+                "Proxy":[{
+                    "node":2,
+                    "index":8,
+                    "instance":1,
+                    "Codifier":"W2"
+                }, {
+                    "node":2,
+                    "index":0,
+                    "instance":1,
+                    "Codifier":"W3"
+                }, {
+                    "node":3,
+                    "index":4,
+                    "instance":1,
+                    "Codifier":"W4"
+                }, {
+                    "node":3,
+                    "index":8,
+                    "instance":1,
+                    "Codifier":"W5"
+                }, {
+                    "node":3,
+                    "index":0,
+                    "instance":1,
+                    "Codifier":"W6"
+                }, {
+                    "node":4,
+                    "index":4,
+                    "instance":1,
+                    "Codifier":"W7"
+                }, {
+                    "node":4,
+                    "index":8,
+                    "instance":1,
+                    "Codifier":"W8"
+                }, {
+                    "node":4,
+                    "index":0,
+                    "instance":1,
+                    "Codifier":"W9"
+                }]
+            }
+        }, {
+            "Codifier":"W2",
+            "ShortName":"Cupboard power2",
+            "Name":"Power2 Consumption",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W3",
+            "ShortName":"Cupboard energy",
+            "Name":"Energy Used",
+            "Symbol":"kwh",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W4",
+            "ShortName":"Computers power",
+            "Name":"Power1 Consumption",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W5",
+            "ShortName":"Computers power2",
+            "Name":"Power2 Consumption",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W6",
+            "ShortName":"Computers energy",
+            "Name":"Energy Used",
+            "Symbol":"kwh",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W7",
+            "ShortName":"Total power",
+            "Name":"Power Consumption",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W8",
+            "ShortName":"Total power",
+            "Name":"Power2 Consumption",
+            "Symbol":"W",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"W9",
+            "ShortName":"Total power",
+            "Name":"Energy Used",
+            "Symbol":"kwh",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"W1"
+            }
+        }, {
+            "Codifier":"M1",
+            "ShortName":"Hash Aqua",
+            "Name":"Hash Aqua",
+            "Symbol":"MH/s",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":600,
+            "Active":false,
+            "DataType":"float",
+            "Type":"DwarfpoolReader",
+            "Sensor":{
+                "URL":"http://dwarfpool.com/eth/api?wallet=0x03145c9fsdfsdfsdfswsdf&email=xxxxxxxx@gmail.com",
+                "Server":"AQUA",
+                "Proxy":[{
+                    "Codifier":"M2"
+                }]
+            }
+        }, {
+            "Codifier":"M2",
+            "ShortName":"Hash Aqua(c)",
+            "Name":"Calculated Hash Aqua",
+            "Symbol":"MH/s",
+            "Type":"Proxy",
+            "DataType":"float",
+            "Active":false,
+            "Sensor":{
+                "Codifier":"M1"
+            }
+        }, {
+            "Codifier":"M3",
+            "ShortName":"Hash MAD",
+            "Name":"Hash MAD",
+            "Symbol":"MH/s",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":600,
+            "DataType":"float",
+            "Type":"DwarfpoolReader",
+            "Active":false,
+            "Sensor":{
+                "URL":"http://dwarfpool.com/eth/api?wallet=0x03145c9fsdfsdfsdfswsdf&email=xxxxxxxx@gmail.com",
+                "Server":"MAD",
+                "Proxy":[{
+                    "Codifier":"M4"
+                }]
+            }
+        }, {
+            "Codifier":"M4",
+            "ShortName":"Hash MAD(c)",
+            "Name":"Calculated Hash MAD",
+            "Symbol":"MH/s",
+            "Active":false,
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"M3"
+            }
+        },{
+            "Codifier":"ZF",
+            "ShortName":"Flask Devel",
+            "Name":"Web Interface Development",
+            "Symbol":"",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":false,
+            "DataType":"integer",
+            "Type":"Flask",
+            "Sensor":{
+                "SQL":{
+                    "Database":"sensors",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
+        }, {
+            "Codifier":"ZC",
+            "ShortName":"devel",
+            "Name":"Control Console Program Development",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":false,
+            "DataType":"integer",
+            "Type":"ControlProgram"
+        }, {
+            "Codifier":"ZR",
+            "ShortName":"Redis-devel",
+            "Name":"Redis-Cache on devel",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":false,
+            "DataType":"integer",
+            "Type":"jphRedis"
+        }, {
+            "Codifier":"ZH",
+            "ShortName":"Hist-devel",
+            "Name":"Postgress Calculate History",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":false,
+            "DataType":"integer",
+            "Type":"jphCalcHistory",
+            "Sensor":{
+                "SQL":{
+                    "Database":"sensors",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
+        }, {
+            "Codifier":"ZQ",
+            "ShortName":"SQL-devel",
+            "Name":"Postgress SQL adaptor on devel",
+            "Symbol":"p/m",
+            "KeepAliveInterval":60,
+            "SensorInterval":60,
+            "TimeoutWarning":60,
+            "Active":false,
+            "DataType":"integer",
+            "Type":"jphPostgreSQL",
+            "Sensor":{
+                "SQL":{
+                    "Database":"sensors",
+                    "User":"jphadmin",
+                    "Password":"~/.sqlpassword",
+                    "Host":"127.0.0.1"
+                }
+            }
+        }, {
+            "Codifier":"FG",
+            "ShortName":"Control Range",
+            "Name":"Only operate the fan in this Range",
+            "Symbol":"%",
+            "Active":true,
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "DataType":"float",
+            "Control":"enabled",
+            "Type":"controlSensor",
+            "Sensor":{
+                "Default":"6"
+            }
+        }, {
+            "Codifier":"FH",
+            "ShortName":"Target Humid",
+            "Name":"Target Humidity",
+            "Symbol":"%",
+            "Active":true,
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "DataType":"float",
+            "Control":"enabled",
+            "Type":"controlSensor",
+            "Sensor":{
+                "Default":"80"
+            }
+        }, {
+            "Codifier":"FI",
+            "ShortName":"Fan on/off",
+            "Name":"Enable fan control (1=on else off)",
+            "Symbol":"",
+            "Active":true,
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "DataType":"integer",
+            "Control":"enabled",
+            "Type":"controlSensor",
+            "Sensor":{
+                "Default":"1"
+            }
+        }, {
+            "Codifier":"FJ",
+            "ShortName":"Target Temp",
+            "Name":"Temperature targe",
+            "Symbol":"C",
+            "Active":true,
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "DataType":"float",
+            "Control":"enabled",
+            "Type":"controlSensor",
+            "Sensor":{
+                "Default":"35"
+            }
+        }, {
+            "Codifier":"FK",
+            "ShortName":"Fan Outside",
+            "Name":"Radiator Fan",
+            "Symbol":"%",
+            "Active":true,
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":10,
+            "DataType":"float",
+            "Control":"enabled",
+            "Type":"fanControl"
+        }, {
+            "Codifier":"FL",
+            "ShortName":"Fan Control",
+            "Name":"Fan Controller",
+            "Symbol":"ms",
+            "KeepAliveInterval":60,
+            "SensorInterval":5,
+            "TimeoutWarning":20,
+            "Active":true,
+            "Type":"PythonNinja",
+            "Sensor":{
+                "Filename":"pytemplates/fancontrol.py",
+                "Proxy":[{
+                    "Codifier":"FM"
+                }, {
+                    "Codifier":"FN"
+                }, {
+                    "Codifier":"FO"
+                }, {
+                    "Codifier":"FP"
+                }, {
+                    "Codifier":"FQ"
+                }, {
+                    "Codifier":"FR"
+                }, {
+                    "Codifier":"FS"
+                }, {
+                    "Codifier":"FT"
+                }]
+            }
+        }, {
+            "Codifier":"FM",
+            "ShortName":"msg to FK",
+            "Name":"Signal send to FK",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FN",
+            "ShortName":"Current Temp",
+            "Name":"Current Max input Temp",
+            "Symbol":"C",
+            "DataType":"integer",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FO",
+            "ShortName":"Dew Temp ",
+            "Name":"Dew Temp",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FP",
+            "ShortName":"Low Temp ",
+            "Name":"Reserved",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FQ",
+            "ShortName":"Operating",
+            "Name":"On when fan in operating range",
+            "Symbol":"",
+            "DataType":"integer",
+            "Type":"Proxy",
+            "Sensor":{
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FR",
+            "ShortName":"Upper Temp ",
+            "Name":"Upper Temp for operating limit",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FS",
+            "ShortName":"Lower Temp ",
+            "Name":"Lower Temp for operating limit",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        }, {
+            "Codifier":"FT",
+            "ShortName":"Reserved ",
+            "Name":"Reserved",
+            "Symbol":"",
+            "DataType":"float",
+            "Type":"Proxy",
+            "Sensor":{
+                "__comment":"Reserved for fan memory",
+                "Codifier":"FL"
+            }
+        }   
+    ]
+}
+   

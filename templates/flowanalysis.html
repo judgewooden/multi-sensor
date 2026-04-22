@@ -1,0 +1,198 @@
+{% extends "layout.html" %}
+{% import 'includes.html' as includes %}
+{% block head %}
+<meta name="description" content="Analysis of liters per minute flow per computer loop.">
+{{ includes.graphs() }}
+{% endblock %}
+{% block body %}
+<span itemprop="description" content="Analysis of liters per minute flow per computer loop."/>
+
+<div class="container-fluid">
+  <div id="graph1" class="jph-graph-box-full"></div>
+  <div id="graph2" class="jph-graph-box-half"></div>
+  <div id="graph3" class="jph-graph-box-half"></div>
+</div>
+
+<script>
+var source1 = {
+  "Name": "Arduino Flow",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 7200,
+    "LeftLegend": "Temp (C)",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Liters/pm",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Arduino Flow - Last Two Hours",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "MAD",
+        "Codifier": "X2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.20",
+        "Smoothing": "30.00"
+      },
+      {
+        "Name": "MAD-raw",
+        "Codifier": "X2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "AQUA",
+        "Codifier": "Y2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.20",
+        "Smoothing": "30.00"
+      },
+      {
+        "Name": "AQUA-raw",
+        "Codifier": "Y2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "Water Temp",
+        "Codifier": "A3",
+        "Field": "value",
+        "Axis": "Left",
+        "Interpolation": "linear",
+        "Frequency": "0.00",
+        "Filter": "0.20",
+        "Smoothing": "30.00"
+      }
+    ]
+  }
+};
+var g1 = new LineGraph({containerId: 'graph1', data: source1});
+
+var source2 = {
+  "Name": "Arduino 30 days",
+  "Settings": {
+    "AutoUpdate": 0,
+    "UpdateInterval": 60,
+    "SecondsToShow": 2592000,
+    "LeftLegend": "MAD Liters/pm",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "AQUA Liters/pm",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Arduino Flow - Last Month",
+    "Interpolation": "cardinal-open",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 0,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+        {
+            "Name": "MAD",
+            "Codifier": "X2",
+            "Field": "3600",
+            "Axis": "Right",
+            "Interpolation": "linear",
+            "Frequency": "3,600.00",
+            "Filter": "0.00",
+            "Smoothing": "1.00"
+        },
+        {
+            "Name": "AQUA",
+            "Codifier": "Y2",
+            "Field": "mean-hour",
+            "Axis": "Left",
+            "Interpolation": "linear",
+            "Frequency": "3,600.00",
+            "Filter": "0.00",
+            "Smoothing": "1.00"
+        }
+    ]
+  }
+};
+var g2 = new LineGraph({containerId: 'graph2', data: source2});
+
+var source3 = {
+  "Name": "Arduino 10min",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 600,
+    "LeftLegend": "Temp (C)",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Liters/pm",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Arduino Flow - Last 10 minute",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "MAD",
+        "Codifier": "X2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "15.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "AQUA",
+        "Codifier": "Y2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "15.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      }
+    ]
+  }
+};
+var g3 = new LineGraph({containerId: 'graph3', data: source3});
+
+</script>
+{% endblock %}

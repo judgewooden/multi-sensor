@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% import 'includes.html' as includes %}
+{% block head %}
+<meta name="description" content="View log files.">
+{{ includes.datatables() }}
+{% endblock %}
+{% block body %}
+<span itemprop="description" content="View log files."/>
+
+<div class="container-fluid" style="padding:8px">
+<table id="output" class="cell-border compact">
+<thead>
+<tr>
+<th>Log Entry</th>
+</tr>
+</thead>
+<tbody>
+{% for line in loghist %} 
+<tr>
+<td>
+{{ line }}
+</td>
+</tr>
+{% endfor %}
+</tbody>  
+</table>
+</div>
+<script>
+
+function drawtable() {
+  vart = $('#output').DataTable({
+    "columns": [
+      { "orderable": true }
+    ],
+    "order": [[ 0, "desc" ]],
+    "scrollY": $(window).innerHeight() - 170,
+    "paging": false,
+    "scrollCollapse": true,
+  });
+}
+
+$(document).ready(function() {
+  drawtable();
+})
+
+$(window).resize(function(){
+  vart.destroy();
+  drawtable();
+});
+
+</script>
+
+{% endblock %}

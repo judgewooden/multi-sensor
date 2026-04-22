@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JPH Monitor</title>
+{% import 'includes.html' as includes %}
+{{ includes.jph() }}
+{% block head %}
+{% endblock %}
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108649643-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-108649643-1');
+</script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+<span itemprop="name" content="{{ request.endpoint }}"/>
+<span itemprop="url" content="{{ request.url }}"/>
+<nav class="navbar navbar-dark bg-inverse navbar-fixed-top jph-nav">
+  <a class="navbar-brand" href="/">JPH Monitor</a>
+  <button class="navbar-toggler hidden-md-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
+  <div class="collapse navbar-toggleable-sm" id="navbarResponsive">
+    <ul class="nav navbar-nav" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
+      <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="http://jphmonitor.nl" id="jph-nav-other" data-toggle="dropdown" 
+            aria-haspopup="true" aria-expanded="false">Overview</a>
+        <div class="dropdown-menu" aria-labelledby="jph-nav-other">
+          <a itemprop="url" class="dropdown-item" href="/dashboard"><span itemprop="name">Dashboard</span></a>
+          <a itemprop="url" class="dropdown-item" href="/diagram"><span itemprop="name">Flow Diagram</span></a>
+          <a itemprop="url" class="dropdown-item" href="/component"><span itemprop="name">Component Diagram</span></a>
+          <a itemprop="url" class="dropdown-item" href="/sensorboard/Q1"><span itemprop="name">Sensor Detail</span></a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="http://jphmonitor.nl" id="jph-nav-graphs" data-toggle="dropdown" 
+            aria-haspopup="true" aria-expanded="false">Graphs</a>
+        <div class="dropdown-menu" aria-labelledby="jph-nav-graphs">
+          
+          <a itemprop="url" class="dropdown-item" href="/flowanalysis"><span itemprop="name">Arduino Flow</span></a>
+          <a itemprop="url" class="dropdown-item" href="/wateranalysis"><span itemprop="name">Water Details</span></a>
+          <a itemprop="url" class="dropdown-item" href="/coolanalysis"><span itemprop="name">Cool Room</span></a>
+          <a itemprop="url" class="dropdown-item" href="/mineanalysis"><span itemprop="name">Mining v. Power</span></a>
+          <a itemprop="url" class="dropdown-item" href="/fananalysis"><span itemprop="name">Fan Cycle</span></a>
+          <a class="dropdown-item" href="/devel">Custom Graphs</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="http://jphmonitor.nl" id="jph-nav-system" data-toggle="dropdown" 
+            aria-haspopup="true" aria-expanded="false">System</a>
+        <div class="dropdown-menu" aria-labelledby="jph-nav-system">
+          <a class="dropdown-item" href="/dashtable">List Sensors</a>
+          <a class="dropdown-item" href="/logview">Log Viewer</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav pull-right">
+    	<li class="nav-item">
+    		{% if current_user.is_authenticated %} 
+    		<a class="nav-link" href="/logout">Logout: {{ current_user.email }}</a>
+ 				{% else %}
+    		<a class="nav-link" href="/login">Login</a>
+ 				{% endif %}
+    	<li>
+    </ul>
+  </div>
+</nav>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div data-btn="clear" class="jph-notify-show jph-error">
+		<ul> 
+		{% for message in messages %}
+		  <li id="jph-notice">{{ message }}</li>
+		{% endfor %}
+		</ul>
+	</div>
+{% else %}
+{% endif %}
+{% endwith %}
+<div id="jph-notice-bar" data-btn="clear" class="jph-notify-hide">
+	<div id="jph-notice"></div>
+</div>
+<script>
+$(function() {
+	$('[data-btn="clear"]').click(function (event) {
+		$(this).slideUp('slow');
+	})
+})
+</script>
+{% block body %}
+{% endblock %}
+</body>
+</html>

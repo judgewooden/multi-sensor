@@ -1,0 +1,487 @@
+/*
+ ******
+ * THIS SECTION IS STILL BEING REVIEWED
+ ******
+ */
+
+root {
+  font-size: 16px;
+}
+body {
+  padding-top: 42px;
+  clear:both;
+  background:white;
+}
+.jph-left-box{
+  float: left;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #dddddd;
+  padding: 0;
+  overflow: hidden;
+  margin-left: .5em;
+  margin-bottom: .5em;
+  width:100%;
+}
+.jph-right-box{
+  float: left;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #dddddd;
+  padding: 0;
+  overflow: hidden;
+  margin-left: .5em;
+  margin-bottom: .5em;
+  width:100%;
+}
+@media (min-width: 480px) {
+  .jph-right-box {
+    float: right;
+    width: 48%;
+  }
+  .jph-left-box {
+    width: 48%;
+  }
+}
+.jph-name-box{
+  float: left;
+  font-size: 24px;
+  border: .11em black;
+  border-radius: .5em;
+  text-align: center;
+  box-shadow: none;
+  
+  color: red;
+  margin-bottom: .5em;
+/*
+  background-color: #dddddd;
+  height: 4.75em; 
+  min-width: 9.75em;
+  padding: 0;
+  overflow: hidden;
+  margin-bottom: .5em;
+  margin-left: .5em;
+  */
+  width:100%;
+}
+.jph-sens-box{
+  float: left;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  height: 4.75em; 
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #dddddd;
+  padding: 0;
+  overflow: hidden;
+  margin-bottom: .5em;
+  margin-left: .5em;
+  width:100%;
+}
+.jph-sgraph-box{
+  float: left;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  height: 4.75em; 
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #dddddd;
+  padding: 0;
+  overflow: hidden;
+  margin-bottom: .5em;
+  margin-left: .5em;
+  width:100%;
+}
+@media (min-width: 480px) {
+  .jph-sgraph-box {
+    float: right;
+    width: 48%;
+  }
+  .jph-sens-box {
+    width: 48%;
+  }
+}
+.jph-log-box{
+  overflow: auto;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  height: 14.75em; 
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: white;
+  padding: 0;
+  margin-top: .7em;
+  margin-bottom: .5em;
+  margin-left: .5em;
+  margin-right: .5em;
+  width: 100%;
+}
+.jph-entry-list{
+  float: left;
+  font-size: 13px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #fff;
+  padding: 0;
+  margin-top: .7em;
+  margin-left: .5em;
+  margin-bottom: .5em;
+}
+/* GRAPHS */
+.jph-graph-box{
+  float: left;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #fff;
+  padding: 0;
+  overflow: hidden;
+  margin-top: .7em;
+  margin-left: .5em;
+  margin-bottom: .5em;
+  width:100%;
+}
+.jph-graph-box-full{
+  float: left;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #fff;
+  padding: 0;
+  overflow: hidden;
+  margin-top: .7em;
+  margin-left: .5em;
+  margin-bottom: .5em;
+  width:100%;
+  height:300px;
+  color:#f6f6f6;
+  background:#12120a;
+}
+.jph-graph-box-half{
+  float: left;
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #fff;
+  padding: 0;
+  overflow: hidden;
+  margin-top: .7em;
+  margin-left: .5em;
+  margin-bottom: .5em;
+  height:400px;
+  color:#f6f6f6;
+  background:#12120a;
+  float: none;
+  width: 100%;
+}
+@media (min-width: 960px) {
+  .jph-graph-box-half {
+    height:200px;
+    width:49%;
+    float:left;
+    position:relative;
+  }
+}
+.jph-notify-show {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.jph-notify-hide {
+  display: none;
+  width: 100%;
+  text-align: center;
+}
+.jph-auto {
+  font-size: 14px;
+}
+.jph-nav {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.jph-box{
+  font-size: 16px;
+  border: .11em solid navy;
+  border-radius: .5em;
+  height: 4.75em; 
+  min-width: 9.75em;
+  box-shadow: none;
+  background-color: #dddddd;
+  padding: 0;
+  overflow: hidden;
+  margin-bottom: .5em;
+  margin-left: .5em;
+}
+@media (min-width: 480px) {
+  .jph-box {
+    float: left;
+    width: 9.75em;
+  }
+}
+.jph-box-header{
+  max-height: 1.5em;
+  padding: 0;
+  text-align: center;
+  border-bottom: 0.063em solid transparent;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+.jph-box-buttons{
+  height: 1.875em;
+  display: none; 
+  padding: 0;
+  text-align: center;
+  border: 0.063px solid transparent; 
+}
+.jph-box-vbuttons{ 
+  height: 1.875em;
+  padding: 0;
+  text-align: center;
+  border: 0.063px solid transparent; 
+}
+.jph-btn {
+  display: inline-block;
+  width: 1.6em;
+  height: 1.6em;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0;
+  border-radius: 1.1em;
+  border: 0.163em solid transparent;
+  box-shadow: none;
+  white-space: nowrap;
+}
+.jph-box-value{
+  padding: 0;
+  font-size: 1.2em;
+  text-align: center;
+  border: 0.063em solid transparent;
+  white-space: nowrap;
+}
+.jph-box-footer{
+  padding: 0;
+  font-size: .65em;
+  text-align: center;
+  border-top: 0.063em solid transparent;
+  color: #333;
+  background-color: #dddddd; 
+}
+.jph-white{
+  color: #333;
+  background-color: #fff;
+}
+.jph-info{
+  color: #333;
+  background-color: #dddddd;
+}
+.jph-ready{
+  color: #fff;
+  background-color: #60d24a;
+}
+.jph-proxy{
+  color: #333;
+  background-color: #60d24a;
+}
+.jph-timeout{
+  color: #fff;
+  background-color: #b74f33;
+}
+.jph-warning{
+  color: #333;
+  background-color: #f4fd0c;
+}
+.jph-error{
+  color: #333;
+  background-color: #b74f33;
+}
+.jph-okay{
+  color: #fff;
+  background-color: #337ab7;
+}
+.jph-iframe-popover {
+  outline: none;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 230px;
+  height: 400px;
+  border: 0px solid black;
+}
+.popover-title {
+  color: blue;
+  font-size: small;
+  font-variant: small-caps;
+}
+.jph-popover-row-header {
+  text-decoration: underline;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+.jph-popover-row {
+  font-size: x-small;
+  vertical-align: text-top;
+}
+/* 
+ * consider making these JPH tags
+ */
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/*
+ ******
+ * FROM HERE EVERYTHING NEEDS TO BE REWRITTEN 
+ ******
+ */
+
+
+svg.line-graph {
+  color: #fff;
+  fill: #fff;
+}
+
+svg.line-graph .title {
+	font-size: 14px;
+	text-decoration: underline;
+  color: white;
+  fill: #fff;
+  stroke-width: 0px;
+}
+
+svg.line-graph text {
+	cursor: default;
+}
+
+svg.line-graph .hover-line {
+	stroke: #6E7B8B;
+}
+
+svg.line-graph .hide {
+	opacity: 0;
+}
+
+svg.line-graph .axis {
+	shape-rendering: crispEdges;
+  color: white;
+  fill: white;
+  stroke: white;
+  stroke-width: 1px;
+}
+
+svg.line-graph .x.axis line {
+	fill: white;
+}
+
+svg.line-graph .x.axis .minor {
+	stroke-opacity: .5;
+}
+
+svg.line-graph .x.axis path {
+  	display: none;
+}
+
+svg.line-graph .x.axis text {
+	font-size: 10px;
+  color: white;
+  fill: #fff;
+  stroke-width: 0px;
+}
+
+svg.line-graph .y.axis line, .y.axis path {
+	fill: none;
+  stroke: 1px;
+}
+
+svg.line-graph .y.axis text {
+	font-size: 10px;
+  color: white;
+  fill: #fff;
+  stroke-width: 0px;
+}
+
+svg.line-graph .menu-button:not(.selected):hover {
+	text-decoration: underline;
+	cursor: pointer !important;
+}
+
+svg.line-graph .date-label {
+	fill: #D3E0F0;
+}
+
+svg.line-graph .line { 
+  stroke-width: 3px;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: normal;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 8px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+

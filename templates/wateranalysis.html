@@ -1,0 +1,238 @@
+{% extends "layout.html" %}
+{% import 'includes.html' as includes %}
+{% block head %}
+<meta name="description" content="Analysis of Water Flow Rate.">
+{{ includes.graphs() }}
+{% endblock %}
+{% block body %}
+<span itemprop="description" content="Analysis of Water Flow Rate."/>
+
+<div class="container-fluid">
+  <div id="graph1" class="jph-graph-box-full"></div>
+  <div id="graph2" class="jph-graph-box-half"></div>
+  <div id="graph3" class="jph-graph-box-half"></div>
+</div>
+
+<script>
+var source1 = {
+  "Name": "Water Efficiency",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 7200,
+    "LeftLegend": "LeftLegend",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Temp (C)",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Water Temperatures last two hours",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "Man-in",
+        "Codifier": "A3",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Rad-in",
+        "Codifier": "A1",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Rad-out",
+        "Codifier": "A2",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Man-out (calc)",
+        "Codifier": "PB",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Man-out (aqua)",
+        "Codifier": "A5",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Man-out (mad)",
+        "Codifier": "A4",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "0.10",
+        "Smoothing": "15.00"
+      }
+    ]
+  }
+};
+var g1 = new LineGraph({containerId: 'graph1', data: source1});
+
+var source2 = {
+  "Name": "Water 2days",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 172800,
+    "LeftLegend": "LeftLegend",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Temp (C)",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Water Temperatures last two days",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "Man-in",
+        "Codifier": "A3",
+        "Field": "mean-10min",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "3600.00",
+        "Filter": "1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Rad-in",
+        "Codifier": "A1",
+        "Field": "mean-10min",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "3600.00",
+        "Filter": "1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Rad-out",
+        "Codifier": "A2",
+        "Field": "mean-10min",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "3600.00",
+        "Filter": "1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Man-out (aqua)",
+        "Codifier": "A5",
+        "Field": "mean-10min",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "3600.00",
+        "Filter": "1.00",
+        "Smoothing": "15.00"
+      },
+      {
+        "Name": "Man-out (mad)",
+        "Codifier": "A4",
+        "Field": "mean-10min",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "3600.00",
+        "Filter": "1.00",
+        "Smoothing": "15.00"
+      }
+    ]
+  }
+};
+var g2 = new LineGraph({containerId: 'graph2', data: source2});
+
+var source3 = {
+  "Name": "Water 10min",
+  "Settings": {
+    "AutoUpdate": 1,
+    "UpdateInterval": 10,
+    "SecondsToShow": 600,
+    "LeftLegend": "LeftLegend",
+    "LeftMax": 0,
+    "LeftMin": 0,
+    "RightLegend": "Temp (C)",
+    "RightMax": 0,
+    "RightMin": 0,
+    "Title": "Water Temperatures last 10 minutes",
+    "Interpolation": "linear",
+    "TickLine": 0,
+    "DateLabel": "top",
+    "HideDateLabel": 0,
+    "HideLegend": 0,
+    "HideXAxis": 0,
+    "HideAxisLeft": 0,
+    "HideAxisRight": 0,
+    "HideButtons": 1,
+    "HideLeftControls": 1,
+    "HideRightControls": 1,
+    "graphSensors": [
+      {
+        "Name": "Man-in",
+        "Codifier": "A3",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "15.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      },
+      {
+        "Name": "Rad-in",
+        "Codifier": "A1",
+        "Field": "value",
+        "Axis": "Right",
+        "Interpolation": "linear",
+        "Frequency": "60.00",
+        "Filter": "-1.00",
+        "Smoothing": "1.00"
+      }
+    ]
+  }
+};
+var g3 = new LineGraph({containerId: 'graph3', data: source3});
+
+</script>
+{% endblock %}

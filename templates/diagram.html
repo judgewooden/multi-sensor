@@ -1,0 +1,157 @@
+{% extends "layout.html" %}
+{% import 'includes.html' as includes %}
+{% block head %}
+<meta name="description" content="Graphical representation of system and sensor locations.">
+{% endblock %}
+{% block body %}
+<span itemprop="description" content="Graphical representation of system and sensor locations."/>
+<br>
+<div style="position:relative;display:table-cell">
+  <img style="border:5;padding:5:width:1200px;height:700px" src={{ url_for('static', filename='diagram.png') }}>
+  <div style="font-size:14px;position:absolute;top:1.1em;left:6.9em">
+    <div id="N2" Class="jph-auto" style="float:left">N/A</div>
+    <p style="float:left;font-size:14px">&nbsp(Target:</p>
+    <div id="N4" Class="jph-auto" style="float:left">N/A</div>
+    <p style="float:left;font-size:14px">)</p>
+  </div>
+  <div id="PG" Class="jph-auto" style="position:absolute;top:1.85em;left:73.3em">N/A</div>
+  <div id="N3" Class="jph-auto" style="position:absolute;top:2.6em;left:6.9em">N/A</div>
+  <div id="X1" Class="jph-auto" style="position:absolute;top:5.1em;left:13.1em">N/A</div>
+  <div id="X2" Class="jph-auto" style="position:absolute;top:5.1em;left:20.1em">N/A</div>
+  <div id="A4" Class="jph-auto" style="position:absolute;top:5.1em;left:63.7em">N/A</div>
+  <div id="A3" Class="jph-auto" style="position:absolute;top:10.8em;left:9.3em">N/A</div>
+  <div id="PB" Class="jph-auto" style="position:absolute;top:10.8em;left:75em">N/A</div>
+  <div id="Y1" Class="jph-auto" style="position:absolute;top:17.8em;left:13.1em">N/A</div>
+  <div id="Y2" Class="jph-auto" style="position:absolute;top:17.8em;left:20.1em">N/A</div>
+  <div id="A5" Class="jph-auto" style="position:absolute;top:17.8em;left:63.7em">N/A</div>
+
+  <div id="F6" Class="jph-auto" style="position:absolute;top:27.3em;left:6.9em">N/A</div>
+  <div id="W1" Class="jph-auto" style="position:absolute;top:26.9em;left:73.3em">N/A</div>
+  <div id="F7" Class="jph-auto" style="position:absolute;top:28.8em;left:6.9em">N/A</div>
+  <div id="A2" Class="jph-auto" style="position:absolute;top:34.3em;left:9.3em">N/A</div>
+  <div id="A1" Class="jph-auto" style="position:absolute;top:34.3em;left:33.4em">N/A</div>
+  
+  <div id="F1" Class="jph-auto" style="position:absolute;top:45.6em;left:6.9em">N/A</div>
+  <div id="PH" Class="jph-auto" style="position:absolute;top:46.5em;left:51.8em">N/A</div>
+  <div id="W4" Class="jph-auto" style="position:absolute;top:46.5em;left:73.3em">N/A</div>
+  <div id="N5" Class="jph-auto" style="position:absolute;top:45.6em;left:18.5em">N/A</div>
+  <div id="F2" Class="jph-auto" style="position:absolute;top:47.1em;left:6.9em">N/A</div>
+  <div id="N6" Class="jph-auto" style="position:absolute;top:47.1em;left:18.5em">N/A</div>
+
+</div>
+<script>
+var visibleScrollbars = window.scrollbars.visible;
+ 
+var t0=(new Date()).valueOf();
+var TimeOffSet=0
+var RoundTripDelay=0
+$.ajax({
+    type : "GET",
+    dataType : "json",
+    url: '/ntp',
+    success: function(answer, textStatus, request){
+        t1=answer.time;
+        t3 = (new Date()).valueOf();
+        RoundTripDelay= (t3 - t0);
+        TimeOffSet= ((t1 - t0) + (t1 - t3)) / 2;
+        console.log("NTP delay:", RoundTripDelay, "NTP offset:", TimeOffSet, "corrected: ", (new Date(t3 + TimeOffSet)));
+    },
+    error: function(answer, textStatus, request){
+        console.log("ntp error", answer);
+    }
+})
+
+
+var RefreshRate=1000;           // Update Frequency for client browser (for poling version)
+var RefreshInProgress = false;
+
+var mySensors = {{ sensors|tojson }};
+var Sensors = new Array();
+
+var STATUS = {                  // enum the status per sensor
+  INIT : {value: -1},
+  OKAY : {value: 0},
+  ERROR : {value: 1} 
+}
+
+var initSensors = function() {
+  var dash = document.getElementsByClassName("jph-auto");
+  var i;
+  for (var i = 0; i < dash.length; i++) {
+    p = findSensor(dash[i].id, mySensors);
+    if (p==null) {
+      console.log("Strange? Sensors not found ", dash[i].id );
+      continue;
+    }
+    sy=p.Symbol;
+    if (p.Type == "Proxy") {
+      p=findSensor(p.Sensor.Codifier, mySensors);
+      if (p==null) {
+        console.log("Strange? Proxy sensors not found ", s.Sensor.Codifier );
+        continue;
+      }
+    }
+    temp={
+      id: dash[i].id,
+      lv: -1,                       // Last timestamp a value was updated
+      to: p.TimeoutWarning * 1000,  // timeout period from config
+      sy: sy,                       // Symbol
+      ls: STATUS.INIT               // last status field
+    }
+    Sensors.push(temp);
+  }
+  MySensors="";                     // Freeup some RAM
+};
+
+var updateValues = function() {
+  jQuery.getJSON("/sensor/").done(function(response) {
+    if ( response.length > 0) {
+      n=parseInt((Date.now()+TimeOffSet-RefreshRate));
+      for (var i = 0; i < Sensors.length; i++) {
+        for (var key in response) {
+          t=parseInt(response[key].DTimestamp);
+          if (t>0) {
+            // console.log(t, Sensors[i].id, response[key].Codifier)
+            if (Sensors[i].id == response[key].Codifier) {
+              if (t>Sensors[i].lv) {
+                $("#"+Sensors[i].id).html('<a href="/sensorboard/' + Sensors[i].id + '">' + afronden(parseFloat(response[key].Value).toFixed(1)) + "" + Sensors[i].sy + '</a>');
+                Sensors[i].lv = t;
+              }
+              break;
+            }
+          }
+        }
+        if ((n - (Sensors[i].to)) < Sensors[i].lv) 
+          newStatus = STATUS.OKAY;
+        else
+          newStatus = STATUS.ERROR;
+        if(Sensors[i].ls != newStatus) {
+          switch(newStatus) {
+            case STATUS.OKAY:
+              $("#"+Sensors[i].id).addClass("jph-white");
+              $("#"+Sensors[i].id).removeClass("jph-error");
+              break;
+            case STATUS.ERROR:
+              $("#"+Sensors[i].id).addClass("jph-error");
+              $("#"+Sensors[i].id).removeClass("jph-white");
+              break;
+          }
+        }
+        // Do colours here
+      }
+    }
+    RefreshInProgress = false;
+  })
+}
+
+initSensors();
+
+setInterval(function () {
+  if (RefreshInProgress) return;
+  RefreshInProgress = true;
+  updateValues();
+}, RefreshRate);
+
+</script>
+{% endblock %}
+

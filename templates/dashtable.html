@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% import 'includes.html' as includes %}
+{% block head %}
+<meta name="description" content="Overview of all sensors.">
+{{ includes.datatables() }}
+{% endblock %}
+{% block body %}
+<span itemprop="description" content="Overview of all sensors."/>
+<div class="container-fluid">
+<table id="jphTable" class="cell-border hover order-column nowrap" width="100%">
+	<thead>
+		<tr>
+			<th>Codifier</th>
+			<th>Name</th>
+			<th>Value</th>
+			<th>Symbol</th>
+			<th>DTimestamp</th>
+			<th>SensorInterval</th>
+			<th>ITimestamp</th>
+			<th>TimoutWarning</th>
+			<th>Type</th>
+			<th>Name</th>
+			<th>IsActive</th>
+			<th>DResetTime</th>
+			<th>DPacketsLost</th>
+			<th>CPacketsLost</th>
+			<th>CResetTime</th>
+			<th>TRequest</th>
+			<th>TTimestamp</th>
+			<th>TDuration</th>
+		</tr>
+	</thead>
+	<tbody>
+{% for sensor in sensors %}		
+		<tr>
+			<td class="dt-center"><a href="/sensorboard/{{ sensor.Codifier }}">{{ sensor.Codifier }}</a></td>
+			<td class="dt-left">{{ sensor.ShortName }}</td>
+			<td class="dt-right" data-type="float">{{ sensor.Value }}</td>
+			<td class="dt-centre">{{ sensor.Symbol }}</td>
+			<td class="dt-centre" data-type="timestamp">{{ sensor.DTimestamp }}</td>
+			<td class="dt-right">{{ sensor.SensorInterval }}</td>
+			<td class="dt-centre" data-type="timestamp">{{ sensor.ITimestamp }}</td>
+			<td class="dt-right">{{ sensor.TimeoutWarning }}</td>
+			<td class="dt-">{{ sensor.Type }}</td>
+			<td class="dt-left">{{ sensor.Name }}</td>
+			<td class="dt-center">{{ sensor.IsActive }}</td>
+			<td class="dt-centre" data-type="timestamp">{{ sensor.DResetTime }}</td>
+			<td class="dt-right">{{ sensor.DPacketsLost }}</td>
+			<td class="dt-right">{{ sensor.CPacketsLost }}</td>
+			<td class="dt-centre" data-type="timestamp">{{ sensor.CResetTime }}</td>
+			<td class="dt-centre" data-type="timestamp">{{ sensor.TRequest }}</td>
+			<td class="dt-centre data-type="timestamp">{{ sensor.TTimestamp }}</td>
+			<td class="dt-centre">{{ sensor.TDuration }}</td>
+		</tr>
+{% endfor %}
+	</tbody>
+</div>
+<script>
+// 
+// Format the data & table after loading
+//
+$(document).ready(function() {
+	$('[data-type="float"]').each(function() {
+		x=parseFloat($(this).html());
+		$(this).html(afronden(x));
+		$(this).addClass("right-align-class");
+	})
+	$('[data-type="timestamp"]').each(function() {
+		x=parseInt($(this).html());
+		if (x>0) {
+			n=parseInt(Date.now());
+			if (((n-x)/1000)<86400)
+				$(this).html(time_ago(x));
+			else
+				$(this).html(dateFormat(x, "yy-mm-dd HH:MM:ss"))
+		}
+	});
+  oTable = $('#jphTable').DataTable({
+  	"scrollX": true,
+  	"lengthMenu": [[10, 20, 30, 60, 120, 200, -1], [10, 20, 30, 60, 120, 200, "All"]]
+  });
+
+})
+</script>
+{% endblock %}

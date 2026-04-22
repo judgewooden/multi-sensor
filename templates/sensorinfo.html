@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jphStyle.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='jphCommon.js') }}"></script>
+</head>
+<body style="margin:0px; padding: 0px; border: 0px">
+
+<table style="max-width: 230px">
+<tbody>
+<tr>
+<td class="jph-popover-row jph-popover-row-header">Redis Cache</td>
+<td></td>
+</tr>
+{% if redis|length < 1 %}
+    <tr><td class="jph-popover-row">no data</td></tr>
+{% else %}
+    {% for field in redis %}
+    <tr>
+    <td class="jph-popover-row">{{ field }}<td>
+    <td class="jph-popover-row"
+        {% if 'Time' in field %}
+            data-time="{{ redis[field] }}">
+        {% else %}
+            >{{ redis[field] }}
+        {% endif %}
+    </td>
+    </tr>
+    {% endfor %}
+{% endif %}
+<tr>
+<td class="jph-popover-row jph-popover-row-header">Configuration</td>
+<td></td>
+</tr>
+{% for field in sensor %}
+<tr>
+<td class="jph-popover-row">{{ field }}<td>
+<td class="jph-popover-row"
+{% if field == 'Sensor' %}
+    data-json="{{ sensor[field] }}">{{ sensordetail }}
+{% else %}
+    >{{ sensor[field] }}
+{% endif %}
+</tr>
+{% endfor %}
+</tbody >
+</table>
+</body>
+<script>
+$(document).ready(function () {
+  $("[data-time]").each( function( index ) {
+    t=$(this).attr("data-time");
+    x=parseInt(t);
+    v=time_ago(x);
+    $(this).html( v );
+  });
+});
+</script>
